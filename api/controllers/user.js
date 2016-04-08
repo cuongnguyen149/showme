@@ -36,9 +36,10 @@ module.exports = {
  */
 function registerUser(req, res) {
   // variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
-  var name = req.swagger.params.name.value || 'stranger';
-  var hello = util.format('Hello, %s!', name);
-
+  // var name = req.swagger.params.name.value || 'stranger';
+  // var hello = util.format('Hello, %s!', name);
+  console.log(req.swagger.params.user.schema.schema);
+  console.log(req.swagger.params.user.value)
   // this sends back a JSON response which is a single string
-  res.json(hello);
+  
 }

@@ -59,14 +59,21 @@ definitions:
     properties:
       message:
         type: string
+  #User params for /user post method      
   User:
     description: User object.
     properties:
-      name: 
+      email: 
         type: string
       pwd: 
         type: string
+      dob:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string        
     required:
-      - name
+      - email
       - pwd        
 

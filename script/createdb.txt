@@ -1,0 +1,74 @@
+CREATE TABLE client_user(
+   user_id VARCHAR(100) NOT NULL,
+   user_name VARCHAR(100) NOT NULL,
+   pwd VARCHAR(100) NOT NULL,
+   fullname VARCHAR(100),
+   dob DATE,
+   email VARCHAR(100),
+   google_id VARCHAR(100),
+   facebook_id VARCHAR(100),
+   address VARCHAR(100),
+   avatar TEXT,
+   country VARCHAR(100),
+   sex VARCHAR(10),
+   phone VARCHAR(20),
+   create_date TIMESTAMP,
+   update_date TIMESTAMP, 
+   PRIMARY KEY ( user_id )
+);
+
+CREATE TABLE leader_user(
+   leader_id VARCHAR(100) NOT NULL,
+   leader_name VARCHAR(100) NOT NULL,
+   pwd VARCHAR(100) NOT NULL,
+   fullname VARCHAR(100),
+   dob DATE,
+   email VARCHAR(100),
+   google_id VARCHAR(100),
+   facebook_id VARCHAR(100),
+   address VARCHAR(100),
+   avatar TEXT,
+   country VARCHAR(100),
+   sex VARCHAR(10),
+   phone VARCHAR(20),
+   description VARCHAR(500),
+   rating FLOAT,
+   fee_per_hour FLOAT,
+   month_income FLOAT,
+   is_active BOOL,
+   longitude VARCHAR(20),
+   lattitude VARCHAR(20),
+   create_date TIMESTAMP,
+   update_date TIMESTAMP, 
+   PRIMARY KEY ( leader_id )
+);
+
+CREATE TABLE user_comment(
+	user_id VARCHAR(100) NOT NULL,
+	transaction_id VARCHAR(100) NOT NULL,
+	user_comment VARCHAR(500),
+	create_date TIMESTAMP,
+   	update_date TIMESTAMP,
+   	rating_1 FLOAT,
+   	rating_2 FLOAT,
+   	PRIMARY KEY ( user_id, transaction_id )
+);
+
+CREATE TABLE leader_comment(
+	leader_id VARCHAR(100) NOT NULL,
+	transaction_id VARCHAR(100) NOT NULL,
+	leader_comment VARCHAR(500),
+	create_date TIMESTAMP,
+   	update_date TIMESTAMP,
+   	PRIMARY KEY ( leader_id, transaction_id )
+);
+
+CREATE TABLE user_transaction(
+	transaction_id VARCHAR(100) NOT NULL,
+	leader_id VARCHAR(100) NOT NULL,
+	user_id VARCHAR(100) NOT NULL,
+	call_start TIMESTAMP,
+   	call_end TIMESTAMP,
+   	fee FLOAT,
+   	PRIMARY KEY ( transaction_id )
+);

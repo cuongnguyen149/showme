@@ -1,10 +1,11 @@
 var Configuration = {
 	mysql : {
-		host: 'localhost:3306',
+		host: 'localhost',
 		user: 'root',
-		password: 'P@ssword123'
+		password: 'root',
+		database: 'showme_db'
 	},
-	quickbox : {
+	quickblox : {
 		appID : '38631',
 		authKey: 'Jk4b5XEEbBPKTqu',
 		athuSecret: 'fVMmMrwjMeUAFUX'

@@ -10,6 +10,7 @@
   "dependencies": {
     "express": "^4.12.3",
     "mysql": "^2.10.2",
+    "quickblox": "^2.1.1",
     "swagger-express-mw": "^0.1.0"
   },
   "devDependencies": {

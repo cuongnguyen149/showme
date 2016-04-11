@@ -1,1 +1,1 @@
-# Skeleton project for Swagger
+http://editor.swagger.io/#/?import=https://www.dropbox.com/s/k7gpyuu8p1qc28g/swagger.yaml?dl=1

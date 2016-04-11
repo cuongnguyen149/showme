@@ -58,7 +58,7 @@ definitions:
       - message
     properties:
       message:
-        type: string
+        type: string  
   #User params for /user post method      
   User:
     description: User object.
@@ -69,9 +69,12 @@ definitions:
         type: string
       dob:
         type: string
-      first_name:
+        format: date
+      firstname:
         type: string
-      last_name:
+      lastname:
+        type: string  
+      device_uiid:
         type: string        
     required:
       - email

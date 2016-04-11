@@ -1,56 +1,50 @@
 'use strict';
-var util = require('util');
+// var util = require('util');
 var config = require('../../config/appConfig');
+var myUtils = require('../../utility/utils');
 var dbConfig = require('../../config/dbConfig');
 var quickbloxConfig = require('../../config/quickbloxConfig');
+var constants = require('../../constants');
 module.exports = {
   registerUser: registerUser
 };
 
 function registerUser(req, res) {
-  // dbConfig.connect(function(err) {
-  //   if (err) {
-  //     console.error('error connecting: ' + err.stack);
-  //     return;
-  //   }
-   
-  //   console.log('connected as id ' + dbConfig.threadId);
-  // });
-  // console.log(req.swagger.params.user.schema.schema);
-  // console.log(req.swagger.params.user.value)
   var userObject = req.swagger.params.user.value;
   var params = {email : userObject.email, password: userObject.pwd};
-  // var params = { 'email': "e@e.com", 'password': "somepass"};
-  // console.log(userObject);
-  // console.log(params);
   quickbloxConfig.createSession(function(err, result) {
     if(err){
-      res.json(err);
+      res.json(myUtils.createError(err));
     }else{
-      // console.log(result);
       quickbloxConfig.users.create(params, function(err, result) {
         // console.log(result);
         if(err){
-          res.json(err); 
+          res.json(myUtils.createError(err)); 
         }else{
           if(result){
-            dbConfig.connect(function(err) {
-              if(err){
-                console.log(err);
-              }else{
-                var query = "INSERT INTO client_user " + 
-                            "(user_id, email, pwd) " +
-                            "VALUES " +
-                            "( "+ result.id + ", '"+ userObject.email + "', " +  '"+ userObject.pwd + "' +  ");";
+            var query = "INSERT INTO " + constants.CLIENT_USER +  
+                        " (" + constants.USER_ID + ", " + constants.EMAIL + ", " + constants.PWD + ", " + constants.FIRSTNAME + ", " + constants.LASTNAME + ", " + constants.DOB + ", " + constants.DEVICE_UIID + ") " +
+                        "VALUES " +
+                        "( "+ result.id + ", '"+ userObject.email + "', '"+ userObject.pwd + "', '" + userObject.firstname + "', '" + userObject.lastname + "', '" + userObject.dob + "', '" + userObject.device_uiid + "');";
+            dbConfig.query(query, function(err, rows){
+               if(err){
+                // console.log(err);
+                res.json(myUtils.createError(err)); 
+               }else{
+                var query = "SELECT *, NULL AS " + constants.PWD + 
+                            " FROM " + constants.CLIENT_USER +
+                            " WHERE "  + constants.USER_ID + " = "  + result.id;
                 dbConfig.query(query, function(err, rows){
-                   if(err){
-                    console.log(err);
-                   }else{
-                    console.log(rows);
-                   } 
-                });            
-              }
-            });  
+                 if(err){
+                  // console.log(err);
+                  res.json(myUtils.createError(err)); 
+                 }else{
+                  console.log(rows);  
+                 } 
+                }); 
+                // res.json({message: "success"});
+               } 
+            });              
           }else{
 
           }

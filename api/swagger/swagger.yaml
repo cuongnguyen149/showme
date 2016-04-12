@@ -33,32 +33,57 @@ paths:
           schema:
             $ref: "#/definitions/User" 
       responses:
-        "200":
+        "201":
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/BasicResponse"
+            $ref: "#/definitions/CreateAndLoginResponse"
         # responses may fall through to errors
         default:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /login:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: user
+    post:
+      description: API for login.
+      # used as the method name of the controller
+      operationId: login
+      parameters:
+        - name: login
+          in: body
+          description: The user's info.
+          required: true
+          schema:
+            $ref: "#/definitions/Login"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/CreateAndLoginResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse" 
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
-  BasicResponse:
-    required:
-      - message
-    properties:
-      message:
-        type: string
   ErrorResponse:
     required:
       - message
     properties:
       message:
-        type: string  
+        type: string
+  CreateAndLoginResponse:
+    properties:
+      user:
+        type: object
+      token: 
+        type: string                  
   #User params for /user post method      
   User:
     description: User object.
@@ -78,5 +103,19 @@ definitions:
         type: string        
     required:
       - email
-      - pwd        
+      - pwd
+      - device_uiid
+  Login: 
+    description: Login object.
+    properties:
+      email:
+        type: string
+      pwd: 
+        type: string
+      device_uiid: 
+        type: string  
+    required:
+      - email
+      - pwd
+      - device_uiid                  
 

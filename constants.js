@@ -2,7 +2,7 @@ var constants = {
 	ERROR : "error",
 	MESSAGE: "message",
 	MESSAGE_ERR: "Opp! something went wrong!",
-
+	BAD_PARAMETERS: "Bad parameters.",
 	//DATABASE TABLE
 	CLIENT_USER: "client_user",
 	LEADER_USER: "leader_user",

@@ -6,50 +6,86 @@ var dbConfig = require('../../config/dbConfig');
 var quickbloxConfig = require('../../config/quickbloxConfig');
 var constants = require('../../constants');
 module.exports = {
-  registerUser: registerUser
+  registerUser: registerUser,
+  login : login
 };
 
 function registerUser(req, res) {
   var userObject = req.swagger.params.user.value;
   var params = {email : userObject.email, password: userObject.pwd};
   quickbloxConfig.createSession(function(err, result) {
-    if(err){
-      res.json(myUtils.createError(err));
-    }else{
+    if(result){
       quickbloxConfig.users.create(params, function(err, result) {
         // console.log(result);
-        if(err){
-          res.json(myUtils.createError(err)); 
-        }else{
-          if(result){
-            var query = "INSERT INTO " + constants.CLIENT_USER +  
-                        " (" + constants.USER_ID + ", " + constants.EMAIL + ", " + constants.PWD + ", " + constants.FIRSTNAME + ", " + constants.LASTNAME + ", " + constants.DOB + ", " + constants.DEVICE_UIID + ") " +
-                        "VALUES " +
-                        "( "+ result.id + ", '"+ userObject.email + "', '"+ userObject.pwd + "', '" + userObject.firstname + "', '" + userObject.lastname + "', '" + userObject.dob + "', '" + userObject.device_uiid + "');";
-            dbConfig.query(query, function(err, rows){
+        if(result){
+          var insert = "INSERT INTO " + constants.CLIENT_USER +  
+                      " (" + constants.USER_ID + ", " + constants.EMAIL + ", " + constants.PWD + ", " + constants.FIRSTNAME + ", " + constants.LASTNAME + ", " + constants.DOB + ", " + constants.DEVICE_UIID + ") " +
+                      "VALUES " +
+                      "( "+ result.id + ", '"+ userObject.email + "', '"+ userObject.pwd + "', '" + userObject.firstname + "', '" + userObject.lastname + "', '" + userObject.dob + "', '" + userObject.device_uiid + "');";
+          dbConfig.query(insert, function(err, rows){
+             if(err){
+              // console.log(err);
+              res.json(myUtils.createError(err)); 
+             }else{
+              var query = "SELECT *, NULL AS " + constants.PWD + 
+                          " FROM " + constants.CLIENT_USER +
+                          " WHERE "  + constants.USER_ID + " = "  + result.id;
+              dbConfig.query(query, function(err, rows){
                if(err){
                 // console.log(err);
                 res.json(myUtils.createError(err)); 
                }else{
-                var query = "SELECT *, NULL AS " + constants.PWD + 
-                            " FROM " + constants.CLIENT_USER +
-                            " WHERE "  + constants.USER_ID + " = "  + result.id;
-                dbConfig.query(query, function(err, rows){
-                 if(err){
-                  // console.log(err);
-                  res.json(myUtils.createError(err)); 
-                 }else{
-                  console.log(rows);  
-                 } 
-                }); 
-                // res.json({message: "success"});
+                // console.log(rows[0]);
+                res.status(201).json(myUtils.generateToken(rows[0]));  
                } 
-            });              
-          }else{
-
-          }
+              });
+             } 
+          });              
+        }else{
+          res.json(myUtils.createError(err)); 
         }
       });  
+    }else{
+      res.json(myUtils.createError(err));
     }    
   });
-}
+};
+
+function login(req, res){
+  var userObject = req.swagger.params.login.value;
+  var params = {email : userObject.email, password: userObject.pwd};
+  quickbloxConfig.createSession(function(err, result) {
+    if(result){
+      quickbloxConfig.login(params, function(err, result) {
+        if(result){
+          // console.log("login success!!!!");
+          var query = "SELECT *, NULL AS " + constants.PWD + 
+                      " FROM " + constants.CLIENT_USER +
+                      " WHERE "  + constants.USER_ID + " = "  + result.id;
+          var update = "UPDATE " + constants.CLIENT_USER +
+                       " SET " + constants.DEVICE_UIID + " = " + userObject.device_uiid +
+                       " WHERE " + constants.USER_ID + " = "  + result.id;
+          dbConfig.query(update, function(err, rows){
+            if(rows){
+              dbConfig.query(query, function(err, rows){
+               if(err){
+                // console.log(err);
+                res.json(myUtils.createError(err)); 
+               }else{
+                // console.log(myUtils.generateToken(rows[0]));
+                res.json(myUtils.generateToken(rows[0]));  
+               } 
+              });
+            }else{
+              res.json(myUtils.createError(err));
+            }
+          });             
+        }else{
+          res.json(myUtils.createError(err));
+        }
+      });
+    }else{
+      res.json(myUtils.createError(err));
+    }
+  });    
+};

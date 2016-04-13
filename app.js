@@ -28,8 +28,8 @@ app.all('*', function(req, res, next) {
 		myUtils.validateToken(req, res, next);
 	} else {
 		// ignore
-		// res.json(myUtils.createErrorStr('No token found'));
-		next();
+		res.json(myUtils.createErrorStr('No token found'));
+		// next();
 	}
 });
 app.get('/doc/api', function(req, res){

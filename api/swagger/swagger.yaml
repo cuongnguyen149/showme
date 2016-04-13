@@ -69,6 +69,42 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse" 
+  /leaders/location:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: leader
+    get:
+      description: API for get leaders location in range.
+      # used as the method name of the controller
+      operationId: leaderLocation
+      parameters:
+        - name: user_id
+          in: query
+          description: user's id.
+          required: true
+          type: string
+        - name: lng
+          in: query
+          description: user's longitude.
+          required: true
+          type: number
+        - name: lat
+          in: query
+          description: user's lattitude.
+          required: true
+          type: number    
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            type: array
+            items:
+              $ref: "#/definitions/LeaderLocation"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"           
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -118,5 +154,16 @@ definitions:
     required:
       - email
       - pwd
-      - device_uiid                  
+      - device_uiid
+  LeaderLocation:
+    description: Leader location object
+    properties:
+      leader_id:
+        type: string
+      longitude: 
+        type: number
+      lattitude:
+        type: number
+      distance:
+        type: number                      
 

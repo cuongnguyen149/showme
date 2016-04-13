@@ -162,5 +162,7 @@ definitions:
       longitude: 
         type: number
       lattitude:
-        type: number                    
+        type: number
+      distance:
+        type: number                      
 

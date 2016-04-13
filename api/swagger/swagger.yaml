@@ -104,11 +104,42 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"           
+            $ref: "#/definitions/ErrorResponse"
+  /users/role:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: user
+    put:
+      description: API for update user's role.
+      # used as the method name of the controller
+      operationId: updateRole
+      parameters:
+        - name: user
+          in: body
+          description: user info.
+          required: true
+          schema:
+            $ref: "#/definitions/updateRoleParams"   
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"                        
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
+  BaseSuccessRespone:
+    required:
+      - message
+    properties:
+      message:
+        type: string
   ErrorResponse:
     required:
       - message
@@ -123,13 +154,14 @@ definitions:
         type: string                  
   #User params for /user post method      
   User:
-    description: User object.
+    description: User object. DOB format (yyyy/mm/dd).
     properties:
       email: 
         type: string
       pwd: 
         type: string
       dob:
+        description: format (yyyy/mm/dd).
         type: string
         format: date
       firstname:
@@ -165,5 +197,18 @@ definitions:
       lattitude:
         type: number
       distance:
-        type: number                      
-
+        type: number
+  updateRoleParams: 
+    description: User info object. Note -> (role = current role. "user" or "leader")
+    properties:
+      user_id:
+        type: string
+      role:
+        type: string                                
+  # DeviceInfo:
+  #   description: DeviceInfo
+  #   properties:
+  #     device_uiid:
+  #       type: string
+  #     os:
+  #       type: string        

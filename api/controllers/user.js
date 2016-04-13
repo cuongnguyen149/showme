@@ -7,9 +7,12 @@ var quickbloxConfig = require('../../config/quickbloxConfig');
 var constants = require('../../constants');
 module.exports = {
   registerUser: registerUser,
-  login : login
+  login : login,
+  updateRole: updateRole
 };
-
+/**
+* Register API (Integrate with QuickBlox)
+*/
 function registerUser(req, res) {
   var userObject = req.swagger.params.user.value;
   var params = {email : userObject.email, password: userObject.pwd};
@@ -50,7 +53,9 @@ function registerUser(req, res) {
     }    
   });
 };
-
+/**
+* User login API (Integrate with QuickBlox)
+*/
 function login(req, res){
   var userObject = req.swagger.params.login.value;
   var params = {email : userObject.email, password: userObject.pwd};
@@ -89,3 +94,21 @@ function login(req, res){
     }
   });    
 };
+
+function updateRole (req, res){
+  var userObject = req.swagger.params.user.value;
+  var role = "user";
+  if(userObject.role && userObject.role == "user"){
+    role = "leader";
+  }
+  var update = "UPDATE " + constants.CLIENT_USER +
+               " SET " + constants.ROLE + " = '" + role  + "' " +
+               " WHERE " + constants.USER_ID + " = "  + userObject.user_id;
+  dbConfig.query(update, function(err, rows){
+    if(rows){
+      res.status(200).json({message: "Updated user " + userObject.user_id + " to " + role + " role."});
+    }else{
+      res.json(myUtils.createError(err));
+    }
+  });             
+}

@@ -45,6 +45,7 @@ var constants = {
 	CALL_START: "call_start",
 	CALL_END: "call_end",
 	FEE: "fee",
+	ROLE: "role",
 	DEVICE_UIID: "device_uiid"
 }
 module.exports = constants;

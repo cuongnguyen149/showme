@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   version: "0.0.1"
-  title: baseurl /showme/v1
+  title: Baseurl /showme/v1
   
 # during dev, should point to your local machine
 host: localhost:80
@@ -77,19 +77,19 @@ paths:
       # used as the method name of the controller
       operationId: leaderLocation
       parameters:
-        - name: user_id
+        - name: radius
           in: query
-          description: user's id.
+          description: radius which user input.
           required: true
-          type: string
+          type: number
         - name: lng
           in: query
-          description: user's longitude.
+          description: longitude which user input.
           required: true
           type: number
         - name: lat
           in: query
-          description: user's lattitude.
+          description: lattitude which user input.
           required: true
           type: number    
       responses:
@@ -105,6 +105,28 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+    put:
+      description: API for update leaders location.
+      # used as the method name of the controller
+      operationId: updateLocation
+      parameters:
+        - name: leader
+          in: body
+          description: leader's info.
+          required: true
+          schema:
+            $ref: "#/definitions/updateLocationParams"   
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"            
   /users/role:
     # binds a127 app logic to a route
     x-swagger-router-controller: user
@@ -190,7 +212,7 @@ definitions:
   LeaderLocation:
     description: Leader location object
     properties:
-      leader_id:
+      user_id:
         type: string
       longitude: 
         type: number
@@ -204,7 +226,23 @@ definitions:
       user_id:
         type: string
       role:
-        type: string                                
+        type: string
+    required:
+      - user_id
+      - role    
+  updateLocationParams:
+    description: leader location info object.
+    properties:
+      user_id:
+        type: string
+      lat: 
+        type: number
+      lng:
+        type: number
+    required:
+      - user_id
+      - lat
+      - lng                                                
   # DeviceInfo:
   #   description: DeviceInfo
   #   properties:

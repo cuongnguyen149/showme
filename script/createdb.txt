@@ -14,7 +14,7 @@ CREATE TABLE client_user(
    sex VARCHAR(10),
    phone VARCHAR(20),
    description VARCHAR(500),
-   role VARCHAR(10),
+   role VARCHAR(10) DEFAULT 'user',
    rating DOUBLE,
    fee_per_hour DOUBLE,
    month_income DOUBLE,

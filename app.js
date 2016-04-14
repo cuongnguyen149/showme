@@ -28,8 +28,8 @@ app.all('*', function(req, res, next) {
 		myUtils.validateToken(req, res, next);
 	} else {
 		// ignore
-		res.json(myUtils.createErrorStr('No token found'));
-		// next();
+		// res.json(myUtils.createErrorStr('No token found'));
+		next();
 	}
 });
 app.get('/doc/api', function(req, res){
@@ -41,7 +41,7 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   // install middleware
   swaggerExpress.register(app);
 
-  var port = process.env.PORT || 80;
+  var port = process.env.PORT || 10010;
   app.listen(port, function(){
   	console.log("Server listening on port :" +  port);
   });

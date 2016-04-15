@@ -18,7 +18,7 @@ CREATE TABLE client_user(
    rating DOUBLE,
    fee_per_hour DOUBLE,
    month_income DOUBLE,
-   is_active BOOL,
+   is_active BOOL DEFAULT true,
    longitude DOUBLE,
    lattitude DOUBLE,
    create_date TIMESTAMP default now(),

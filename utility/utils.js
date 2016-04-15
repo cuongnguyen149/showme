@@ -27,7 +27,7 @@ module.exports.createDatabaseError = function(error) {
  */
 module.exports.createErrorStr = function(message, returnCode) {
 	var err = new Error();
-	err.data = constants.ERROR;
+	err.data = {error : constants.ERROR};
 	err.message = message;
   err.returnCode = returnCode;
 	return err;

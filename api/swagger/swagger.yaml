@@ -334,8 +334,33 @@ definitions:
       # - email
       # - address
       # - phone
-      
-        
+  codeReturn:
+    description: leader status info object.
+    properties:
+      error_code:
+        type: number
+        description: a 1000
+      success_code:
+        type: number
+        description: a 2000
+      create_code:
+        type: number
+        description: a 2002  
+      database_error_code:
+        type: number
+        description: a 1001  
+      quickblox_create_code:
+        type: number
+        description: a 1002  
+      no_token_code:
+        type: number
+        description: a 1003  
+      token_expire_code:
+        type: number
+        description: a 1004  
+      token_error_code:
+        type: number
+        description: a 1005  
   # DeviceInfo:
   #   description: DeviceInfo
   #   properties:

@@ -2,23 +2,35 @@ var constants = require('../constants');
 var jwt = require('jwt-simple');
 
 /**
- * Create error object.
+ * Create Quickblox error object.
  */
-module.exports.createError = function(error) {
+module.exports.createQuickBloxError = function(error) {
 	var err = new Error();
-	err.error = error;
-	err.message = constants.MESSAGE_ERR;
+	err.data = error;
+  err.returnCode = constants.QUICKBLOX_ERROR_CODE;
+	err.message = constants.MESSAGE_QUICKBLOX_ERR;
 	return err;
+};
+/**
+ * Create Quickblox error object.
+ */
+module.exports.createDatabaseError = function(error) {
+  var err = new Error();
+  err.data = error;
+  err.returnCode = constants.DATABASE_ERROR_CODE;
+  err.message = constants.MESSAGE_DATABASE_ERR;
+  return err;
 };
 
 /**
  * Create error string.
  */
-module.exports.createErrorStr = function(message) {
+module.exports.createErrorStr = function(message, returnCode) {
 	var err = new Error();
-	err.error = constants.ERROR;
+	err.data = constants.ERROR;
 	err.message = message;
-	return JSON.stringify(err);
+  err.returnCode = returnCode;
+	return err;
 };
 
 /**
@@ -51,8 +63,9 @@ module.exports.validateToken = function(req, res, next) {
       var decoded = jwt.decode(token, 'showme-serect-string');
       if (decoded.exp <= Date.now()) {
         res.json( {
-          "codeResponse": 1000,
-          "message": "Token Expired"
+          "returnCode": constants.TOKEN_EXPIRE_CODE,
+          "message": "Token Expired",
+          "data" : {}
         });
         return;
       }else{
@@ -60,15 +73,16 @@ module.exports.validateToken = function(req, res, next) {
       }
     }catch(err){
       res.json({
-      "codeResponse": 1002,
+      "returnCode": constants.TOKEN_ERROR_CODE,
       "message": "Opps!! Something went wrong!",
-      "error" : err
+      "data" : err
     });
     }  
   } else {
     res.json({
-      "codeResponse": 1001,
-      "message": "Invalid Token"
+      "returnCode": constants.TOKEN_ERROR_CODE,
+      "message": "Invalid Token",
+      "data": {}
     });
     return;
   }

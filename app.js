@@ -28,7 +28,7 @@ app.all('*', function(req, res, next) {
 		myUtils.validateToken(req, res, next);
 	} else {
 		// ignore
-		// res.json(myUtils.createErrorStr('No token found'));
+		// res.json(myUtils.createErrorStr('No token found', constants.NO_TOKEN_CODE));
 		next();
 	}
 });

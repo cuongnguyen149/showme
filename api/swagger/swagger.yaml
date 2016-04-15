@@ -2,6 +2,7 @@ swagger: "2.0"
 info:
   version: "0.0.1"
   title: Baseurl /showme/v1
+        
   
 # during dev, should point to your local machine
 host: localhost:80
@@ -32,13 +33,34 @@ paths:
           description: The user's info.
           required: true
           schema:
-            $ref: "#/definitions/User" 
+            $ref: "#/definitions/registerParams" 
       responses:
         "201":
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/CreateAndLoginResponse"
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    put:
+      description: API for update user profiles.
+      operationId: updateUserProfiles
+      parameters:
+        - name: user
+          in: body
+          description: The user's info.
+          required: true
+          schema:
+            $ref: "#/definitions/updateProfilesParams" 
+      responses:
+        "201":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
         # responses may fall through to errors
         default:
           description: Error
@@ -57,13 +79,13 @@ paths:
           description: The user's info.
           required: true
           schema:
-            $ref: "#/definitions/Login"
+            $ref: "#/definitions/loginParams"
       responses:
         "200":
           description: Success
           schema:
             # a pointer to a definition
-            $ref: "#/definitions/CreateAndLoginResponse"
+            $ref: "#/definitions/BaseSuccessRespone"
         # responses may fall through to errors
         default:
           description: Error
@@ -97,9 +119,7 @@ paths:
           description: Success
           schema:
             # a pointer to a definition
-            type: array
-            items:
-              $ref: "#/definitions/LeaderLocation"
+            $ref: "#/definitions/BaseSuccessRespone"
         # responses may fall through to errors
         default:
           description: Error
@@ -126,7 +146,31 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"            
+            $ref: "#/definitions/ErrorResponse"
+  /leaders/active:
+    x-swagger-router-controller: leader  
+    put:
+      description: API for update leaders status.
+      # used as the method name of the controller
+      operationId: updateStatus
+      parameters:
+        - name: leader
+          in: body
+          description: leader's info.
+          required: true
+          schema:
+            $ref: "#/definitions/updateStatusParams"   
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /users/role:
     # binds a127 app logic to a route
     x-swagger-router-controller: user
@@ -159,23 +203,26 @@ definitions:
   BaseSuccessRespone:
     required:
       - message
+      - returnCode
     properties:
       message:
         type: string
+      returnCode:
+        type: number
+      data:
+        type: object
   ErrorResponse:
     required:
       - message
     properties:
       message:
         type: string
-  CreateAndLoginResponse:
-    properties:
-      user:
+      returnCode:
+        type: number
+      data:
         type: object
-      token: 
-        type: string                  
   #User params for /user post method      
-  User:
+  registerParams:
     description: User object. DOB format (yyyy/mm/dd).
     properties:
       email: 
@@ -195,8 +242,11 @@ definitions:
     required:
       - email
       - pwd
+      - firstname
+      - lastname
       - device_uiid
-  Login: 
+      - dob
+  loginParams: 
     description: Login object.
     properties:
       email:
@@ -209,17 +259,6 @@ definitions:
       - email
       - pwd
       - device_uiid
-  LeaderLocation:
-    description: Leader location object
-    properties:
-      user_id:
-        type: string
-      longitude: 
-        type: number
-      lattitude:
-        type: number
-      distance:
-        type: number
   updateRoleParams: 
     description: User info object. Note -> (role = current role. "user" or "leader")
     properties:
@@ -227,6 +266,7 @@ definitions:
         type: string
       role:
         type: string
+        description: current role "user" or "leader"
     required:
       - user_id
       - role    
@@ -242,7 +282,60 @@ definitions:
     required:
       - user_id
       - lat
-      - lng                                                
+      - lng
+  updateStatusParams:
+    description: leader status info object.
+    properties:
+      user_id:
+        type: string
+      active:
+        type: boolean
+        description: current status
+    required:
+      - user_id
+      - active
+  updateProfilesParams:
+    description: user updated info.
+    properties:
+      user_id: 
+        type: string
+      avatar:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      country:
+        type: string
+      description:
+        type: string
+      fee_per_hour:
+        type: string
+      sex:
+        type: string
+      dob:
+        description: format (yyyy/mm/dd).
+        type: string
+        format: date
+      email: 
+        type: string
+      address:
+        type: string
+      phone:
+        type: string
+    required:
+      - user_id
+      # - firstname
+      # - lastname
+      # - country
+      # - description
+      # - sex
+      # - dob
+      # - email
+      # - address
+      # - phone
+      
+        
   # DeviceInfo:
   #   description: DeviceInfo
   #   properties:
@@ -250,3 +343,4 @@ definitions:
   #       type: string
   #     os:
   #       type: string        
+  

@@ -1,7 +1,8 @@
 var constants = {
 	ERROR : "error",
 	MESSAGE: "message",
-	MESSAGE_ERR: "Opp! something went wrong!",
+	MESSAGE_QUICKBLOX_ERR: "Opp! something went wrong with Quickblox!",
+	MESSAGE_DATABASE_ERR: "Opp! something went wrong with Database!",
 	BAD_PARAMETERS: "Bad parameters.",
 	//DATABASE TABLE
 	CLIENT_USER: "client_user",
@@ -46,6 +47,16 @@ var constants = {
 	CALL_END: "call_end",
 	FEE: "fee",
 	ROLE: "role",
-	DEVICE_UIID: "device_uiid"
+	DEVICE_UIID: "device_uiid",
+
+	//RETURN CODE
+	ERROR_CODE : 1000,
+	SUCCESS_CODE : 2000,
+	CREATE_CODE : 2002,
+	DATABASE_ERROR_CODE : 1001,
+	QUICKBLOX_ERROR_CODE : 1002,
+	NO_TOKEN_CODE : 1003,
+	TOKEN_EXPIRE_CODE: 1004,
+	TOKEN_ERROR_CODE : 1005
 }
 module.exports = constants;

@@ -56,10 +56,10 @@ CREATE TABLE leader_user(
 );
 
 CREATE TABLE user_comment(
-   user_id VARCHAR(100) NOT NULL,
-   transaction_id VARCHAR(100) NOT NULL,
-   user_comment VARCHAR(500),
-   create_date TIMESTAMP,
+	user_id VARCHAR(100) NOT NULL,
+	transaction_id VARCHAR(100) NOT NULL,
+	user_comment VARCHAR(500),
+	create_date TIMESTAMP,
    update_date TIMESTAMP,
    rating_1 FLOAT,
    rating_2 FLOAT,
@@ -67,19 +67,19 @@ CREATE TABLE user_comment(
 );
 
 CREATE TABLE leader_comment(
-   leader_id VARCHAR(100) NOT NULL,
-   transaction_id VARCHAR(100) NOT NULL,
-   leader_comment VARCHAR(500),
-   create_date TIMESTAMP,
+	leader_id VARCHAR(100) NOT NULL,
+	transaction_id VARCHAR(100) NOT NULL,
+	leader_comment VARCHAR(500),
+	create_date TIMESTAMP,
    update_date TIMESTAMP,
    PRIMARY KEY ( leader_id, transaction_id )
 );
 
 CREATE TABLE user_transaction(
-   transaction_id VARCHAR(100) NOT NULL,
-   leader_id VARCHAR(100) NOT NULL,
-   user_id VARCHAR(100) NOT NULL,
-   call_start TIMESTAMP,
+	transaction_id VARCHAR(100) NOT NULL,
+	leader_id VARCHAR(100) NOT NULL,
+	user_id VARCHAR(100) NOT NULL,
+	call_start TIMESTAMP,
    call_end TIMESTAMP,
    fee FLOAT,
    PRIMARY KEY ( transaction_id )

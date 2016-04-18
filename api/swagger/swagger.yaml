@@ -223,14 +223,15 @@ definitions:
         type: object
   #User params for /user post method      
   registerParams:
-    description: User object. DOB format (yyyy/mm/dd).
+    description: User object. DOB format (yyyy-mm-dd).
     properties:
       email: 
         type: string
+        format: email
       pwd: 
         type: string
       dob:
-        description: format (yyyy/mm/dd).
+        description: format (yyyy-mm-dd).
         type: string
         format: date
       firstname:

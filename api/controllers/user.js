@@ -89,7 +89,7 @@ function login(req, res){
             if(rows){
               dbConfig.query(query, function(err, rows){
                if(err){
-                // console.log(err);
+                console.log(err);
                 res.json(myUtils.createDatabaseError(err)); 
                }else{
                 // console.log(myUtils.generateToken(rows[0]));
@@ -97,6 +97,7 @@ function login(req, res){
                } 
               });
             }else{
+              console.log(err);
               res.json(myUtils.createDatabaseError(err));
             }
           });             

@@ -16,9 +16,13 @@ schemes:
 # format of bodies a client can send (Content-Type)
 consumes:
   - application/json
+  - application/x-www-form-urlencoded
+  - multipart/form-data
 # format of the responses to the client (Accepts)
 produces:
   - application/json
+  - application/x-www-form-urlencoded
+  - multipart/form-data
 paths:
   /user:
     # binds a127 app logic to a route
@@ -74,12 +78,21 @@ paths:
       # used as the method name of the controller
       operationId: login
       parameters:
-        - name: login
-          in: body
+        - name: email
+          in: formData
           description: The user's info.
           required: true
-          schema:
-            $ref: "#/definitions/loginParams"
+          type: string
+        - name: pwd
+          in: formData
+          description: The user's info.
+          required: true
+          type: string
+        - name: device_uiid
+          in: formData
+          description: The user's info.
+          required: true
+          type: string  
       responses:
         "200":
           description: Success

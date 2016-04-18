@@ -83,7 +83,7 @@ function login(req, res){
                       " FROM " + constants.CLIENT_USER +
                       " WHERE "  + constants.USER_ID + " = "  + result.id;
           var update = "UPDATE " + constants.CLIENT_USER +
-                       " SET " + constants.DEVICE_UIID + " = " + userObject.device_uiid +
+                       " SET " + constants.DEVICE_UIID + " = '" + userObject.device_uiid + "'" +
                        " WHERE " + constants.USER_ID + " = "  + result.id;
           dbConfig.query(update, function(err, rows){
             if(rows){

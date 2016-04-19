@@ -20,7 +20,7 @@ CREATE TABLE client_user(
    month_income DOUBLE,
    is_active BOOL DEFAULT true,
    longitude DOUBLE,
-   lattitude DOUBLE,
+   latitude DOUBLE,
    create_date TIMESTAMP default now(),
    update_date TIMESTAMP default now() on update now(),
    device_uiid VARCHAR(100), 

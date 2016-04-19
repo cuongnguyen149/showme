@@ -2,7 +2,7 @@ var Configuration = {
 	mysql : {
 		host: 'localhost',
 		user: 'root',
-		password: 'root',
+		password: 'P@ssword123',
 		database: 'showme_db'
 	},
 	// quickblox : {

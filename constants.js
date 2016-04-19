@@ -27,7 +27,7 @@ var constants = {
 	MONTH_INCOME: "month_income",
 	IS_ACTIVE: "is_active",
 	LONGITUDE: "longitude",
-	LATTITUDE: "lattitude",
+	LATITUDE: "latitude",
 
 	//COMMON	
 	FIRSTNAME: "firstname",

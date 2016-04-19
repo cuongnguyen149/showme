@@ -1,10 +1,11 @@
 'use strict';
 
 var SwaggerExpress = require('swagger-express-mw');
-var app = require('express')();
-var constants = require('./constants');
-var myUtils = require('./utility/utils');
-module.exports = app; // for testing
+var app            = require('express')();
+var constants      = require('./constants');
+var appConfig         = require('./config/appConfig');
+var myUtils        = require('./utility/utils');
+module.exports     = app; // for testing
 
 var config = {
   appRoot: __dirname // required config
@@ -41,7 +42,7 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   // install middleware
   swaggerExpress.register(app);
 
-  var port = process.env.PORT || 10010;
+  var port = process.env.PORT || appConfig.app.port;
   app.listen(port, function(){
   	console.log("Server listening on port :" +  port);
   });

@@ -16,9 +16,13 @@ schemes:
 # format of bodies a client can send (Content-Type)
 consumes:
   - application/json
+  - application/x-www-form-urlencoded
+  - multipart/form-data
 # format of the responses to the client (Accepts)
 produces:
   - application/json
+  - application/x-www-form-urlencoded
+  - multipart/form-data
 paths:
   /user:
     # binds a127 app logic to a route
@@ -74,12 +78,21 @@ paths:
       # used as the method name of the controller
       operationId: login
       parameters:
-        - name: login
-          in: body
+        - name: email
+          in: formData
           description: The user's info.
           required: true
-          schema:
-            $ref: "#/definitions/loginParams"
+          type: string
+        - name: pwd
+          in: formData
+          description: The user's info.
+          required: true
+          type: string
+        - name: device_uiid
+          in: formData
+          description: The user's info.
+          required: true
+          type: string  
       responses:
         "200":
           description: Success
@@ -223,14 +236,15 @@ definitions:
         type: object
   #User params for /user post method      
   registerParams:
-    description: User object. DOB format (yyyy/mm/dd).
+    description: User object. DOB format (yyyy-mm-dd).
     properties:
       email: 
         type: string
+        format: email
       pwd: 
         type: string
       dob:
-        description: format (yyyy/mm/dd).
+        description: format (yyyy-mm-dd).
         type: string
         format: date
       firstname:
@@ -334,8 +348,33 @@ definitions:
       # - email
       # - address
       # - phone
-      
-        
+  codeReturn:
+    description: leader status info object.
+    properties:
+      error_code:
+        type: number
+        description: a 1000
+      success_code:
+        type: number
+        description: a 2000
+      create_code:
+        type: number
+        description: a 2002  
+      database_error_code:
+        type: number
+        description: a 1001  
+      quickblox_create_code:
+        type: number
+        description: a 1002  
+      no_token_code:
+        type: number
+        description: a 1003  
+      token_expire_code:
+        type: number
+        description: a 1004  
+      token_error_code:
+        type: number
+        description: a 1005  
   # DeviceInfo:
   #   description: DeviceInfo
   #   properties:

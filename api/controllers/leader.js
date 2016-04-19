@@ -73,20 +73,21 @@ function updateStatus(req, res){
                           " FROM " + constants.CLIENT_USER +
                           " WHERE "  + constants.USER_ID + " = "  + leaderObject.user_id;          	 
 	dbConfig.query(update, function(err, rows){
-		if(rows){
+		if(rows && rows.affectedRows != 0){
+			console.log(rows);
 			dbConfig.query(query, function(err, rows){
-				if(rows){
+				if(rows && rows.length > 0){
 					console.log(rows);
 					res.json({returnCode: constants.SUCCESS_CODE, message: "Updated status of leader " + leaderObject.user_id + " to " + !leaderObject.active +".", data: {user: rows[0]}});	
 				}else{
-					res.json(myUtils.createDatabaseError(err)); 
-					console.log(err);
+					res.json(myUtils.createDatabaseError(err));
 				}
 			});
 			
+		}else if(err){
+			res.json(myUtils.createDatabaseError(err));
 		}else{
-			res.json(myUtils.createDatabaseError(err)); 
-			console.log(err);
+			res.json(myUtils.createErrorStr("user_id: " +  leaderObject.user_id + " does not exist!", constants.ERROR_CODE));
 		}
 		
 	});

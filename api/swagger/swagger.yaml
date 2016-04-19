@@ -16,13 +16,9 @@ schemes:
 # format of bodies a client can send (Content-Type)
 consumes:
   - application/json
-  - application/x-www-form-urlencoded
-  - multipart/form-data
 # format of the responses to the client (Accepts)
 produces:
   - application/json
-  - application/x-www-form-urlencoded
-  - multipart/form-data
 paths:
   /user:
     # binds a127 app logic to a route
@@ -32,38 +28,12 @@ paths:
       # used as the method name of the controller
       operationId: registerUser
       parameters:
-        - name: email
-          in: formData
-          description: The user's email.
+        - name: user
+          in: body
+          description: The user's info.
           required: true
-          type: string
-          format: email
-        - name: pwd
-          in: formData
-          description: The user's password.
-          required: true
-          type: string
-        - name: firstname
-          in: formData
-          description: The user's first name.
-          required: true
-          type: string
-        - name: lastname
-          in: formData
-          description: The user's last name.
-          required: true
-          type: string
-        - name: dob
-          in: formData
-          description: The user's day of birth. (yyyy-mm-dd)
-          required: true
-          type: string
-          format: date
-        - name: device_uiid
-          in: formData
-          description: The user's device token.
-          required: true
-          type: string 
+          schema:
+            $ref: "#/definitions/registerParams" 
       responses:
         "201":
           description: Success
@@ -96,35 +66,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /users/role:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: user
-    put:
-      description: API for update user's role.
-      # used as the method name of the controller
-      operationId: updateRole
-      parameters:
-        - name: user_id
-          in: formData
-          description: The user's id.
-          required: true
-          type: string
-        - name: role
-          in: formData
-          description: The current role of user ("user" or "leader").
-          required: true
-          type: string
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/BaseSuccessRespone"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"           
   /login:
     # binds a127 app logic to a route
     x-swagger-router-controller: user
@@ -133,22 +74,12 @@ paths:
       # used as the method name of the controller
       operationId: login
       parameters:
-        - name: email
-          in: formData
-          description: The user's email.
+        - name: login
+          in: body
+          description: The user's info.
           required: true
-          type: string
-          format: email
-        - name: pwd
-          in: formData
-          description: The user's password.
-          required: true
-          type: string
-        - name: device_uiid
-          in: formData
-          description: The user's device token.
-          required: true
-          type: string  
+          schema:
+            $ref: "#/definitions/loginParams"
       responses:
         "200":
           description: Success
@@ -159,30 +90,7 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-  /leaders/{user_id}:
-    x-swagger-router-controller: leader
-    get:
-      description: API for get leaders information by id.
-      # used as the method name of the controller
-      operationId: getLeaderInfo
-      parameters:
-        - name: user_id
-          in: path
-          description: The user's id.
-          required: true
-          type: string
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/BaseSuccessRespone"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"  
+            $ref: "#/definitions/ErrorResponse" 
   /leaders/location:
     # binds a127 app logic to a route
     x-swagger-router-controller: leader
@@ -194,23 +102,18 @@ paths:
         - name: radius
           in: query
           description: radius which user input.
-          required: false
+          required: true
           type: number
         - name: lng
           in: query
           description: longitude which user input.
-          required: false
+          required: true
           type: number
         - name: lat
           in: query
           description: lattitude which user input.
-          required: false
+          required: true
           type: number    
-        - name: address
-          in: query
-          description: address which user input.
-          required: false
-          type: number  
       responses:
         "200":
           description: Success
@@ -227,16 +130,12 @@ paths:
       # used as the method name of the controller
       operationId: updateLocation
       parameters:
-        - name: user_id
-          in: formData
-          description: The user's id.
+        - name: leader
+          in: body
+          description: leader's info.
           required: true
-          type: string
-        - name: address
-          in: formData
-          description: The user address.
-          required: true
-          type: string  
+          schema:
+            $ref: "#/definitions/updateLocationParams"   
       responses:
         "200":
           description: Success
@@ -255,16 +154,12 @@ paths:
       # used as the method name of the controller
       operationId: updateStatus
       parameters:
-        - name: user_id
-          in: formData
-          description: The user's id.
+        - name: leader
+          in: body
+          description: leader's info.
           required: true
-          type: string
-        - name: active
-          in: formData
-          description: The current status.
-          required: true
-          type: boolean   
+          schema:
+            $ref: "#/definitions/updateStatusParams"   
       responses:
         "200":
           description: Success
@@ -276,6 +171,31 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /users/role:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: user
+    put:
+      description: API for update user's role.
+      # used as the method name of the controller
+      operationId: updateRole
+      parameters:
+        - name: user
+          in: body
+          description: user info.
+          required: true
+          schema:
+            $ref: "#/definitions/updateRoleParams"   
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"                        
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -301,7 +221,80 @@ definitions:
         type: number
       data:
         type: object
-        
+  #User params for /user post method      
+  registerParams:
+    description: User object. DOB format (yyyy-mm-dd).
+    properties:
+      email: 
+        type: string
+        format: email
+      pwd: 
+        type: string
+      dob:
+        description: format (yyyy-mm-dd).
+        type: string
+        format: date
+      firstname:
+        type: string
+      lastname:
+        type: string  
+      device_uiid:
+        type: string        
+    required:
+      - email
+      - pwd
+      - firstname
+      - lastname
+      - device_uiid
+      - dob
+  loginParams: 
+    description: Login object.
+    properties:
+      email:
+        type: string
+      pwd: 
+        type: string
+      device_uiid: 
+        type: string  
+    required:
+      - email
+      - pwd
+      - device_uiid
+  updateRoleParams: 
+    description: User info object. Note -> (role = current role. "user" or "leader")
+    properties:
+      user_id:
+        type: string
+      role:
+        type: string
+        description: current role "user" or "leader"
+    required:
+      - user_id
+      - role    
+  updateLocationParams:
+    description: leader location info object.
+    properties:
+      user_id:
+        type: string
+      lat: 
+        type: number
+      lng:
+        type: number
+    required:
+      - user_id
+      - lat
+      - lng
+  updateStatusParams:
+    description: leader status info object.
+    properties:
+      user_id:
+        type: string
+      active:
+        type: boolean
+        description: current status
+    required:
+      - user_id
+      - active
   updateProfilesParams:
     description: user updated info.
     properties:

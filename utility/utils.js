@@ -41,9 +41,8 @@ module.exports.generateToken = function(user) {
   var token = jwt.encode({
     exp: expires
   }, 'showme-serect-string');
-
-  return {
-    token: token,
+  user.token = token;
+  return {   
     user: user
   };
 };

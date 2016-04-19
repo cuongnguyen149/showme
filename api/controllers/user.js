@@ -154,7 +154,7 @@ function updateUserProfiles(req, res){
                     " WHERE "  + constants.EMAIL + " = '"  + email + "'";
   dbConfig.query(query_email, function(err, rows){
     if(rows){
-      if(rows.length > 0 && row[0].email != userObject.email){
+      if(rows.length > 0 && rows[0].email != userObject.email){
         res.json(myUtils.createErrorStr('Email already exist.', constants.ERROR_CODE));
       }else{
         quickbloxConfig.createSession(function(err, result) {

@@ -5,10 +5,15 @@ var Configuration = {
 		password: 'P@ssword123',
 		database: 'showme_db'
 	},
+	// quickblox : {
+	// 	appID : '38631',
+	// 	authKey: 'Jk4b5XEEbBPKTqu',
+	// 	athuSecret: 'fVMmMrwjMeUAFUX'
+	// },
 	quickblox : {
-		appID : '38631',
-		authKey: 'Jk4b5XEEbBPKTqu',
-		athuSecret: 'fVMmMrwjMeUAFUX'
+		appID : '37722',
+		authKey: '7dM2BUhuP3QzPD4',
+		athuSecret: 'QmQsmLMHNU252me'
 	},
 	app : {
 		port: 80

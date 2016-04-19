@@ -48,7 +48,8 @@ var constants = {
 	FEE: "fee",
 	ROLE: "role",
 	DEVICE_UIID: "device_uiid",
-
+	LEADER: "leader",
+	USER: "user",
 	//RETURN CODE
 	ERROR_CODE : 1000,
 	SUCCESS_CODE : 2000,

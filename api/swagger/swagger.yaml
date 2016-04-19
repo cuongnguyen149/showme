@@ -320,6 +320,17 @@ definitions:
     required:
       - user_id
       - active
+  # locationParams:
+  #   description: location query object.
+  #   properties:
+  #     radius:
+  #       type: number
+  #     longitude:
+  #       type: number
+  #     latitude:
+  #       type: number
+  #     address:
+  #       type: string
   updateProfilesParams:
     description: user updated info.
     properties:

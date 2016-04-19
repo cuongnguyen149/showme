@@ -79,7 +79,7 @@ function login(req, res){
       quickbloxConfig.login(params, function(err, result) {
         if(result){
           // console.log("login success!!!!");
-          var query = "SELECT *, NULL AS " + constants.PWD + 
+          var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
                       " FROM " + constants.CLIENT_USER +
                       " WHERE "  + constants.USER_ID + " = "  + result.id;
           var update = "UPDATE " + constants.CLIENT_USER +
@@ -93,6 +93,7 @@ function login(req, res){
                 res.json(myUtils.createDatabaseError(err)); 
                }else{
                 // console.log(myUtils.generateToken(rows[0]));
+                // console.log(rows);
                 res.json({returnCode : constants.SUCCESS_CODE, message: "Login successfully", data: myUtils.generateToken(rows[0])});  
                } 
               });
@@ -116,20 +117,21 @@ function login(req, res){
 function updateRole (req, res){
   var userObject = req.swagger.params.user.value;
   var role = "user";
-  var query = "SELECT *, NULL AS " + constants.PWD + ", NULL AS " + constants.FEE_PER_HOUR + ", NULL AS " + constants.MONTH_INCOME +
+  var query = "SELECT *, NULL AS " + constants.PWD + ", NULL AS " + constants.FEE_PER_HOUR + ", NULL AS " + constants.MONTH_INCOME + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
               " FROM " + constants.CLIENT_USER +
-              " WHERE "  + constants.USER_ID + " = "  + userObject.user_id;
-  var update = "UPDATE " + constants.CLIENT_USER +
-               " SET " + constants.ROLE + " = '" + role  + "' " +
-               " WHERE " + constants.USER_ID + " = "  + userObject.user_id;             
+              " WHERE "  + constants.USER_ID + " = "  + userObject.user_id;             
   if(userObject.role && userObject.role == "user"){
     role = "leader";
     query = "SELECT *, NULL AS " + constants.PWD + 
               " FROM " + constants.CLIENT_USER +
               " WHERE "  + constants.USER_ID + " = "  + userObject.user_id;
   }
+  var update = "UPDATE " + constants.CLIENT_USER +
+               " SET " + constants.ROLE + " = '" + role  + "' " +
+               " WHERE " + constants.USER_ID + " = "  + userObject.user_id;
+               
   dbConfig.query(update, function(err, rows){
-    if(rows){
+    if(rows && rows.affectedRows != 0){
       dbConfig.query(query, function(err, rows){
         if(rows){
           res.json({returnCode: constants.SUCCESS_CODE, message: "Updated user " + userObject.user_id + " to " + role + " role.", data : {user :rows[0]}});
@@ -137,8 +139,10 @@ function updateRole (req, res){
           res.json(myUtils.createDatabaseError(err));    
         }
       });
-    }else{
+    }else if(err){
       res.json(myUtils.createDatabaseError(err));
+    }else{
+      res.json(myUtils.createErrorStr('Your params incorrect! Please check again!', constants.ERROR_CODE));
     }
   });             
 };

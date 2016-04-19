@@ -1,16 +1,17 @@
 'use strict';
 
 var SwaggerExpress = require('swagger-express-mw');
-var app            = require('express')();
+var express        = require('express');
+var app            = express();
 var constants      = require('./constants');
-var appConfig         = require('./config/appConfig');
+var appConfig      = require('./config/appConfig');
 var myUtils        = require('./utility/utils');
 module.exports     = app; // for testing
 
 var config = {
   appRoot: __dirname // required config
 };
-
+app.use(express.static(__dirname + '/public'));
 app.all('*', function(req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');

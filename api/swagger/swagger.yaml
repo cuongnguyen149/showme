@@ -66,6 +66,31 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /users/role:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: user
+    put:
+      description: API for update user's role.
+      # used as the method name of the controller
+      operationId: updateRole
+      parameters:
+        - name: user
+          in: body
+          description: user info.
+          required: true
+          schema:
+            $ref: "#/definitions/updateRoleParams"   
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"          
   /login:
     # binds a127 app logic to a route
     x-swagger-router-controller: user
@@ -90,7 +115,30 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse" 
+            $ref: "#/definitions/ErrorResponse"
+  /leaders/{user_id}:
+    x-swagger-router-controller: leader
+    get:
+      description: API for get leaders information by id.
+      # used as the method name of the controller
+      operationId: getLeaderInfo
+      parameters:
+        - name: user_id
+          in: path
+          description: The user's id.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"    
   /leaders/location:
     # binds a127 app logic to a route
     x-swagger-router-controller: leader
@@ -102,18 +150,23 @@ paths:
         - name: radius
           in: query
           description: radius which user input.
-          required: true
+          required: false
           type: number
         - name: lng
           in: query
           description: longitude which user input.
-          required: true
+          required: false
           type: number
         - name: lat
           in: query
           description: lattitude which user input.
-          required: true
-          type: number    
+          required: false
+          type: number
+        - name: address
+          in: query
+          description: address which user input.
+          required: false
+          type: string  
       responses:
         "200":
           description: Success
@@ -171,31 +224,6 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /users/role:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: user
-    put:
-      description: API for update user's role.
-      # used as the method name of the controller
-      operationId: updateRole
-      parameters:
-        - name: user
-          in: body
-          description: user info.
-          required: true
-          schema:
-            $ref: "#/definitions/updateRoleParams"   
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/BaseSuccessRespone"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"                        
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -276,14 +304,11 @@ definitions:
     properties:
       user_id:
         type: string
-      lat: 
-        type: number
-      lng:
-        type: number
+      address: 
+        type: string
     required:
       - user_id
-      - lat
-      - lng
+      - address
   updateStatusParams:
     description: leader status info object.
     properties:

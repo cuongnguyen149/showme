@@ -123,8 +123,7 @@ function updateStatus(req, res){
                           " FROM " + constants.CLIENT_USER +
                           " WHERE "  + constants.USER_ID + " = "  + leaderObject.user_id;          	 
 	dbConfig.query(update, function(err, rows){
-		if(rows && rows.affectedRows != 0){
-			console.log(rows);
+		if(rows && rows.affectedRows > 0){
 			dbConfig.query(query, function(err, rows){
 				if(rows && rows.length > 0){
 					console.log(rows);
@@ -133,13 +132,11 @@ function updateStatus(req, res){
 					res.json(myUtils.createDatabaseError(err));
 				}
 			});
-			
 		}else if(err){
 			res.json(myUtils.createDatabaseError(err));
 		}else{
 			res.json(myUtils.createErrorStr("user_id: " +  leaderObject.user_id + " does not exist!", constants.ERROR_CODE));
 		}
-		
 	});
 };
 /**
@@ -149,8 +146,8 @@ function getLeaderInfo(req, res){
 	var user_id = req.swagger.params.user_id.value;
 	var query   = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
 	              " FROM " + constants.CLIENT_USER +
-	              " WHERE "  + constants.USER_ID + " = "  + user_id;
-	dbConfig.query(query, function(err, rows){
+	              " WHERE "  + constants.USER_ID + " = ?";
+	dbConfig.query(query, [user_id], function(err, rows){
 		if(rows && rows.length > 0){
 			res.json({returnCode: constants.SUCCESS_CODE, message: "Get information of leader success.", data: {user: rows[0]}});
 		}else if(err){

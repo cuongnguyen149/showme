@@ -280,6 +280,7 @@ definitions:
     properties:
       email:
         type: string
+        format: email
       pwd: 
         type: string
       device_uiid: 
@@ -342,35 +343,41 @@ definitions:
         type: string
       lastname:
         type: string
-      country:
+      language:
         type: string
       description:
         type: string
       fee_per_hour:
-        type: string
+        type: number
+      possible_purchase:
+        type: number
       sex:
         type: string
       dob:
-        description: format (yyyy/mm/dd).
+        description: format (yyyy-mm-dd).
         type: string
         format: date
       email: 
         type: string
+        format: email
       address:
         type: string
       phone:
         type: string
     required:
       - user_id
-      # - firstname
-      # - lastname
-      # - country
-      # - description
-      # - sex
-      # - dob
-      # - email
-      # - address
-      # - phone
+      - avatar
+      - firstname
+      - lastname
+      - language
+      - description
+      - fee_per_hour
+      - possible_purchase
+      - sex
+      - dob
+      - email
+      - address
+      - phone
   codeReturn:
     description: leader status info object.
     properties:

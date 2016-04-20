@@ -16,6 +16,7 @@ module.exports = {
 */
 function registerUser(req, res) {
   var userObject = req.swagger.params.user.value;
+  userObject.pwd = userObject.pwd + constants.PWD_ADD;
   var params = {email : userObject.email, password: userObject.pwd};
   var query_email = "SELECT " + constants.EMAIL + 
                     " FROM " + constants.CLIENT_USER +
@@ -73,6 +74,7 @@ function registerUser(req, res) {
 */
 function login(req, res){
   var userObject = req.swagger.params.login.value;
+  userObject.pwd = userObject.pwd + constants.PWD_ADD;
   var params = {email : userObject.email, password: userObject.pwd};
   quickbloxConfig.createSession(function(err, result) {
     if(result){
@@ -103,7 +105,7 @@ function login(req, res){
             }
           });             
         }else{
-          res.json(myUtils.createErrorStr('Login fail. Incorrect Email or Password. Please try again.', constants.ERROR_CODE));
+          res.json(myUtils.createErrorStr('Login fail. Incorrect Email or Password.', constants.ERROR_CODE));
         }
       });
     }else{
@@ -117,24 +119,25 @@ function login(req, res){
 function updateRole (req, res){
   var userObject = req.swagger.params.user.value;
   var role = "user";
+  var user_id = userObject.user_id;
   var query = "SELECT *, NULL AS " + constants.PWD + ", NULL AS " + constants.FEE_PER_HOUR + ", NULL AS " + constants.MONTH_INCOME + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
               " FROM " + constants.CLIENT_USER +
-              " WHERE "  + constants.USER_ID + " = "  + userObject.user_id;             
+              " WHERE "  + constants.USER_ID + " = ?";             
   if(userObject.role && userObject.role == "user"){
     role = "leader";
     query = "SELECT *, NULL AS " + constants.PWD + 
               " FROM " + constants.CLIENT_USER +
-              " WHERE "  + constants.USER_ID + " = "  + userObject.user_id;
+              " WHERE "  + constants.USER_ID + " = ?";
   }
   var update = "UPDATE " + constants.CLIENT_USER +
-               " SET " + constants.ROLE + " = '" + role  + "' " +
-               " WHERE " + constants.USER_ID + " = "  + userObject.user_id;
+               " SET " + constants.ROLE + " = ?" + 
+               " WHERE " + constants.USER_ID + " = ?";
                
-  dbConfig.query(update, function(err, rows){
+  dbConfig.query(update, [role, user_id], function(err, rows){
     if(rows && rows.affectedRows != 0){
-      dbConfig.query(query, function(err, rows){
+      dbConfig.query(query, [user_id], function(err, rows){
         if(rows){
-          res.json({returnCode: constants.SUCCESS_CODE, message: "Updated user " + userObject.user_id + " to " + role + " role.", data : {user :rows[0]}});
+          res.json({returnCode: constants.SUCCESS_CODE, message: "Updated user " + user_id + " to " + role + " role.", data : {user :rows[0]}});
         }else{
           res.json(myUtils.createDatabaseError(err));    
         }
@@ -150,34 +153,71 @@ function updateRole (req, res){
 * User update user's profiles API.
 */
 function updateUserProfiles(req, res){
-  var userObject = req.swagger.params.user.value,
-      user_id    = userObject.user_id,
-      email       = userObject.email;
+  var userObject = req.swagger.params.user.value;
 
-  var query_email = "SELECT " + constants.EMAIL + 
-                    " FROM " + constants.CLIENT_USER +
-                    " WHERE "  + constants.EMAIL + " = '"  + email + "'";
-  dbConfig.query(query_email, function(err, rows){
-    if(rows){
-      if(rows.length > 0 && row[0].email != userObject.email){
-        res.json(myUtils.createErrorStr('Email already exist.', constants.ERROR_CODE));
-      }else{
-        quickbloxConfig.createSession(function(err, result) {
-          if(result){
-            quickbloxConfig.users.update(user_id, {email: email}, function(err, result){
-              if(result){
-                console.log(result);
-              }else{
-                console.log(err);
-              }
-            }); 
-          }else{
-            console.log(err);
-          }
-        });
-      }
+  var query_email = "SELECT " + constants.EMAIL + ", " + constants.PWD +
+                  " FROM " + constants.CLIENT_USER +
+                  " WHERE "  + constants.USER_ID + " = ?";
+
+  var query_user = "SELECT * " +
+                  " FROM " + constants.CLIENT_USER +
+                  " WHERE "  + constants.USER_ID + " = ?";
+
+  var update_user = "UPDATE " + constants.CLIENT_USER +
+                    " SET " + constants.AVATAR + " = ?, " +
+                              constants.FIRSTNAME + " = ?, " + 
+                              constants.LASTNAME + " = ?, " + 
+                              constants.LANGUAGE + " = ?, " + 
+                              constants.DESCRIPTION + " = ?, " + 
+                              constants.FEE_PER_HOUR + " = ?, " + 
+                              constants.POSSIBLE_PURCHASE + " = ?, " + 
+                              constants.SEX + " = ?, " + 
+                              constants.DOB + " = ?, " + 
+                              constants.EMAIL + " = ?, " + 
+                              constants.ADDRESS + " = ?, " + 
+                              constants.PHONE + " = ? " + 
+                    " WHERE " + constants.USER_ID + " = ? ";                                  
+  dbConfig.query(query_email, [userObject.user_id], function(err, rows){
+    if(rows && rows.length > 0 && rows[0].email == userObject.email){
+      res.json(myUtils.createErrorStr('Email already exist.', constants.ERROR_CODE));
+    }else if(err){
+      res.json(myUtils.createDatabaseError(err));
     }else{
-      console.log(err);
+      console.log(rows[0]);
+      var params = {email: rows[0].email, password : rows[0].pwd};
+      quickbloxConfig.createSession(params, function(err, result) {
+        if(result){
+          quickbloxConfig.users.update(userObject.user_id, {email : userObject.email}, function(err, result){
+            if(result){
+              dbConfig.query(update_user,[userObject.avatar, userObject.firstname, userObject.lastname, 
+                                          userObject.language, userObject.description, userObject.fee_per_hour,
+                                          userObject.possible_purchase, userObject.sex, userObject.dob, 
+                                          userObject.email, userObject.address, userObject.phone, userObject.user_id] ,function(err, rows){
+                 if(rows){
+                    dbConfig.query(query_user, [userObject.user_id], function(err, rows){
+                      if(rows && rows.length > 0){
+                        res.json({returnCode: constants.SUCCESS_CODE, message: "Updated user " + userObject.user_id + " successfully.", data : {user :rows[0]}});
+                      }else if(err){
+                        console.log(err);
+                        res.json(myUtils.createDatabaseError(err));
+                      }else{
+                        res.json(myUtils.createErrorStr('user_id incorrect! Please check again.', constants.ERROR_CODE));
+                      }
+                    });
+                 }else{
+                  console.log(err);
+                  res.json(myUtils.createDatabaseError(err));
+                 } 
+              });
+            }else{
+              res.json(myUtils.createQuickBloxError(err));
+            }
+          }); 
+        }else{
+          console.log(err);
+          res.json(myUtils.createQuickBloxError(err));
+        }
+      });      
     }
   });                  
 };

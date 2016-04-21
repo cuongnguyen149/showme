@@ -15,13 +15,19 @@ module.exports = {
 * Register API (Integrate with QuickBlox)
 */
 function registerUser(req, res) {
-  var userObject = req.swagger.params.user.value;
-  userObject.pwd = userObject.pwd + constants.PWD_ADD;
-  var params = {email : userObject.email, password: userObject.pwd};
+  var userObject  = req.swagger.params.user.value;
+  var email       = userObject.email,
+      pwd         = userObject.pwd,
+      firstname   = userObject.firstname,
+      lastname    = userObject.lastname,
+      dob         = userObject.dob,
+      device_uiid = userObject.device_uiid; 
+  pwd = pwd + constants.PWD_ADD;
+  var params = {email : email, password: pwd};
   var query_email = "SELECT " + constants.EMAIL + 
                     " FROM " + constants.CLIENT_USER +
-                    " WHERE "  + constants.EMAIL + " = '"  + userObject.email + "'";
-  dbConfig.query(query_email, function(err, rows){
+                    " WHERE "  + constants.EMAIL + " = ?"; 
+  dbConfig.query(query_email, [userObject.email], function(err, rows){
     if(rows){
       if(rows.length > 0){
         res.json(myUtils.createErrorStr('Email already exist.', constants.ERROR_CODE));
@@ -31,19 +37,24 @@ function registerUser(req, res) {
             quickbloxConfig.users.create(params, function(err, result) {
               // console.log(result);
               if(result){
-                var insert = "INSERT INTO " + constants.CLIENT_USER +  
-                            " (" + constants.USER_ID + ", " + constants.EMAIL + ", " + constants.PWD + ", " + constants.FIRSTNAME + ", " + constants.LASTNAME + ", " + constants.DOB + ", " + constants.DEVICE_UIID + ") " +
-                            "VALUES " +
-                            "( "+ result.id + ", '"+ userObject.email + "', '"+ userObject.pwd + "', '" + userObject.firstname + "', '" + userObject.lastname + "', '" + userObject.dob + "', '" + userObject.device_uiid + "');";
-                dbConfig.query(insert, function(err, rows){
+                var userStr = '{"' + constants.USER_ID + '":"' + result.id + '", "'
+                                   + constants.EMAIL + '":"' + email + '", "'
+                                   + constants.PWD + '":"' + pwd + '", "'
+                                   + constants.FIRSTNAME + '":"' + firstname + '", "' 
+                                   + constants.LASTNAME + '":"' + lastname + '", "' 
+                                   + constants.DOB + '":"' + dob + '", "' 
+                                   + constants.DEVICE_UIID + '":"' + device_uiid + '"}'; 
+                var userObj =  JSON.parse(userStr);
+                var insert = "INSERT INTO " + constants.CLIENT_USER + " SET ?"; 
+                dbConfig.query(insert, userObj, function(err, rows){
                    if(err){
                     // console.log(err);
                     res.json(myUtils.createDatabaseError(err)); 
                    }else{
-                    var query = "SELECT *, NULL AS " + constants.PWD + 
-                                " FROM " + constants.CLIENT_USER +
-                                " WHERE "  + constants.USER_ID + " = "  + result.id;
-                    dbConfig.query(query, function(err, rows){
+                    var query_user = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB + 
+                                     " FROM " + constants.CLIENT_USER +
+                                     " WHERE "  + constants.USER_ID + " = ?";
+                    dbConfig.query(query_user, [result.id], function(err, rows){
                      if(err){
                       // console.log(err);
                       res.json(myUtils.createDatabaseError(err)); 
@@ -64,6 +75,7 @@ function registerUser(req, res) {
         });
       }
     }else{
+      // console.log(err);
       res.json(myUtils.createDatabaseError(err)); 
     }
   });                  
@@ -83,13 +95,13 @@ function login(req, res){
           // console.log("login success!!!!");
           var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
                       " FROM " + constants.CLIENT_USER +
-                      " WHERE "  + constants.USER_ID + " = "  + result.id;
+                      " WHERE "  + constants.USER_ID + " = ?";
           var update = "UPDATE " + constants.CLIENT_USER +
                        " SET " + constants.DEVICE_UIID + " = '" + userObject.device_uiid + "'" +
-                       " WHERE " + constants.USER_ID + " = "  + result.id;
-          dbConfig.query(update, function(err, rows){
+                       " WHERE " + constants.USER_ID + " = ?";
+          dbConfig.query(update, [result.id], function(err, rows){
             if(rows){
-              dbConfig.query(query, function(err, rows){
+              dbConfig.query(query, [result.id], function(err, rows){
                if(err){
                 console.log(err);
                 res.json(myUtils.createDatabaseError(err)); 

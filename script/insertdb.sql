@@ -4,7 +4,7 @@ INSERT INTO client_user ( latitude, longitude, user_id, pwd, email, role, dob, f
 	VALUES ( 10.764199, 106.697577, "2", "123", "a2@a.com", "leader", "1999-12-21", "John", "Lock" );
 INSERT INTO client_user ( latitude, longitude, user_id, pwd, email, role, dob, firstname, lastname ) 
 	VALUES ( 10.770996, 106.699855, "3", "123", "a3@a.com", "leader", "1999-12-21", "John", "Lock" );
-INSERT INTO client_user ( latiude, longitude, user_id, pwd, email, role, dob, firstname, lastname ) 
+INSERT INTO client_user ( latitude, longitude, user_id, pwd, email, role, dob, firstname, lastname ) 
 	VALUES ( 10.773743, 106.703706, "4", "123", "a4@a.com", "leader", "1999-12-21", "John", "Lock" );
 INSERT INTO client_user ( latitude, longitude, user_id, pwd, email, role, dob, firstname, lastname )
 	VALUES ( 10.772678, 106.702622, "5", "123", "a5@a.com", "leader", "1999-12-21", "John", "Lock" );

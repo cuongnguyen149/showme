@@ -31,16 +31,24 @@ function leaderLocation(req, res){
 	    	if(resuls && resuls.length > 0){
 	    		lat = resuls[0].latitude;
 	    		lng = resuls[0].longitude;
-	    		var query = "SELECT " + constants.USER_ID + ", " + constants.LATITUDE + ", " + constants.LONGITUDE + 
+	    		var query = "SELECT " + constants.USER_ID + ", " 
+	    							  + constants.LATITUDE + ", " 
+	    							  + constants.LONGITUDE + ", " 
+	    							  + constants.FIRSTNAME + ", " 
+	    							  + constants.LASTNAME + ", " 
+	    							  + constants.RATING + ", " 
+	    							  + constants.LANGUAGE + ", "
+	    							  + constants.FEE_PER_HOUR + ", "
+	    							  + constants.POSSIBLE_PURCHASE +
 							", ( 6371 * acos( cos( radians(" + lat + ") ) * cos( radians( "+  constants.LATITUDE + " ) ) * cos( radians( " + constants.LONGITUDE + " ) - radians( " + lng + " ) ) + sin( radians( " + lat + " ) ) * sin(radians( "+ constants.LATITUDE + " )) ) ) AS distance " +
 							" FROM " + constants.CLIENT_USER +
-							" WHERE " + constants.ROLE + " = '" + constants.LEADER + "' AND " + constants.IS_ACTIVE + " = true " + 
+							" WHERE " + constants.ROLE + " = ? AND "
+									  + constants.IS_ACTIVE + " = ?" + 
 							" HAVING distance <= " + radius +
-							" ORDER BY distance " + 
-							"LIMIT 0 , 50;";		
-				dbConfig.query(query, function(err, rows){
+							" ORDER BY distance;";
+				dbConfig.query(query, [constants.LEADER, true], function(err, rows){
 					if(rows){
-						res.json({returnCode: constants.SUCCESS_CODE, message : "Get location of leader success", data: {locations : rows}});
+						res.json({returnCode: constants.SUCCESS_CODE, message : "Get location of leader success", data: {leaders : rows}});
 					}else{
 						console.log(err);
 						res.json(myUtils.createDatabaseError(err)); 
@@ -54,16 +62,24 @@ function leaderLocation(req, res){
 	        res.json(myUtils.createErrorStr("Opps! something wrong with get leader location", constants.ERROR_CODE));
 	    });	
 	}else if(lat && lng){
-		var query = "SELECT " + constants.USER_ID + ", " + constants.LATITUDE + ", " + constants.LONGITUDE + 
+		var query = "SELECT " + constants.USER_ID + ", " 
+							  + constants.LATITUDE + ", " 
+							  + constants.LONGITUDE + ", " 
+							  + constants.FIRSTNAME + ", " 
+							  + constants.LASTNAME + ", " 
+							  + constants.RATING + ", " 
+							  + constants.LANGUAGE + ", "
+							  + constants.FEE_PER_HOUR + ", "
+							  + constants.POSSIBLE_PURCHASE +
 					", ( 6371 * acos( cos( radians(" + lat + ") ) * cos( radians( "+  constants.LATITUDE + " ) ) * cos( radians( " + constants.LONGITUDE + " ) - radians( " + lng + " ) ) + sin( radians( " + lat + " ) ) * sin(radians( "+ constants.LATITUDE + " )) ) ) AS distance " +
 					" FROM " + constants.CLIENT_USER +
-					" WHERE " + constants.ROLE + " = '" + constants.LEADER + "' AND " + constanst.IS_ACTIVE + " = true " + 
+					" WHERE " + constants.ROLE + " = ? AND "
+							  + constants.IS_ACTIVE + " = ?" + 
 					" HAVING distance <= " + radius +
-					" ORDER BY distance " + 
-					"LIMIT 0 , 50;";		
-		dbConfig.query(query, function(err, rows){
+					" ORDER BY distance;";
+		dbConfig.query(query, [constants.LEADER, true], function(err, rows){
 			if(rows){
-				res.json({returnCode: constants.SUCCESS_CODE, message : "Get location of leader success", data: {locations : rows}});
+				res.json({returnCode: constants.SUCCESS_CODE, message : "Get location of leader success", data: {leaders : rows}});
 			}else{
 				console.log(err);
 				res.json(myUtils.createDatabaseError(err)); 
@@ -79,27 +95,31 @@ function leaderLocation(req, res){
 */
 function updateLocation(req, res){
 	var leaderObject = req.swagger.params.leader.value;
+	var user_id = leaderObject.user_id;
 	geocoder.geocode(leaderObject.address)
 	    .then(function(resuls) {
 	        if(resuls && resuls.length > 0){
         		var update = "UPDATE " + constants.CLIENT_USER +
-				          	 " SET " + constants.LATITUDE + " = " + resuls[0].latitude + ", " 
-				          	 		 + constants.LONGITUDE + " = " + resuls[0].longitude +
-				          	 " WHERE " + constants.USER_ID + " = "  + user_id;
+				          	 " SET " + constants.LATITUDE + " = ?, " 
+				          	 		 + constants.LONGITUDE + " = ?, " 
+				          	 		 + constants.ADDRESS + " = ? " +
+				          	 " WHERE " + constants.USER_ID + " = ? ";
 				var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
 			                          " FROM " + constants.CLIENT_USER +
-			                          " WHERE "  + constants.USER_ID + " = "  + user_id;          	 
-				dbConfig.query(update, function(err, rows){
+			                          " WHERE "  + constants.USER_ID + " = ?";          	 
+				dbConfig.query(update, [resuls[0].latitude, resuls[0].longitude, leaderObject.address, user_id], function(err, rows){
 					if(rows){
-						dbConfig.query(query, function(err, rows){
+						dbConfig.query(query, [user_id], function(err, rows){
 							if(rows){
-								res.json({returnCode: constants.SUCCESS_CODE, message: "Updated location of leader " + user_id + " to " + address + ".", data: {user: rows[0]}});	
+								res.json({returnCode: constants.SUCCESS_CODE, message: "Updated location of leader " + user_id + " to " + leaderObject.address + ".", data: {user: rows[0]}});	
 							}else{
+								// console.log(err);
 								res.json(myUtils.createDatabaseError(err)); 
 							}
 						});
 						
 					}else{
+						console.log(err);
 						res.json(myUtils.createDatabaseError(err)); 
 					}	
 				});
@@ -118,15 +138,14 @@ function updateStatus(req, res){
 	var leaderObject = req.swagger.params.leader.value;
 	var update = "UPDATE " + constants.CLIENT_USER +
 	          	 " SET " + constants.IS_ACTIVE + " = " + !leaderObject.active +
-	          	 " WHERE " + constants.USER_ID + " = "  + leaderObject.user_id;
+	          	 " WHERE " + constants.USER_ID + " = ?";
 	var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
                           " FROM " + constants.CLIENT_USER +
-                          " WHERE "  + constants.USER_ID + " = "  + leaderObject.user_id;          	 
-	dbConfig.query(update, function(err, rows){
+                          " WHERE "  + constants.USER_ID + " = ?";          	 
+	dbConfig.query(update, [leaderObject.user_id], function(err, rows){
 		if(rows && rows.affectedRows > 0){
-			dbConfig.query(query, function(err, rows){
+			dbConfig.query(query, [leaderObject.user_id], function(err, rows){
 				if(rows && rows.length > 0){
-					console.log(rows);
 					res.json({returnCode: constants.SUCCESS_CODE, message: "Updated status of leader " + leaderObject.user_id + " to " + !leaderObject.active +".", data: {user: rows[0]}});	
 				}else{
 					res.json(myUtils.createDatabaseError(err));

@@ -29,8 +29,11 @@ function leaderLocation(req, res){
 		geocoder.geocode(address)
 	    .then(function(resuls) {
 	    	if(resuls && resuls.length > 0){
-	    		lat = resuls[0].latitude;
-	    		lng = resuls[0].longitude;
+	    		console.log(resuls);
+		    		lat 		= resuls[0].latitude;
+		    		lng 		= resuls[0].longitude;
+	    		var addressFull = resuls[0].formattedAddress,
+	    			addressObject = {latitude: lat, longitude: lng, addressFull: addressFull};
 	    		var query = "SELECT " + constants.USER_ID + ", " 
 	    							  + constants.LATITUDE + ", " 
 	    							  + constants.LONGITUDE + ", " 
@@ -48,7 +51,7 @@ function leaderLocation(req, res){
 							" ORDER BY distance;";
 				dbConfig.query(query, [constants.LEADER, true], function(err, rows){
 					if(rows){
-						res.json({returnCode: constants.SUCCESS_CODE, message : "Get location of leader success", data: {leaders : rows}});
+						res.json({returnCode: constants.SUCCESS_CODE, message : "Get location of leader success", data: {leaders : rows, searched: addressObject}});
 					}else{
 						console.log(err);
 						res.json(myUtils.createDatabaseError(err)); 
@@ -62,6 +65,7 @@ function leaderLocation(req, res){
 	        res.json(myUtils.createErrorStr("Opps! something wrong with get leader location", constants.ERROR_CODE));
 	    });	
 	}else if(lat && lng && lat != 0.0 && lng != 0.0){
+		var addressObject = {latitude: lat, longitude: lng, addressFull: ""};
 		var query = "SELECT " + constants.USER_ID + ", " 
 							  + constants.LATITUDE + ", " 
 							  + constants.LONGITUDE + ", " 
@@ -79,7 +83,7 @@ function leaderLocation(req, res){
 					" ORDER BY distance;";
 		dbConfig.query(query, [constants.LEADER, true], function(err, rows){
 			if(rows){
-				res.json({returnCode: constants.SUCCESS_CODE, message : "Get location of leader success", data: {leaders : rows}});
+				res.json({returnCode: constants.SUCCESS_CODE, message : "Get location of leader success", data: {leaders : rows,  searched: addressObject}});
 			}else{
 				console.log(err);
 				res.json(myUtils.createDatabaseError(err)); 

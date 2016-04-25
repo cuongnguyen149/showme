@@ -61,7 +61,7 @@ function leaderLocation(req, res){
 	    .catch(function(err) {
 	        res.json(myUtils.createErrorStr("Opps! something wrong with get leader location", constants.ERROR_CODE));
 	    });	
-	}else if(lat && lng){
+	}else if(lat && lng && lat != 0.0 && lng != 0.0){
 		var query = "SELECT " + constants.USER_ID + ", " 
 							  + constants.LATITUDE + ", " 
 							  + constants.LONGITUDE + ", " 

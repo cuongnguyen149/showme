@@ -1,6 +1,5 @@
 'use strict';
 // var util = require('util');
-var config = require('../../config/appConfig');
 var myUtils = require('../../utility/utils');
 var dbConfig = require('../../config/dbConfig');
 var quickbloxConfig = require('../../config/quickbloxConfig');

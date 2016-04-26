@@ -13,6 +13,7 @@
     "mysql": "^2.10.2",
     "node-geocoder": "^3.9.1",
     "quickblox": "^2.1.1",
+    "socket.io": "^1.4.5",
     "swagger-express-mw": "^0.1.0"
   },
   "devDependencies": {

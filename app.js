@@ -44,6 +44,9 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   swaggerExpress.register(app);
 
   var port = process.env.PORT || appConfig.app.port;
-  var io   = require('socket.io').listen(app.listen(port, function(err){if(!err){ console.log("Server listening on port: " + port)}})),
-      socketLeader = require('./api/controllers/socket/leader')(io);
+  var io   = require('socket.io').listen(app.listen(port, function(err){
+    if(!err){ 
+      console.log("Server listening on port: " + port)
+    }})),
+  socketLeader = require('./api/controllers/socket/leader')(io);
 });

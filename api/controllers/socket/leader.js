@@ -10,15 +10,12 @@ var geocoder 			= require('node-geocoder')(geocoderProvider, httpAdapter);
 exports = module.exports = function(io){
 	var leader = {}; 
   	io.sockets.on('connection', function (socket) {
-  		console.log("connected");
-  		// console.log(socket);
-	    // console.log(socket.server.eio.clientsCount);
+  		console.log("user connected");
 	    /*
 	    * update leader location 
 	    * Param: user_id, address.	
 	    */
 	    socket.on('updateLeaderLocation', function (leaderObject) {
-	    	console.log(leaderObject);
 	    	if(leaderObject.user_id && leaderObject.address){
 		      	geocoder.geocode(leaderObject.address)
 			    .then(function(resuls) {
@@ -35,16 +32,13 @@ exports = module.exports = function(io){
 							if(rows){
 								dbConfig.query(query, [leaderObject.user_id], function(err, rows){
 									if(rows){
-										console.log(rows);
 										socket.emit("updateLocationSuccess", {returnCode: constants.SUCCESS_CODE, message: "Updated location of leader " + leaderObject.user_id + " to " + leaderObject.address + ".", data: {user: rows[0]}});	
 									}else{
-										console.log(err);
 										socket.emit("updateLocationFalse", myUtils.createDatabaseError(err)); 
 									}
 								});
 								
 							}else{
-								console.log(err);
 								socket.emit("updateLocationFalse", myUtils.createDatabaseError(err)); 
 							}	
 						});
@@ -59,10 +53,6 @@ exports = module.exports = function(io){
 	    	}else{
 	    		socket.emit("updateLocationFalse", myUtils.createErrorStr("Bad parameters!!", constants.ERROR_CODE));
 	    	}
-	    	// console.log(socket.id);
-	    	// leader[socket.id] =  leaderObject.user_id;
-	    	// console.log(leaderObject);
-	    	// console.log(leader[socket.id]);
 	    });
 	    /*
 	    * update leader location 
@@ -80,13 +70,15 @@ exports = module.exports = function(io){
 				if(rows && rows.affectedRows > 0){
 					dbConfig.query(query, [leaderObject.user_id], function(err, rows){
 						if(rows && rows.length > 0){
-							socket.emit("updateStatusSuccess", {returnCode: constants.SUCCESS_CODE, message: "Updated status of leader " + leaderObject.user_id + " to " + !leaderObject.active +".", data: {user: rows[0]}});	
 							if(leaderObject.active){
+								socket.emit("updateStatusToActive", {returnCode: constants.SUCCESS_CODE, message: "Updated status of leader " + leaderObject.user_id + " to " + !leaderObject.active +".", data: {user: rows[0]}});	
 								// console.log(io.sockets.connected[socket.id]);
 								io.sockets.connected[socket.id].disconnect();
-								console.log(socket.server.eio.clientsCount);
+								// console.log(socket.server.eio.clientsCount);
+							}else{
+								socket.emit("updateStatusToInactive", {returnCode: constants.SUCCESS_CODE, message: "Updated status of leader " + leaderObject.user_id + " to " + !leaderObject.active +".", data: {user: rows[0]}});	
 							}
-							console.log(socket.server.eio.clientsCount);
+							// console.log(socket.server.eio.clientsCount);
 						}else{
 							socket.emit("updateStatusFalse", myUtils.createDatabaseError(err));
 						}
@@ -101,8 +93,15 @@ exports = module.exports = function(io){
 
 	    socket.on('disconnect', function(leaderObject){
 	    	console.log('user disconnected');
-	    	// console.log(leader[socket.id]);
-
+	    	console.log(leader[socket.id]);
+	    	var update_inactive = "UPDATE " + constants.CLIENT_USER +
+	          	 " SET " + constants.IS_ACTIVE + " = " + false +
+	          	 " WHERE " + constants.USER_ID + " = ?";
+	        dbConfig.query(update_inactive, [leader[socket.id]], function(err, rows){
+	        	if(err){
+	        		console.log(err);
+	        	}
+	        });  	 
 	  	});
  	});
 }

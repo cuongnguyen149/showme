@@ -1,3 +1,5 @@
+'use strict';
+
 var quickBlox = require('quickblox');
 var config     = require('./appConfig');
 quickBlox.init( config.quickblox.appID,

@@ -28,12 +28,13 @@ function leaderLocation(req, res){
 		geocoder.geocode(address)
 	    .then(function(resuls) {
 	    	if(resuls && resuls.length > 0){
-	    		console.log(resuls);
+	    		// console.log(resuls);
 		    		lat 		= resuls[0].latitude;
 		    		lng 		= resuls[0].longitude;
 	    		var addressFull = resuls[0].formattedAddress,
 	    			addressObject = {latitude: lat, longitude: lng, addressFull: addressFull};
-	    		var query = "SELECT " + constants.USER_ID + ", " 
+	    		var query = "SELECT " + constants.USER_ID + ", "
+	    							  +	constants.AVATAR + ", " 
 	    							  + constants.LATITUDE + ", " 
 	    							  + constants.LONGITUDE + ", " 
 	    							  + constants.FIRSTNAME + ", " 

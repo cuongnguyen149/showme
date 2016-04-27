@@ -3,6 +3,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
+   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <style>
 #outerdiv
@@ -11,7 +14,7 @@
    height:900px;
    overflow:hidden;
    position:absolute;
-   left: 250px;
+   left: 0px;
 }
 
 #inneriframe
@@ -22,11 +25,54 @@
    width:1260px;
    height:1090px;
 }
+
+#socketInfo
+{
+   width:500px;
+   height:900px;
+   overflow:hidden;
+   position:absolute;
+   left: 640px;
+}
 </style>
 
 <body>
 	<div id="outerdiv">
     <iframe src="http://tinyurl.com/hldl3rn" id="inneriframe" scrolling="no"></iframe>
-</div>
+   </div>
+   <div id="socketInfo">
+      <h1>Socket Information</h1>
+      <table class="table table-hover table-bordered">
+         <thead>
+            <tr class="success">
+              <th>Socket.on (for calling)</th>
+              <th>Params</th>
+              <th>Socket.emit (for listening response)</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr>
+              <td>updateLeaderLocation</td>
+              <td>{user_id: string, address: string}</td>
+              <td>
+               <ul>
+                 <li>updateLocationSuccess</li>
+                 <li>updateLocationFalse</li>
+               </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>updateLeaderStatus</td>
+              <td>{user_id: string, active: boolean}</td>
+              <td>
+               <ul>
+                 <li>updateStatusToActive</li>
+                 <li>updateStatusToInactive</li>
+                 <li>updateStatusFalse</li>
+               </ul>            
+            </tr>
+         </tbody>
+      </table>
+   </div>
 </body>
 </html>

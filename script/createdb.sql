@@ -48,11 +48,18 @@ CREATE TABLE leader_comment(
 );
 
 CREATE TABLE user_transaction(
-	transaction_id VARCHAR(100) NOT NULL,
+	transaction_id INT NOT NULL AUTO_INCREMENT,
 	leader_id VARCHAR(100) NOT NULL,
 	user_id VARCHAR(100) NOT NULL,
 	call_start TIMESTAMP,
    call_end TIMESTAMP,
-   fee FLOAT,
+   rating_connection FLOAT,
+   rating_visit FLOAT,
+   rating_guide FLOAT,
+   rating_recommend FLOAT,
+   total_fee FLOAT,
+   user_comment VARCHAR(500),
+   create_date TIMESTAMP default now(),
+   update_date TIMESTAMP default now() on update now()
    PRIMARY KEY ( transaction_id )
 );

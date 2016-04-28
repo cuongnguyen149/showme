@@ -224,6 +224,64 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /leaders/comment:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: leader
+    get:
+      description: API for get leaders location in range.
+      # used as the method name of the controller
+      operationId: leaderComment
+      parameters:
+        - name: user_id
+          in: query
+          description: user_id of leader.
+          required: true
+          type: string
+        - name: page_size
+          in: query
+          description: record per page.
+          required: true
+          type: number
+        - name: page_number
+          in: query
+          description: page want get record.
+          required: true
+          type: number
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"          
+  /transaction:
+    x-swagger-router-controller: transaction 
+    post:
+      description: API for update leaders status.
+      # used as the method name of the controller
+      operationId: createTransaction
+      parameters:
+        - name: transaction
+          in: body
+          description: transaction's info.
+          required: true
+          schema:
+            $ref: "#/definitions/createTransactionParams"   
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"          
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -378,6 +436,31 @@ definitions:
       - email
       - address
       - phone
+  createTransactionParams:
+    description: transaction info.
+    properties:
+      user_id:
+        type: string
+      leader_id:
+        type: string
+      rating_connection:
+        type: number
+      rating_visit:
+        type: number
+      rating_guide:  
+        type: number
+      rating_recommend:
+        type: number
+      total_fee:
+        type: number
+      user_comment:
+        type: string
+      call_start:
+        type: string
+        # format: date-time
+      call_end:
+        type: string
+        # format: date-time
   codeReturn:
     description: leader status info object.
     properties:

@@ -7,15 +7,13 @@ var constants = {
 	//DATABASE TABLE
 	CLIENT_USER: "client_user",
 	LEADER_USER: "leader_user",
-
-
-	//DATABASE COLLUM
+	USER_TRANSACTION: "user_transaction",
 	
 	//USER
 	USER_ID: "user_id",
 	PWD: "pwd",
 	USER_NAME: "user_name",
-	USER_COMMENT: "user_comment",
+	
 
 	//LEADER
 	LEADER_ID: "leader_id",
@@ -30,6 +28,15 @@ var constants = {
 	LONGITUDE: "longitude",
 	LATITUDE: "latitude",
 
+	//TRANSACTION
+	TRANSACTION_ID: "transaction_id",
+	RATING_CONNECTION: "rating_connection",
+	RATING_VISIT: "rating_visit",
+	RATING_GUIDE: "rating_guide",
+	RATING_RECOMMEND:"rating_recommend",
+	USER_COMMENT: "user_comment",
+	TOTAL_FEE: "total_fee",
+	
 	//COMMON	
 	FIRSTNAME: "firstname",
 	LASTNAME: "lastname",

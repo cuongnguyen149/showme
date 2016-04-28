@@ -1,5 +1,5 @@
 'use strict';
-// var util = require('util');
+
 var myUtils = require('../../utility/utils');
 var dbConfig = require('../../config/dbConfig');
 var quickbloxConfig = require('../../config/quickbloxConfig');
@@ -11,7 +11,8 @@ module.exports = {
   leaderLocation: leaderLocation,
   updateLocation : updateLocation,
   updateStatus : updateStatus,
-  getLeaderInfo : getLeaderInfo
+  getLeaderInfo : getLeaderInfo,
+  leaderComment: leaderComment
 };
 /**
 * GET leaders location in cirle API.
@@ -180,3 +181,12 @@ function getLeaderInfo(req, res){
 		}
 	});             
 };
+/**
+* Leader get leader comment API.
+*/
+function leaderComment(req, res){
+	var user_id 	= req.query.radius,
+		page_size 	= parseInt(req.query.lat),
+		page_number = parseInt(req.query.lng);
+		
+}

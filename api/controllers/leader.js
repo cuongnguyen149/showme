@@ -188,5 +188,5 @@ function leaderComment(req, res){
 	var user_id 	= req.query.radius,
 		page_size 	= parseInt(req.query.lat),
 		page_number = parseInt(req.query.lng);
-		
+
 }

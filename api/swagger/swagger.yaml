@@ -281,7 +281,30 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"          
+            $ref: "#/definitions/ErrorResponse"
+  /test:
+    x-swagger-router-controller: dialogAndMessage 
+    post:
+      description: API for update leaders status.
+      # used as the method name of the controller
+      operationId: test
+      parameters:
+        - name: transaction
+          in: query
+          description: transaction's info.
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"           
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions

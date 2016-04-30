@@ -22,7 +22,7 @@
       var socket; 
       $("#a").click(function() {
         // alert( "Handler for .click() called." );
-        socket = io.connect('http://localhost');
+        socket = io.connect('http://51.254.98.255');
         socket.emit('updateLeaderStatus', {user_id: "1", active: false});
         socket.on("updateStatusSuccess", function(data){
           console.log(data);

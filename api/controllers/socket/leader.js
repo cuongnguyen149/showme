@@ -71,7 +71,7 @@ exports = module.exports = function(io){
 					dbConfig.query(query, [leaderObject.user_id], function(err, rows){
 						if(rows && rows.length > 0){
 							if(leaderObject.active){
-								
+
 								socket.emit("updateStatusToActive", {returnCode: constants.SUCCESS_CODE, message: "Updated status of leader " + leaderObject.user_id + " to " + leaderObject.active +".", data: {user: rows[0]}});	
 								// console.log(io.sockets.connected[socket.id]);
 								// console.log(socket.server.eio.clientsCount);
@@ -81,10 +81,12 @@ exports = module.exports = function(io){
 							}
 							// console.log(socket.server.eio.clientsCount);
 						}else{
+							console.log(err);
 							socket.emit("updateStatusFalse", myUtils.createDatabaseError(err));
 						}
 					});
 				}else if(err){
+					console.log(err);
 					socket.emit("updateStatusFalse", myUtils.createDatabaseError(err));
 				}else{
 					socket.emit("updateStatusFalse", myUtils.createErrorStr("user_id: " +  leaderObject.user_id + " does not exist!", constants.ERROR_CODE));

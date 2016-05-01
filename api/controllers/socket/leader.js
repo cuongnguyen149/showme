@@ -21,11 +21,11 @@ exports = module.exports = function(io){
 	    	if(leaderObj.user_id && leaderObj.lat && leaderObj.lng){
         		var update = "UPDATE " + constants.CLIENT_USER +
 				          	 " SET " + constants.LATITUDE + " = ?, " 
-				          	 		 + constants.LONGITUDE + " = ? " 
+				          	 		 + constants.LONGITUDE + " = ? " + 
 				          	 " WHERE " + constants.USER_ID + " = ? ";
 				var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
 			                          " FROM " + constants.CLIENT_USER +
-			                          " WHERE "  + constants.USER_ID + " = ?";          	 
+			                          " WHERE "  + constants.USER_ID + " = ?";
 				dbConfig.query(update, [leaderObj.lat, leaderObj.lng, leaderObj.user_id], function(err, rows){
 					if(rows){
 						dbConfig.query(query, [leaderObj.user_id], function(err, rows){

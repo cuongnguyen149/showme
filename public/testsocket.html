@@ -36,7 +36,7 @@
         // alert( "Handler for .click() called." );
         // socket = io.connect('http://51.254.98.255');
         socket = io.connect('http://localhost');
-        socket.emit('updateLeaderLocation', {"user_id": "1", "lat": 123, "lng":3211});
+        socket.emit('updateLeaderLocation', '{"user_id": "1", "lat": 1111321, "lng":3243411}');
         socket.on("updateLocationFalse", function(data){
           console.log(data);
         });

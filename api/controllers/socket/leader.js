@@ -16,40 +16,32 @@ exports = module.exports = function(io){
 	    * Param: user_id, address.	
 	    */
 	    socket.on('updateLeaderLocation', function (leaderObject) {
-	    	if(leaderObject.user_id && leaderObject.address){
-		      	geocoder.geocode(leaderObject.address)
-			    .then(function(resuls) {
-			        if(resuls && resuls.length > 0){
-		        		var update = "UPDATE " + constants.CLIENT_USER +
-						          	 " SET " + constants.LATITUDE + " = ?, " 
-						          	 		 + constants.LONGITUDE + " = ?, " 
-						          	 		 + constants.ADDRESS + " = ? " +
-						          	 " WHERE " + constants.USER_ID + " = ? ";
-						var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
-					                          " FROM " + constants.CLIENT_USER +
-					                          " WHERE "  + constants.USER_ID + " = ?";          	 
-						dbConfig.query(update, [resuls[0].latitude, resuls[0].longitude, leaderObject.address, leaderObject.user_id], function(err, rows){
+	    	console.log(leaderObject);
+	    	var leaderObj = JSON.parse(leaderObject);
+	    	if(leaderObj.user_id && leaderObj.lat && leaderObj.lng){
+        		var update = "UPDATE " + constants.CLIENT_USER +
+				          	 " SET " + constants.LATITUDE + " = ?, " 
+				          	 		 + constants.LONGITUDE + " = ? " 
+				          	 " WHERE " + constants.USER_ID + " = ? ";
+				var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
+			                          " FROM " + constants.CLIENT_USER +
+			                          " WHERE "  + constants.USER_ID + " = ?";          	 
+				dbConfig.query(update, [leaderObj.lat, leaderObj.lng, leaderObj.user_id], function(err, rows){
+					if(rows){
+						dbConfig.query(query, [leaderObj.user_id], function(err, rows){
 							if(rows){
-								dbConfig.query(query, [leaderObject.user_id], function(err, rows){
-									if(rows){
-										socket.emit("updateLocationSuccess", {returnCode: constants.SUCCESS_CODE, message: "Updated location of leader " + leaderObject.user_id + " to " + leaderObject.address + ".", data: {user: rows[0]}});	
-									}else{
-										socket.emit("updateLocationFalse", myUtils.createDatabaseError(err)); 
-									}
-								});
-								
+								socket.emit("updateLocationSuccess", {returnCode: constants.SUCCESS_CODE, message: "Updated location of leader " + leaderObj.user_id + " success!.", data: {user: rows[0]}});	
 							}else{
+								// console.log(err);
 								socket.emit("updateLocationFalse", myUtils.createDatabaseError(err)); 
-							}	
+							}
 						});
-			        }else{
-						socket.emit("updateLocationFalse", myUtils.createErrorStr("Your input address does not exist! Please try again.", constants.ERROR_CODE));
-			        }
-			    })
-			    .catch(function(err) {
-			        socket.emit("updateLocationFalse", myUtils.createErrorStr(err, constants.ERROR_CODE));
-			    });
-
+						
+					}else{
+						console.log(err);
+						socket.emit("updateLocationFalse", myUtils.createDatabaseError(err)); 
+					}	
+				});
 	    	}else{
 	    		socket.emit("updateLocationFalse", myUtils.createErrorStr("Bad parameters!!", constants.ERROR_CODE));
 	    	}

@@ -15,7 +15,7 @@
     </style>
   </head>
   <body>
-  <button id="m">Update To False </button><button id="a">Update to True</button>
+  <button id="m">Update To False </button><button id="a">Update to True</button><button id="location">Update Location</button>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script>
@@ -29,6 +29,18 @@
           console.log(data);
         });
         socket.on("updateStatusFalse", function(data){
+          console.log(data);
+        })      
+      });
+      $("#location").click(function() {
+        // alert( "Handler for .click() called." );
+        // socket = io.connect('http://51.254.98.255');
+        socket = io.connect('http://localhost');
+        socket.emit('updateLeaderLocation', {"user_id": "1", "lat": 123, "lng":3211});
+        socket.on("updateLocationFalse", function(data){
+          console.log(data);
+        });
+        socket.on("updateLocationSuccess", function(data){
           console.log(data);
         })      
       });

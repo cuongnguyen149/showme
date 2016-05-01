@@ -61,7 +61,7 @@ exports = module.exports = function(io){
 	    socket.on("updateLeaderStatus", function(leaderObject){
 	    	leader[socket.id] =  leaderObject.user_id;
 	    	var update = "UPDATE " + constants.CLIENT_USER +
-	          	 " SET " + constants.IS_ACTIVE + " = " + !leaderObject.active +
+	          	 " SET " + constants.IS_ACTIVE + " = " + leaderObject.active +
 	          	 " WHERE " + constants.USER_ID + " = ?";
 			var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
 		                          " FROM " + constants.CLIENT_USER +
@@ -71,12 +71,13 @@ exports = module.exports = function(io){
 					dbConfig.query(query, [leaderObject.user_id], function(err, rows){
 						if(rows && rows.length > 0){
 							if(leaderObject.active){
-								socket.emit("updateStatusToActive", {returnCode: constants.SUCCESS_CODE, message: "Updated status of leader " + leaderObject.user_id + " to " + !leaderObject.active +".", data: {user: rows[0]}});	
+								
+								socket.emit("updateStatusToActive", {returnCode: constants.SUCCESS_CODE, message: "Updated status of leader " + leaderObject.user_id + " to " + leaderObject.active +".", data: {user: rows[0]}});	
 								// console.log(io.sockets.connected[socket.id]);
-								io.sockets.connected[socket.id].disconnect();
 								// console.log(socket.server.eio.clientsCount);
 							}else{
-								socket.emit("updateStatusToInactive", {returnCode: constants.SUCCESS_CODE, message: "Updated status of leader " + leaderObject.user_id + " to " + !leaderObject.active +".", data: {user: rows[0]}});	
+								socket.emit("updateStatusToInactive", {returnCode: constants.SUCCESS_CODE, message: "Updated status of leader " + leaderObject.user_id + " to " + leaderObject.active +".", data: {user: rows[0]}});	
+								io.sockets.connected[socket.id].disconnect();
 							}
 							// console.log(socket.server.eio.clientsCount);
 						}else{

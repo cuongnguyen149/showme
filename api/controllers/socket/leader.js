@@ -59,25 +59,26 @@ exports = module.exports = function(io){
 	    * Param: user_id, active.	
 	    */
 	    socket.on("updateLeaderStatus", function(leaderObject){
-	    	console.log(leaderObject);
-	    	leader[socket.id] =  leaderObject.user_id;
+	    	var leaderObj = JSON.parse(leaderObject);
+	    	console.log(leaderObj);
+	    	leader[socket.id] =  leaderObj.user_id;
 	    	var update = "UPDATE " + constants.CLIENT_USER +
-	          	 " SET " + constants.IS_ACTIVE + " = " + leaderObject.active +
+	          	 " SET " + constants.IS_ACTIVE + " = " + leaderObj.active +
 	          	 " WHERE " + constants.USER_ID + " = ?";
 			var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
 		                          " FROM " + constants.CLIENT_USER +
 		                          " WHERE "  + constants.USER_ID + " = ?";          	 
-			dbConfig.query(update, [leaderObject.user_id], function(err, rows){
+			dbConfig.query(update, [leaderObj.user_id], function(err, rows){
 				if(rows && rows.affectedRows > 0){
-					dbConfig.query(query, [leaderObject.user_id], function(err, rows){
+					dbConfig.query(query, [leaderObj.user_id], function(err, rows){
 						if(rows && rows.length > 0){
-							if(leaderObject.active){
+							if(leaderObj.active){
 
-								socket.emit("updateStatusToActive", {returnCode: constants.SUCCESS_CODE, message: "Updated status of leader " + leaderObject.user_id + " to " + leaderObject.active +".", data: {user: rows[0]}});	
+								socket.emit("updateStatusToActive", {returnCode: constants.SUCCESS_CODE, message: "Updated status of leader " + leaderObj.user_id + " to " + leaderObj.active +".", data: {user: rows[0]}});	
 								// console.log(io.sockets.connected[socket.id]);
 								// console.log(socket.server.eio.clientsCount);
 							}else{
-								socket.emit("updateStatusToInactive", {returnCode: constants.SUCCESS_CODE, message: "Updated status of leader " + leaderObject.user_id + " to " + leaderObject.active +".", data: {user: rows[0]}});	
+								socket.emit("updateStatusToInactive", {returnCode: constants.SUCCESS_CODE, message: "Updated status of leader " + leaderObj.user_id + " to " + leaderObj.active +".", data: {user: rows[0]}});	
 								io.sockets.connected[socket.id].disconnect();
 							}
 							// console.log(socket.server.eio.clientsCount);
@@ -90,7 +91,7 @@ exports = module.exports = function(io){
 					console.log(err);
 					socket.emit("updateStatusFalse", myUtils.createDatabaseError(err));
 				}else{
-					socket.emit("updateStatusFalse", myUtils.createErrorStr("user_id: " +  leaderObject.user_id + " does not exist!", constants.ERROR_CODE));
+					socket.emit("updateStatusFalse", myUtils.createErrorStr("user_id: " +  leaderObj.user_id + " does not exist!", constants.ERROR_CODE));
 				}
 			});
 	    });

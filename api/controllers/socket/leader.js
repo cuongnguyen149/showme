@@ -59,6 +59,7 @@ exports = module.exports = function(io){
 	    * Param: user_id, active.	
 	    */
 	    socket.on("updateLeaderStatus", function(leaderObject){
+	    	console.log(leaderObject);
 	    	leader[socket.id] =  leaderObject.user_id;
 	    	var update = "UPDATE " + constants.CLIENT_USER +
 	          	 " SET " + constants.IS_ACTIVE + " = " + leaderObject.active +

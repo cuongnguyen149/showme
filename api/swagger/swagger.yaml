@@ -178,133 +178,133 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-    put:
-      description: API for update leaders location.
-      # used as the method name of the controller
-      operationId: updateLocation
-      parameters:
-        - name: leader
-          in: body
-          description: leader's info.
-          required: true
-          schema:
-            $ref: "#/definitions/updateLocationParams"   
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/BaseSuccessRespone"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-  /leaders/active:
-    x-swagger-router-controller: leader  
-    put:
-      description: API for update leaders status.
-      # used as the method name of the controller
-      operationId: updateStatus
-      parameters:
-        - name: leader
-          in: body
-          description: leader's info.
-          required: true
-          schema:
-            $ref: "#/definitions/updateStatusParams"   
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/BaseSuccessRespone"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-  /leaders/comment:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: leader
-    get:
-      description: API for get leaders location in range.
-      # used as the method name of the controller
-      operationId: leaderComment
-      parameters:
-        - name: user_id
-          in: query
-          description: user_id of leader.
-          required: true
-          type: string
-        - name: page_size
-          in: query
-          description: record per page.
-          required: true
-          type: number
-        - name: page_number
-          in: query
-          description: page want get record.
-          required: true
-          type: number
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/BaseSuccessRespone"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"          
-  /transaction:
-    x-swagger-router-controller: transaction 
-    post:
-      description: API for update leaders status.
-      # used as the method name of the controller
-      operationId: createTransaction
-      parameters:
-        - name: transaction
-          in: body
-          description: transaction's info.
-          required: true
-          schema:
-            $ref: "#/definitions/createTransactionParams"   
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/BaseSuccessRespone"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-  /test:
-    x-swagger-router-controller: dialogAndMessage 
-    post:
-      description: API for update leaders status.
-      # used as the method name of the controller
-      operationId: test
-      parameters:
-        - name: transaction
-          in: query
-          description: transaction's info.
-          required: false
-          type: string
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/BaseSuccessRespone"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"           
+  #   put:
+  #     description: API for update leaders location.
+  #     # used as the method name of the controller
+  #     operationId: updateLocation
+  #     parameters:
+  #       - name: leader
+  #         in: body
+  #         description: leader's info.
+  #         required: true
+  #         schema:
+  #           $ref: "#/definitions/updateLocationParams"   
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           # a pointer to a definition
+  #           $ref: "#/definitions/BaseSuccessRespone"
+  #       # responses may fall through to errors
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"
+  # /leaders/active:
+  #   x-swagger-router-controller: leader  
+  #   put:
+  #     description: API for update leaders status.
+  #     # used as the method name of the controller
+  #     operationId: updateStatus
+  #     parameters:
+  #       - name: leader
+  #         in: body
+  #         description: leader's info.
+  #         required: true
+  #         schema:
+  #           $ref: "#/definitions/updateStatusParams"   
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           # a pointer to a definition
+  #           $ref: "#/definitions/BaseSuccessRespone"
+  #       # responses may fall through to errors
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"
+  # /leaders/comment:
+  #   # binds a127 app logic to a route
+  #   x-swagger-router-controller: leader
+  #   get:
+  #     description: API for get leaders location in range.
+  #     # used as the method name of the controller
+  #     operationId: leaderComment
+  #     parameters:
+  #       - name: user_id
+  #         in: query
+  #         description: user_id of leader.
+  #         required: true
+  #         type: string
+  #       - name: page_size
+  #         in: query
+  #         description: record per page.
+  #         required: true
+  #         type: number
+  #       - name: page_number
+  #         in: query
+  #         description: page want get record.
+  #         required: true
+  #         type: number
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           # a pointer to a definition
+  #           $ref: "#/definitions/BaseSuccessRespone"
+  #       # responses may fall through to errors
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"          
+  # /transaction:
+  #   x-swagger-router-controller: transaction 
+  #   post:
+  #     description: API for update leaders status.
+  #     # used as the method name of the controller
+  #     operationId: createTransaction
+  #     parameters:
+  #       - name: transaction
+  #         in: body
+  #         description: transaction's info.
+  #         required: true
+  #         schema:
+  #           $ref: "#/definitions/createTransactionParams"   
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           # a pointer to a definition
+  #           $ref: "#/definitions/BaseSuccessRespone"
+  #       # responses may fall through to errors
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"
+  # /test:
+  #   x-swagger-router-controller: dialogAndMessage 
+  #   post:
+  #     description: API for update leaders status.
+  #     # used as the method name of the controller
+  #     operationId: test
+  #     parameters:
+  #       - name: transaction
+  #         in: query
+  #         description: transaction's info.
+  #         required: false
+  #         type: string
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           # a pointer to a definition
+  #           $ref: "#/definitions/BaseSuccessRespone"
+  #       # responses may fall through to errors
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"           
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -381,27 +381,27 @@ definitions:
     required:
       - user_id
       - role    
-  updateLocationParams:
-    description: leader location info object.
-    properties:
-      user_id:
-        type: string
-      address: 
-        type: string
-    required:
-      - user_id
-      - address
-  updateStatusParams:
-    description: leader status info object.
-    properties:
-      user_id:
-        type: string
-      active:
-        type: boolean
-        description: current status
-    required:
-      - user_id
-      - active
+  # updateLocationParams:
+  #   description: leader location info object.
+  #   properties:
+  #     user_id:
+  #       type: string
+  #     address: 
+  #       type: string
+  #   required:
+  #     - user_id
+  #     - address
+  # updateStatusParams:
+  #   description: leader status info object.
+  #   properties:
+  #     user_id:
+  #       type: string
+  #     active:
+  #       type: boolean
+  #       description: current status
+  #   required:
+  #     - user_id
+  #     - active
   # locationParams:
   #   description: location query object.
   #   properties:
@@ -459,31 +459,31 @@ definitions:
       - email
       - address
       - phone
-  createTransactionParams:
-    description: transaction info.
-    properties:
-      user_id:
-        type: string
-      leader_id:
-        type: string
-      rating_connection:
-        type: number
-      rating_visit:
-        type: number
-      rating_guide:  
-        type: number
-      rating_recommend:
-        type: number
-      total_fee:
-        type: number
-      user_comment:
-        type: string
-      call_start:
-        type: string
-        # format: date-time
-      call_end:
-        type: string
-        # format: date-time
+  # createTransactionParams:
+  #   description: transaction info.
+  #   properties:
+  #     user_id:
+  #       type: string
+  #     leader_id:
+  #       type: string
+  #     rating_connection:
+  #       type: number
+  #     rating_visit:
+  #       type: number
+  #     rating_guide:  
+  #       type: number
+  #     rating_recommend:
+  #       type: number
+  #     total_fee:
+  #       type: number
+  #     user_comment:
+  #       type: string
+  #     call_start:
+  #       type: string
+  #       # format: date-time
+  #     call_end:
+  #       type: string
+  #       # format: date-time
   codeReturn:
     description: leader status info object.
     properties:

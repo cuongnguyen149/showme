@@ -19,7 +19,7 @@ CREATE TABLE client_user(
    fee_per_hour DOUBLE default 25,
    possible_purchase DOUBLE default 150,
    month_income DOUBLE,
-   is_active BOOL DEFAULT true,
+   is_active BOOL DEFAULT false,
    longitude DOUBLE,
    latitude DOUBLE,
    create_date TIMESTAMP default now(),

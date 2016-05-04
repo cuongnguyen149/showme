@@ -61,6 +61,17 @@ CREATE TABLE user_transaction(
    total_fee FLOAT,
    user_comment VARCHAR(500),
    create_date TIMESTAMP default now(),
-   update_date TIMESTAMP default now() on update now()
+   update_date TIMESTAMP default now() on update now(),
    PRIMARY KEY ( transaction_id )
+);
+
+CREATE TABLE dialog(
+   id INT NOT NULL AUTO_INCREMENT,
+   dialog_id VARCHAR(100) NOT NULL,
+   user_id VARCHAR(100) NOT NULL,
+   leader_id VARCHAR(100) NOT NULL,
+   create_date TIMESTAMP default now(),
+   update_date TIMESTAMP default now() on update now(),
+   PRIMARY KEY (id),
+   UNIQUE KEY dialog_id (dialog_id)
 );

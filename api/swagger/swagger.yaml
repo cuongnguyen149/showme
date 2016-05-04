@@ -282,29 +282,98 @@ paths:
   #         description: Error
   #         schema:
   #           $ref: "#/definitions/ErrorResponse"
-  # /test:
-  #   x-swagger-router-controller: dialogAndMessage 
-  #   post:
-  #     description: API for update leaders status.
-  #     # used as the method name of the controller
-  #     operationId: test
-  #     parameters:
-  #       - name: transaction
-  #         in: query
-  #         description: transaction's info.
-  #         required: false
-  #         type: string
-  #     responses:
-  #       "200":
-  #         description: Success
-  #         schema:
-  #           # a pointer to a definition
-  #           $ref: "#/definitions/BaseSuccessRespone"
-  #       # responses may fall through to errors
-  #       default:
-  #         description: Error
-  #         schema:
-  #           $ref: "#/definitions/ErrorResponse"           
+  /chat/dialog:
+    x-swagger-router-controller: dialogAndMessage 
+    get:
+      description: API for get user list dialog.
+      # used as the method name of the controller
+      operationId: listDialog
+      parameters:
+        - name: user_id
+          in: query
+          description: user id.
+          required: true
+          type: string
+        - name: page_size
+          in: query
+          description: record per page.
+          required: true
+          type: number
+        - name: page_number
+          in: query
+          description: page for getting record.
+          required: true
+          type: number
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      description: API for create dialog infomation
+      operationId: createDialog
+      parameters:
+        - name: dialog
+          in: body
+          description: dialog details.
+          required: true
+          schema:
+            $ref: "#/definitions/dialogParams"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"    
+  /chat/message:
+    x-swagger-router-controller: dialogAndMessage 
+    get:
+      description: API for get user list message.
+      # used as the method name of the controller
+      operationId: listMessage
+      parameters:
+        - name: user_id
+          in: query
+          description: user id.
+          required: true
+          type: string
+        - name: dialog_id
+          in: query
+          description: dialog id.
+          required: true
+          type: string  
+        - name: page_size
+          in: query
+          description: record per page.
+          required: true
+          type: number
+        - name: page_number
+          in: query
+          description: page for getting record.
+          required: true
+          type: number
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"        
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -484,6 +553,19 @@ definitions:
   #     call_end:
   #       type: string
   #       # format: date-time
+  dialogParams:
+    description: dialog details object.
+    properties:
+      user_id:
+        type: string
+      leader_id: 
+        type: string
+      dialog_id:
+        type: string
+    required:
+      - user_id
+      - leader_id
+      - dialog_id    
   codeReturn:
     description: leader status info object.
     properties:

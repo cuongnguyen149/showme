@@ -37,6 +37,10 @@ var constants = {
 	USER_COMMENT: "user_comment",
 	TOTAL_FEE: "total_fee",
 	
+	//DIALOG
+	DIALOG: "dialog",
+	ID : "id",
+	DIALOG_ID: "dialog_id",
 	//COMMON	
 	FIRSTNAME: "firstname",
 	LASTNAME: "lastname",

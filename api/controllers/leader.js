@@ -185,8 +185,23 @@ function getLeaderInfo(req, res){
 * Leader get leader comment API.
 */
 function leaderComment(req, res){
-	var user_id 	= req.query.radius,
-		page_size 	= parseInt(req.query.lat),
-		page_number = parseInt(req.query.lng);
-
+	var user_id 	= req.query.user_id,
+		page_size 	= parseInt(req.query.page_size),
+		page_number = parseInt(req.query.page_number);
+	var skip 		= page_number*page_size;	
+	var query 		= "SELECT " + constants.USER_COMMENT + " ," 
+								+ constants.CREATE_DATE +
+				  	  " FROM " + constants.USER_TRANSACTION +
+				  	  " WHERE "	+ constants.USER_ID + " = ?" +
+				  	  " ORDER BY " + constants.CREATE_DATE + " DESC " +
+				  	  " LIMIT "	+ skip + ", " + page_size;	
+	console.log(user_id);			  	  					
+	dbConfig.query(query, [user_id], function(err, rows){
+		if(err){
+			console.log(err);
+			res.json(myUtils.createDatabaseError(err));
+		}else{
+			res.json({returnCode: constants.SUCCESS_CODE, message: "Get comment for leader success.", data: {leader: rows}});
+		}
+	});				  	  
 }

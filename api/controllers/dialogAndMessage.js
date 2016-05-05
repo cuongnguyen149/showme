@@ -12,8 +12,8 @@ module.exports = {
 
 function listDialog(req, res){
 	var user_id 	= req.query.user_id,
-		page_size   = req.query.page_size,
-		page_number = req.query.page_number;
+		page_size   = parseInt(req.query.page_size),
+		page_number = parseInt(req.query.page_number);
  	var query_user 	= "SELECT " + constants.EMAIL + ", " + constants.PWD +
                   	  " FROM " + constants.CLIENT_USER +
                   	  " WHERE "  + constants.USER_ID + " = ?";
@@ -43,8 +43,8 @@ function listDialog(req, res){
 function listMessage(req, res){
 	var user_id 	= req.query.user_id,
 		dialog_id   = req.query.dialog_id,
-		page_size   = req.query.page_size,
-		page_number = req.query.page_number;
+		page_size   = parseInt(req.query.page_size),
+		page_number = parseInt(req.query.page_number);
  	var query_user 	= "SELECT " + constants.EMAIL + ", " + constants.PWD +
                   	  " FROM " + constants.CLIENT_USER +
                   	  " WHERE "  + constants.USER_ID + " = ?";

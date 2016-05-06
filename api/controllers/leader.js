@@ -188,14 +188,13 @@ function leaderComment(req, res){
 	var user_id 	= req.query.user_id,
 		page_size 	= parseInt(req.query.page_size),
 		page_number = parseInt(req.query.page_number);
-	var skip 		= page_number*page_size;	
+	var skip 		= (page_number-1)*page_size;	
 	var query 		= "SELECT " + constants.USER_COMMENT + " ," 
 								+ constants.CREATE_DATE +
 				  	  " FROM " + constants.USER_TRANSACTION +
 				  	  " WHERE "	+ constants.USER_ID + " = ?" +
 				  	  " ORDER BY " + constants.CREATE_DATE + " DESC " +
-				  	  " LIMIT "	+ skip + ", " + page_size;	
-	console.log(user_id);			  	  					
+				  	  " LIMIT "	+ skip + ", " + page_size;			  	  					
 	dbConfig.query(query, [user_id], function(err, rows){
 		if(err){
 			console.log(err);

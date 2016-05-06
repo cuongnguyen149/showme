@@ -19,23 +19,26 @@ function listDialog(req, res){
                   	  " WHERE "  + constants.USER_ID + " = ?";
     dbConfig.query(query_user, [user_id], function(err, rows){
     	if(rows && rows.length > 0){
-    		quickbloxConfig.createSession({email: rows[0].email, password: rows[0].pwd}, function(err, res) {
-			  	if(res){
-				    var skip = page_number*page_size,
+    		quickbloxConfig.createSession({email: rows[0].email, password: rows[0].pwd}, function(err, result) {
+			  	if(result){
+				    var skip = (page_number-1)*page_size,
 				    	filters = {"limit": page_size, "skip": skip, "sort_desc": "last_message_date_sent"};
 					quickbloxConfig.chat.dialog.list(filters, function(err, resDialogs) {
 						if(err){
-						 	res.json(myUtils.createQuickBloxError(err));
+							console.log(err);
+						 	// res.json(myUtils.createQuickBloxError(err));
 						}else{
-							console.log(resDialogs);	
+							res.json({returnCode: constants.SUCCESS_CODE, message : "Get dialog of user: " + user_id +  " success.", data: {dialog: resDialogs.items}});
 						}
 					});
 				}else{
 				    res.json(myUtils.createQuickBloxError(err));
 			   	}
 			});
-    	}else{
+    	}else if(err){
     		res.json(myUtils.createDatabaseError(err));
+    	}else{
+    		res.json(myUtils.createErrorStr('user_id incorrect! Please check again.', constants.ERROR_CODE));
     	}
     });
 };
@@ -50,23 +53,26 @@ function listMessage(req, res){
                   	  " WHERE "  + constants.USER_ID + " = ?";
     dbConfig.query(query_user, [user_id], function(err, rows){
     	if(rows && rows.length > 0){
-    		quickbloxConfig.createSession({email: rows[0].email, password: rows[0].pwd}, function(err, res) {
+    		quickbloxConfig.createSession({email: rows[0].email, password: rows[0].pwd}, function(err, result) {
 			  	if(res){
-				    var skip = page_number*page_size,
+				    var skip = (page_number-1)*page_size,
 				    	filters = {"chat_dialog_id": dialog_id, "sort_desc": "date_sent", "limit": page_size, "skip": skip};
-					quickbloxConfig.chat.message.list(filters, function(err, message) {
+					quickbloxConfig.chat.message.list(filters, function(err, resMessage) {
 						if(err){
+							console.log(err);
 						 	res.json(myUtils.createQuickBloxError(err));
 						}else{
-							console.log(message);	
+							res.json({returnCode: constants.SUCCESS_CODE, message : "Get message of user: " + user_id +  " success.", data: {message: resMessage.items}});
 						}
 					});
 				}else{
 				    res.json(myUtils.createQuickBloxError(err));
 			   	}
 			});
-    	}else{
+    	}else if(err){
     		res.json(myUtils.createDatabaseError(err));
+    	}else{
+    		res.json(myUtils.createErrorStr('user_id incorrect! Please check again.', constants.ERROR_CODE));
     	}
     });
 };

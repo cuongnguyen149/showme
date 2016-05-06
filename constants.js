@@ -21,6 +21,7 @@ var constants = {
 	LEADER_COMMENT: "leader_comment",
 	DESCRIPTION: "description",
 	RATING: "rating",
+	RATING_COUNTER: "rating_counter",
 	FEE_PER_HOUR: "fee_per_hour",
 	POSSIBLE_PURCHASE: "possible_purchase",
 	MONTH_INCOME: "month_income",

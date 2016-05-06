@@ -43,7 +43,7 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   // install middleware
   swaggerExpress.register(app);
 
-  var port = process.env.PORT || appConfig.app.port;
+  var port = appConfig.app.port;
   var io   = require('socket.io').listen(app.listen(port, function(err){
     if(!err){ 
       console.log("Server listening on port: " + port)

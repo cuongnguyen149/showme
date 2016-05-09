@@ -15,7 +15,7 @@ CREATE TABLE client_user(
    description VARCHAR(500) default "Je suis architecte et passionné d'architecture. Paris est une ville formidable que je vous ferai visiter avec passion.",
    role VARCHAR(10) DEFAULT 'user',
    rating DOUBLE default 4,
-   rating_counter INT default 12,
+   rating_counter INT default 8,
    fee_per_hour DOUBLE default 25,
    possible_purchase DOUBLE default 150,
    month_income DOUBLE,

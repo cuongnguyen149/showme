@@ -553,6 +553,17 @@ definitions:
       call_end:
         type: string
         # format: date-time
+    required:
+      - user_id
+      - leader_id
+      - rating_connection
+      - rating_visit
+      - rating_guide
+      - rating_recommend
+      - total_fee
+      - user_comment
+      - call_start
+      - call_end
   dialogParams:
     description: dialog details object.
     properties:

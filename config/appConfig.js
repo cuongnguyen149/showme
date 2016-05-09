@@ -1,25 +1,51 @@
 'use strict';
 
 var Configuration = {
+	/*
+	* For production environment.
+	*/
+	// mysql : {
+	// 	host: 'localhost',
+	// 	user: 'root',
+	// 	password: 'P@ssword123',
+	// 	dateStrings:true,
+	// 	database: 'showme_db'
+	// },
+	// quickblox : {
+	// 	appID : '38631',
+	// 	authKey: 'Jk4b5XEEbBPKTqu',
+	// 	athuSecret: 'fVMmMrwjMeUAFUX'
+	// },
+	// app : {
+	// 	port: 80
+	// }
+	/*
+	* END for production environment.
+	*/
+
+
+	/*
+	* For devolop environment.
+	*/
+
 	mysql : {
 		host: 'localhost',
 		user: 'root',
 		password: 'P@ssword123',
 		dateStrings:true,
-		database: 'showme_db'
+		database: 'showme_db_dev'
 	},
 	quickblox : {
-		appID : '38631',
-		authKey: 'Jk4b5XEEbBPKTqu',
-		athuSecret: 'fVMmMrwjMeUAFUX'
+		appID : '40477',
+		authKey: '5S8UfxMNSk32XWO',
+		athuSecret: 'kCXreDY7YDZJm5T'
 	},
-	// quickblox : {
-	// 	appID : '37722',
-	// 	authKey: '7dM2BUhuP3QzPD4',
-	// 	athuSecret: 'QmQsmLMHNU252me'
-	// },
 	app : {
-		port: 80
+		port: 9001
 	}
+
+	/*
+	* END for devolop environment.
+	*/
 };
 module.exports = Configuration;

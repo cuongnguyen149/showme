@@ -1,5 +1,6 @@
 var constants = require('../constants');
-var jwt = require('jwt-simple');
+var jwt       = require('jwt-simple');
+var _         = require('underscore');
 
 /**
  * Create Quickblox error object.
@@ -87,3 +88,20 @@ module.exports.validateToken = function(req, res, next) {
   }
 };
 
+/**
+ * Merge 2 arrays of objects by properties using underscore.js
+ */
+
+module.exports.mergeByProperty = function(arr1, arr2, prop1, prop2) {
+  _.each(arr2, function(arr2obj) {
+    var arr1obj = _.find(arr1, function(arr1obj) {
+        return arr1obj[prop1] === arr2obj[prop2];
+    });
+     
+    //If the object already exist extend it with the new values from arr2, otherwise just add the new object to arr1
+    if(arr1obj){
+      _.extend(arr1obj, arr2obj);
+      delete arr1obj.pwd;
+    } 
+  });
+};  

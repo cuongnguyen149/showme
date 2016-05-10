@@ -294,6 +294,11 @@ paths:
           description: user id.
           required: true
           type: string
+        - name: role
+          in: query
+          description: role of user.
+          required: true
+          type: string  
         - name: page_size
           in: query
           description: record per page.

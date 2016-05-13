@@ -20,18 +20,18 @@ app.all('*', function(req, res, next) {
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   if  (!req.originalUrl) {
   	res.setHeader('Content-Type', 'application/json');
-	res.json(myUtils.createErrorStr(constants.BAD_PARAMETERS));
-	return;
+  	res.json(myUtils.createErrorStr(constants.BAD_PARAMETERS));
+  	return;
   }    
   //console.log(req.originalUrl + "  " + req.headers.token);
   if (req.originalUrl.indexOf("/login") >= 0 || req.originalUrl.indexOf("/user") >= 0 || req.originalUrl.indexOf("/doc/api") >= 0) {
-	next();
+	 next();
 	} else if (req.headers.token) {
 		myUtils.validateToken(req, res, next);
 	} else {
 	// ignore
 	  res.json(myUtils.createErrorStr('No token found', constants.NO_TOKEN_CODE));
-	// next();
+	 // next();
  }
 });
 app.get('/doc/api', function(req, res){

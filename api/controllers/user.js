@@ -51,7 +51,7 @@ function registerUser(req, res) {
                     // console.log(err);
                     res.json(myUtils.createDatabaseError(err)); 
                    }else{
-                    var query_user = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB + 
+                    var query_user = "SELECT * , DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB + 
                                      " FROM " + constants.CLIENT_USER +
                                      " WHERE "  + constants.USER_ID + " = ?";
                     dbConfig.query(query_user, [result.id], function(err, rows){
@@ -86,44 +86,29 @@ function registerUser(req, res) {
 */
 function login(req, res){
   var userObject = req.swagger.params.login.value;
-  userObject.pwd = userObject.pwd + constants.PWD_ADD;
-  var params = {email : userObject.email, password: userObject.pwd};
-  quickbloxConfig.createSession(function(err, result) {
-    if(result){
-      quickbloxConfig.login(params, function(err, result) {
-        if(result){
-          // console.log("login success!!!!");
-          var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
-                      " FROM " + constants.CLIENT_USER +
-                      " WHERE "  + constants.USER_ID + " = ?";
-          var update = "UPDATE " + constants.CLIENT_USER +
-                       " SET " + constants.DEVICE_UIID + " = '" + userObject.device_uiid + "'" +
-                       " WHERE " + constants.USER_ID + " = ?";
-          dbConfig.query(update, [result.id], function(err, rows){
-            if(rows){
-              dbConfig.query(query, [result.id], function(err, rows){
-               if(err){
-                console.log(err);
-                res.json(myUtils.createDatabaseError(err)); 
-               }else{
-                // console.log(myUtils.generateToken(rows[0]));
-                // console.log(rows);
-                res.json({returnCode : constants.SUCCESS_CODE, message: "Login successfully", data: myUtils.generateToken(rows[0])});  
-               } 
-              });
-            }else{
-              console.log(err);
-              res.json(myUtils.createDatabaseError(err));
-            }
-          });             
-        }else{
-          res.json(myUtils.createErrorStr('Login fail. Incorrect Email or Password.', constants.ERROR_CODE));
-        }
+  var query = "SELECT *, DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
+              " FROM " + constants.CLIENT_USER +
+              " WHERE "  + constants.EMAIL + " = ?";
+  var update = "UPDATE " + constants.CLIENT_USER +
+               " SET " + constants.DEVICE_UIID + " = '" + userObject.device_uiid + "'" +
+               " WHERE " + constants.EMAIL + " = ?";
+  dbConfig.query(update, [userObject.email], function(err, rows){
+    if(rows){
+      dbConfig.query(query, [userObject.email], function(err, rows){
+       if(err){
+        console.log(err);
+        res.json(myUtils.createDatabaseError(err)); 
+       }else if(rows && rows.length > 0){
+        res.json({returnCode : constants.SUCCESS_CODE, message: "Login successfully", data: myUtils.generateToken(rows[0])});  
+       }else{
+        res.json(myUtils.createErrorStr('Your email or password incorrect! Please check again!', constants.ERROR_CODE));
+       } 
       });
     }else{
-      res.json(myUtils.createQuickBloxError(err)); 
+      console.log(err);
+      res.json(myUtils.createDatabaseError(err));
     }
-  });    
+  });              
 };
 /**
 * User update user's role API.

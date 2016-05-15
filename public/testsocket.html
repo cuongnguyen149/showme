@@ -22,9 +22,9 @@
       var socket; 
       $("#a").click(function() {
         // alert( "Handler for .click() called." );
-        // socket = io.connect('http://51.254.98.255');
-        socket = io.connect('http://localhost');
-        socket.emit('updateLeaderStatus', '{"user_id": "1", "active": true}');
+        socket = io.connect('http://51.254.98.255:9001');
+        // socket = io.connect('http://localhost:9001');
+        socket.emit('updateLeaderStatus', '{"user_id":"12657454","active":true}');
         socket.on("updateStatusToActive", function(data){
           console.log(data);
         });
@@ -46,7 +46,7 @@
       });
       $("#m").click(function() {
         // alert( "Handler for .click() called." );
-        socket.emit('updateLeaderStatus', {"user_id" : "1", "active": false});
+        socket.emit('updateLeaderStatus', '{"user_id" : "12481167", "active": false}');
         socket.on("updateStatusToInactive", function(data){
           console.log(data);
         });

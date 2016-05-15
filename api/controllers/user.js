@@ -86,15 +86,18 @@ function registerUser(req, res) {
 */
 function login(req, res){
   var userObject = req.swagger.params.login.value;
+      userObject.pwd = userObject.pwd + constants.PWD_ADD;
   var query = "SELECT *, DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
               " FROM " + constants.CLIENT_USER +
-              " WHERE "  + constants.EMAIL + " = ?";
+              " WHERE "  + constants.EMAIL + " = ?" +
+              " AND " + constants.PWD + " = ?";
   var update = "UPDATE " + constants.CLIENT_USER +
                " SET " + constants.DEVICE_UIID + " = '" + userObject.device_uiid + "'" +
                " WHERE " + constants.EMAIL + " = ?";
+               console.log(query);
   dbConfig.query(update, [userObject.email], function(err, rows){
     if(rows){
-      dbConfig.query(query, [userObject.email], function(err, rows){
+      dbConfig.query(query, [userObject.email, userObject.pwd], function(err, rows){
        if(err){
         console.log(err);
         res.json(myUtils.createDatabaseError(err)); 

@@ -62,6 +62,7 @@ exports = module.exports = function(io){
 		                          " WHERE "  + constants.USER_ID + " = ?";          	 
 			dbConfig.query(update, [leaderObj.user_id], function(err, rows){
 				if(rows && rows.affectedRows > 0){
+						console.log(rows);
 					dbConfig.query(query, [leaderObj.user_id], function(err, rows){
 						if(rows && rows.length > 0){
 							if(leaderObj.active){

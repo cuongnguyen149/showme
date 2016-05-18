@@ -19,6 +19,9 @@ function createTransaction (req, res){
 		user_comment 		= transactionObject.user_comment,
 		call_start 			= transactionObject.call_start,
 		call_end 			= transactionObject.call_end;
+		if(new Date(call_start) == 'Invalid Date' || new Date(call_end) == 'Invalid Date'){
+			call_end = call_start = new Date().toISOString().slice(0, 10);
+		}
 	var user_rating 		= (rating_recommend + rating_guide + rating_connection + rating_visit)/4;	
 	var transactionStr  	= '{"' + constants.USER_ID + '":"' + user_id + '", "'
 								   + constants.LEADER_ID + '":"' + leader_id + '", "'
@@ -38,7 +41,7 @@ function createTransaction (req, res){
 							  " SET "	+ constants.RATING + " = ((" + constants.RATING + "*" + constants.RATING_COUNTER + " + " + user_rating + ")/(" + constants.RATING_COUNTER + " + 1)), "
 							  			+ constants.RATING_COUNTER + " = (" + constants.RATING_COUNTER + "+ 1)" +
 							  " WHERE " + constants.USER_ID + " = ?";
-							  console.log(update_rating);
+							  // console.log(update_rating);
 	dbConfig.query(update_rating, [leader_id], function(err, rows){
 		if(err){
 			console.log(err);
@@ -46,10 +49,12 @@ function createTransaction (req, res){
 		}else{
 			dbConfig.query(insert_transaction, transactionObj, function(err, rows){
 				if(err){
+					console.log(err);
 					res.json(myUtils.createDatabaseError(err));
 				}else{
 					dbConfig.query(query, [rows.insertId], function(err, rows){
 						if(err){
+							console.log(err);
 							res.json(myUtils.createDatabaseError(err));
 						}else{
 							res.json({returnCode: constants.SUCCESS_CODE, message : "Create transaction success.", data: {transaction: rows[0]}});

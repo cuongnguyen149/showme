@@ -41,6 +41,7 @@ function createTransaction (req, res){
 							  console.log(update_rating);
 	dbConfig.query(update_rating, [leader_id], function(err, rows){
 		if(err){
+			console.log(err);
 			res.json(myUtils.createDatabaseError(err));
 		}else{
 			dbConfig.query(insert_transaction, transactionObj, function(err, rows){

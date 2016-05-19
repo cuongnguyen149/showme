@@ -55,3 +55,20 @@ CREATE TABLE dialog(
    PRIMARY KEY (id),
    UNIQUE KEY dialog_id (dialog_id)
 );
+
+CREATE TABLE transaction_price(
+   id INT NOT NULL AUTO_INCREMENT,
+   dialog_id VARCHAR(100) NOT NULL,
+   user_id VARCHAR(100) NOT NULL,
+   leader_id VARCHAR(100) NOT NULL,
+   call_start TIMESTAMP,
+   call_end TIMESTAMP,
+   is_payment BOOL DEFAULT false,
+   shipping_fee DOUBLE DEFAULT 0,
+   buying_fee DOUBLE DEFAULT 0,
+   price DOUBLE DEFAULT 0,
+   service_fee DEFAULT 0,
+   create_date TIMESTAMP default now(),
+   update_date TIMESTAMP default now() on update now(),
+   PRIMARY KEY (id)
+);

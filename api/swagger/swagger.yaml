@@ -258,7 +258,7 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"          
-  /transaction:
+  /reviews:
     x-swagger-router-controller: transaction 
     post:
       description: API for update leaders status.
@@ -284,42 +284,42 @@ paths:
             $ref: "#/definitions/ErrorResponse"
   /chat/dialog:
     x-swagger-router-controller: dialogAndMessage 
-    get:
-      description: API for get user list dialog.
-      # used as the method name of the controller
-      operationId: listDialog
-      parameters:
-        - name: user_id
-          in: query
-          description: user id.
-          required: true
-          type: string
-        - name: role
-          in: query
-          description: role of user.
-          required: true
-          type: string  
-        - name: page_size
-          in: query
-          description: record per page.
-          required: true
-          type: number
-        - name: page_number
-          in: query
-          description: page for getting record.
-          required: true
-          type: number
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/BaseSuccessRespone"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
+    # get:
+    #   description: API for get user list dialog.
+    #   # used as the method name of the controller
+    #   operationId: listDialog
+    #   parameters:
+    #     - name: user_id
+    #       in: query
+    #       description: user id.
+    #       required: true
+    #       type: string
+    #     - name: role
+    #       in: query
+    #       description: role of user.
+    #       required: true
+    #       type: string  
+    #     - name: page_size
+    #       in: query
+    #       description: record per page.
+    #       required: true
+    #       type: number
+    #     - name: page_number
+    #       in: query
+    #       description: page for getting record.
+    #       required: true
+    #       type: number
+    #   responses:
+    #     "200":
+    #       description: Success
+    #       schema:
+    #         # a pointer to a definition
+    #         $ref: "#/definitions/BaseSuccessRespone"
+    #     # responses may fall through to errors
+    #     default:
+    #       description: Error
+    #       schema:
+    #         $ref: "#/definitions/ErrorResponse"
     post:
       description: API for create dialog infomation
       operationId: createDialog
@@ -341,44 +341,96 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"    
-  /chat/message:
-    x-swagger-router-controller: dialogAndMessage 
-    get:
-      description: API for get user list message.
-      # used as the method name of the controller
-      operationId: listMessage
-      parameters:
-        - name: user_id
-          in: query
-          description: user id.
-          required: true
-          type: string
-        - name: dialog_id
-          in: query
-          description: dialog id.
-          required: true
-          type: string  
-        - name: page_size
-          in: query
-          description: record per page.
-          required: true
-          type: number
-        - name: page_number
-          in: query
-          description: page for getting record.
-          required: true
-          type: number
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/BaseSuccessRespone"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"        
+  # /chat/message:
+  #   x-swagger-router-controller: dialogAndMessage 
+  #   get:
+  #     description: API for get user list message.
+  #     # used as the method name of the controller
+  #     operationId: listMessage
+  #     parameters:
+  #       - name: user_id
+  #         in: query
+  #         description: user id.
+  #         required: true
+  #         type: string
+  #       - name: dialog_id
+  #         in: query
+  #         description: dialog id.
+  #         required: true
+  #         type: string  
+  #       - name: page_size
+  #         in: query
+  #         description: record per page.
+  #         required: true
+  #         type: number
+  #       - name: page_number
+  #         in: query
+  #         description: page for getting record.
+  #         required: true
+  #         type: number
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           # a pointer to a definition
+  #           $ref: "#/definitions/BaseSuccessRespone"
+  #       # responses may fall through to errors
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"
+  # /price:
+  #   x-swagger-router-controller: transaction 
+  #   get:
+  #     description: API for get price of call.
+  #     # used as the method name of the controller
+  #     operationId: getPrice
+  #     parameters:
+  #       - name: dialog_id
+  #         in: query
+  #         type: string
+  #         description: transaction's info.
+  #         required: true
+  #       - name: id
+  #         in: query
+  #         type: number
+  #         description: transaction's info.
+  #         required: true  
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           # a pointer to a definition
+  #           $ref: "#/definitions/BaseSuccessRespone"
+  #       # responses may fall through to errors
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"
+  # /call:
+  #   x-swagger-router-controller: transaction 
+  #   post:
+  #     description: API for update leaders status.
+  #     # used as the method name of the controller
+  #     operationId: createCall
+  #     parameters:
+  #       - name: call
+  #         in: body
+  #         description: call's info.
+  #         required: true
+  #         schema:
+  #           $ref: "#/definitions/createTransactionParams"   
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           # a pointer to a definition
+  #           $ref: "#/definitions/BaseSuccessRespone"
+  #       # responses may fall through to errors
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"          
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -581,7 +633,20 @@ definitions:
     required:
       - user_id
       - leader_id
-      - dialog_id    
+      - dialog_id
+  # callParams:
+  #   description: call object.
+  #   properties:
+  #     user_id:
+  #       type: string
+  #     leader_id: 
+  #       type: string
+  #     dialog_id:
+  #       type: string
+  #   required:
+  #     - user_id
+  #     - leader_id
+  #     - dialog_id     
   codeReturn:
     description: leader status info object.
     properties:

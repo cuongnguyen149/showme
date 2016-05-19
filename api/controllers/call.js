@@ -17,7 +17,10 @@ function createCall (req, res){
 	                     		+ constants.DIALOG_ID + '":"' + dialog_id + '"}'; 
     var callObj 		=  JSON.parse(callStr);	
 	var insert_call 	= "INSERT INTO " + constants.TRANSACTION_PRICE + " SET ?",
-		query_call 			= "SELECT * FROM " + constants.TRANSACTION_PRICE + " WHERE " + constants.ID + " = ?";
+		query_call 		= "SELECT * FROM " + constants.TRANSACTION_PRICE + " WHERE " + constants.ID + " = ?",
+		check_call		= "SELECT * FROM " + constants.TRANSACTION_PRICE + 
+					  	  " WHERE " + constants.DIALOG_ID + " = ? AND "
+					  				+ constants.IS_PAYMENT + " = ? ";
 	dbConfig.query(insert_call, callObj, function(err, rows){
 		if(err){
 			res.json(myUtils.createDatabaseError(err));

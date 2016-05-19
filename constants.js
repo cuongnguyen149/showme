@@ -8,6 +8,7 @@ var constants = {
 	CLIENT_USER: "client_user",
 	LEADER_USER: "leader_user",
 	USER_TRANSACTION: "user_transaction",
+	TRANSACTION_PRICE: "transaction_price",
 	
 	//USER
 	USER_ID: "user_id",
@@ -37,7 +38,12 @@ var constants = {
 	RATING_RECOMMEND:"rating_recommend",
 	USER_COMMENT: "user_comment",
 	TOTAL_FEE: "total_fee",
-	
+	IS_PAYMENT: "is_payment",
+	MERCHANDISE_FEE: "merchandise_fee",
+	SHIPPING_FEE:"shipping_fee",
+	SERVICE_FEE: "SERVICE_FEE",
+	PRICE: "price",
+
 	//DIALOG
 	DIALOG: "dialog",
 	ID : "id",

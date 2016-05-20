@@ -29,7 +29,7 @@
 
 #socketInfo
 {
-   width:500px;
+   width:650px;
    height:900px;
    overflow:hidden;
    position:absolute;
@@ -72,6 +72,50 @@
                  <li>updateStatusToInactive</li>
                  <li>updateStatusFalse</li>
                </ul>            
+            </tr>
+            <tr>
+              <td>callStart</td>
+              <td>{user_id: string, leader_id: string, dialog_id: string}</td>
+              <td>
+               <ul>
+                 <li>callStartFalse</li>
+                 <li>callStartSuccess</li>
+                 <button ng-click="getResponseExample('updateLeaderLocation')" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Example Response</button>
+               </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>getPrice</td>
+              <td>{id: string, role: string (user or leader)}</td>
+              <td>
+               <ul>
+                 <li>updateLocationSuccess</li>
+                 <li>updateLocationFalse</li>
+                 <button ng-click="getResponseExample('updateLeaderLocation')" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Example Response</button>
+               </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>merchandiseRequest</td>
+              <td>{merchandise_type: string, shipping_fee: number, merchandise_fee: number}</td>
+              <td>
+               <ul>
+                 <li>merchandiseRequestSuccess</li>
+                 <li>merchandiseRequestFalse</li>
+                 <button ng-click="getResponseExample('updateLeaderLocation')" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Example Response</button>
+               </ul>
+              </td>
+            </tr>
+            <tr>
+              <td>acceptMerchandiseRequest</td>
+              <td>{id: string, merchandise_fee: number, shipping_fee: number}</td>
+              <td>
+               <ul>
+                 <li>acceptMerchandiseRequestFalse</li>
+                 <li>acceptMerchandiseRequestSuccess</li>
+                 <button ng-click="getResponseExample('updateLeaderLocation')" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Example Response</button>
+               </ul>
+              </td>
             </tr>
          </tbody>
       </table>

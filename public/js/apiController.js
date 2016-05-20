@@ -93,6 +93,7 @@ controller('apiController', function($scope) {
 		for (var i =0 in responseObject){
 			if(responseObject[i].name == string){
 				$scope.response = responseObject[i].responseExample;
+				$scope.name     = responseObject[i].name;
 				break;
 			}else{
 				$scope.response = "Response unavailable."

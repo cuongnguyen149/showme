@@ -31,31 +31,37 @@
         // socket.on("updateStatusFalse", function(data){
         //   console.log(data);
         // })
-         
-        socket.emit('getPrice', '{"role":"leader","id": "2"}');
-        socket.on("getPriceFalse", function(data){
-          console.log(data);
-        });
-        socket.on("getPriceSuccess", function(data){
-          console.log(data);
-        });
+        // socket.emit('callStart', '{"user_id":"12","leader_id": "1", "dialog_id": "1231"}');
+        //   socket.on("callStartFalse", function(data){
+        //     console.log(data);
+        //   });
+        //   socket.on("callStartSuccess", function(data){
+        //     console.log(data);
+        // }); 
+        // socket.emit('getPrice', '{"role":"leader","id": "1"}');
+        // socket.on("getPriceFalse", function(data){
+        //   console.log(data);
+        // });
+        // socket.on("getPriceSuccess", function(data){
+        //   console.log(data);
+        // });
 
 
-        // socket.emit('merchandiseRequest', '{"merchandise_fee":"12","shiping_fee":"32", "merchandise_type": "VIP"}');
-        //   socket.on("userMerchandiseRequest", function(data){
+        // socket.emit('merchandiseRequest', '{"merchandise_fee":"12","shipping_fee":"32", "merchandise_type": "VIP"}');
+        //   socket.on("merchandiseRequestSuccess", function(data){
         //     console.log(data);
         //   });
         //   socket.on("merchandiseRequestFalse", function(data){
         //     console.log(data);
         //   }); 
-        // });
-        // socket.emit('acceptMerchandiseRequest', '{"merchandise_fee":12,"shipping_fee":32, "id":"2"}');
-        //   socket.on("acceptMerchandiseRequestFalse", function(data){
-        //     console.log(data);
-        //   });
-        //   socket.on("acceptMerchandiseRequestSuccess", function(data){
-        //     console.log(data);
-        //   }); 
+        
+        socket.emit('acceptMerchandiseRequest', '{"merchandise_fee":12,"shipping_fee":32, "id":"2"}');
+          socket.on("acceptMerchandiseRequestFalse", function(data){
+            console.log(data);
+          });
+          socket.on("acceptMerchandiseRequestSuccess", function(data){
+            console.log(data);
+          }); 
         });
       $("#location").click(function() {
         // alert( "Handler for .click() called." );

@@ -6,7 +6,7 @@
    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+   <script src="/js/angular.js"></script>
 </head>
 <style>
 #outerdiv
@@ -59,7 +59,7 @@
                <ul>
                  <li>updateLocationSuccess</li>
                  <li>updateLocationFalse</li>
-                 <button ng-click="getResponseExample('updateLeaderLocation')" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Example Response</button>
+                 <button ng-click="getResponseExample('updateLeaderLocation')" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Example Response</button>
                </ul>
               </td>
             </tr>
@@ -71,6 +71,7 @@
                  <li>updateStatusToActive</li>
                  <li>updateStatusToInactive</li>
                  <li>updateStatusFalse</li>
+                 <button ng-click="getResponseExample('updateLeaderLocation')" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Example Response</button>
                </ul>            
             </tr>
             <tr>
@@ -80,7 +81,7 @@
                <ul>
                  <li>callStartFalse</li>
                  <li>callStartSuccess</li>
-                 <button ng-click="getResponseExample('updateLeaderLocation')" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Example Response</button>
+                 <button ng-click="getResponseExample('callStart')" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Example Response</button>
                </ul>
               </td>
             </tr>
@@ -91,7 +92,7 @@
                <ul>
                  <li>updateLocationSuccess</li>
                  <li>updateLocationFalse</li>
-                 <button ng-click="getResponseExample('updateLeaderLocation')" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Example Response</button>
+                 <button ng-click="getResponseExample('getPrice')" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Example Response</button>
                </ul>
               </td>
             </tr>
@@ -102,7 +103,7 @@
                <ul>
                  <li>merchandiseRequestSuccess</li>
                  <li>merchandiseRequestFalse</li>
-                 <button ng-click="getResponseExample('updateLeaderLocation')" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Example Response</button>
+                 <button ng-click="getResponseExample('merchandiseRequest')" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Example Response</button>
                </ul>
               </td>
             </tr>
@@ -113,7 +114,7 @@
                <ul>
                  <li>acceptMerchandiseRequestFalse</li>
                  <li>acceptMerchandiseRequestSuccess</li>
-                 <button ng-click="getResponseExample('updateLeaderLocation')" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Example Response</button>
+                 <button ng-click="getResponseExample('acceptMerchandiseRequest')" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Example Response</button>
                </ul>
               </td>
             </tr>
@@ -129,10 +130,12 @@
             <h4 class="modal-title" id="myModalLabel">Example response</h4>
           </div>
           <div class="modal-body">
-            {{response}}
+            <pre>{{response | json}}</pre>
           </div>
         </div>
       </div>
     </div>
+    <script src="/js/app.js"></script>
+    <script src="/js/apiController.js"></script>
 </body>
 </html>

@@ -30,8 +30,8 @@ app.all('*', function(req, res, next) {
 		myUtils.validateToken(req, res, next);
 	} else {
 	// ignore
-	  res.json(myUtils.createErrorStr('No token found', constants.NO_TOKEN_CODE));
-	 // next();
+	  // res.json(myUtils.createErrorStr('No token found', constants.NO_TOKEN_CODE));
+	 next();
  }
 });
 app.get('/doc/api', function(req, res){
@@ -48,5 +48,6 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
     if(!err){ 
       console.log("Server listening on port: " + port)
     }})),
-  socketLeader = require('./api/controllers/socket/leader')(io);
+  socketLeader = require('./api/controllers/socket/leaderSK')(io),
+  socketCall = require('./api/controllers/socket/callSK')(io);
 });

@@ -6,6 +6,7 @@
    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
 </head>
 <style>
 #outerdiv
@@ -36,7 +37,7 @@
 }
 </style>
 
-<body>
+<body ng-app="showme" ng-controller="apiController">
 	<div id="outerdiv">
     <iframe src="http://tinyurl.com/hldl3rn" id="inneriframe" scrolling="no"></iframe>
    </div>
@@ -58,6 +59,7 @@
                <ul>
                  <li>updateLocationSuccess</li>
                  <li>updateLocationFalse</li>
+                 <button ng-click="getResponseExample('updateLeaderLocation')" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">Example Response</button>
                </ul>
               </td>
             </tr>
@@ -74,5 +76,19 @@
          </tbody>
       </table>
    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Example response</h4>
+          </div>
+          <div class="modal-body">
+            {{response}}
+          </div>
+        </div>
+      </div>
+    </div>
 </body>
 </html>

@@ -4,8 +4,7 @@ var myUtils = require('../../utility/utils');
 var dbConfig = require('../../config/dbConfig');
 var constants = require('../../constants');
 module.exports = {
-	createTransaction: createTransaction,
-	getPrice : getPrice
+	createTransaction: createTransaction
 };
 
 function createTransaction (req, res){

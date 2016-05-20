@@ -22,16 +22,41 @@
       var socket; 
       $("#a").click(function() {
         // alert( "Handler for .click() called." );
-        socket = io.connect('http://51.254.98.255:9001');
-        // socket = io.connect('http://localhost:9001');
-        socket.emit('updateLeaderStatus', '{"user_id":"12657454","active":true}');
-        socket.on("updateStatusToActive", function(data){
+        // socket = io.connect('http://51.254.98.255:9001');
+        socket = io.connect('http://localhost:9001');
+        // socket.emit('updateLeaderStatus', '{"user_id":"12657454","active":true}');
+        // socket.on("updateStatusToActive", function(data){
+        //   console.log(data);
+        // });
+        // socket.on("updateStatusFalse", function(data){
+        //   console.log(data);
+        // })
+         
+        socket.emit('getPrice', '{"role":"leader","id": "2"}');
+        socket.on("getPriceFalse", function(data){
           console.log(data);
         });
-        socket.on("updateStatusFalse", function(data){
+        socket.on("getPriceSuccess", function(data){
           console.log(data);
-        })      
-      });
+        });
+
+
+        // socket.emit('merchandiseRequest', '{"merchandise_fee":"12","shiping_fee":"32", "merchandise_type": "VIP"}');
+        //   socket.on("userMerchandiseRequest", function(data){
+        //     console.log(data);
+        //   });
+        //   socket.on("merchandiseRequestFalse", function(data){
+        //     console.log(data);
+        //   }); 
+        // });
+        // socket.emit('acceptMerchandiseRequest', '{"merchandise_fee":12,"shipping_fee":32, "id":"2"}');
+        //   socket.on("acceptMerchandiseRequestFalse", function(data){
+        //     console.log(data);
+        //   });
+        //   socket.on("acceptMerchandiseRequestSuccess", function(data){
+        //     console.log(data);
+        //   }); 
+        });
       $("#location").click(function() {
         // alert( "Handler for .click() called." );
         // socket = io.connect('http://51.254.98.255');

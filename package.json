@@ -8,6 +8,8 @@
   "license": "",
   "main": "app.js",
   "dependencies": {
+    "angular": "^1.5.5",
+    "braintree": "^1.38.0",
     "express": "^4.12.3",
     "jwt-simple": "^0.5.0",
     "mysql": "^2.10.2",

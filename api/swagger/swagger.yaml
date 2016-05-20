@@ -379,53 +379,58 @@ paths:
   #         description: Error
   #         schema:
   #           $ref: "#/definitions/ErrorResponse"
-  /call/price:
-    x-swagger-router-controller: call 
-    get:
-      description: API for get price of call.
-      # used as the method name of the controller
-      operationId: getPrice
-      parameters:
-        - name: dialog_id
-          in: query
-          type: string
-          description: dialog_id.
-          required: true  
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/BaseSuccessRespone"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-  /call/start:
-    x-swagger-router-controller: call 
-    post:
-      description: API for create call information.
-      # used as the method name of the controller
-      operationId: createCall
-      parameters:
-        - name: call
-          in: body
-          description: call's info.
-          required: true
-          schema:
-            $ref: "#/definitions/callParams"   
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/BaseSuccessRespone"
-        # responses may fall through to errors
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"          
+  # /call/price:
+  #   x-swagger-router-controller: call 
+  #   get:
+  #     description: API for get price of call.
+  #     # used as the method name of the controller
+  #     operationId: getPrice
+  #     parameters:
+  #       - name: dialog_id
+  #         in: query
+  #         type: string
+  #         description: dialog_id.
+  #         required: true
+  #       - name: role
+  #         in: query
+  #         type: string
+  #         description: dialog_id.
+  #         required: true  
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           # a pointer to a definition
+  #           $ref: "#/definitions/BaseSuccessRespone"
+  #       # responses may fall through to errors
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"
+  # /call/start:
+  #   x-swagger-router-controller: call 
+  #   post:
+  #     description: API for create call information.
+  #     # used as the method name of the controller
+  #     operationId: createCall
+  #     parameters:
+  #       - name: call
+  #         in: body
+  #         description: call's info.
+  #         required: true
+  #         schema:
+  #           $ref: "#/definitions/callParams"   
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         schema:
+  #           # a pointer to a definition
+  #           $ref: "#/definitions/BaseSuccessRespone"
+  #       # responses may fall through to errors
+  #       default:
+  #         description: Error
+  #         schema:
+  #           $ref: "#/definitions/ErrorResponse"          
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -629,19 +634,19 @@ definitions:
       - user_id
       - leader_id
       - dialog_id
-  callParams:
-    description: call object.
-    properties:
-      user_id:
-        type: string
-      leader_id: 
-        type: string
-      dialog_id:
-        type: string
-    required:
-      - user_id
-      - leader_id
-      - dialog_id     
+  # callParams:
+  #   description: call object.
+  #   properties:
+  #     user_id:
+  #       type: string
+  #     leader_id: 
+  #       type: string
+  #     dialog_id:
+  #       type: string
+  #   required:
+  #     - user_id
+  #     - leader_id
+  #     - dialog_id     
   codeReturn:
     description: leader status info object.
     properties:

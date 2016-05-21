@@ -15,45 +15,65 @@
     </style>
   </head>
   <body>
-  <button id="m">Update To False </button><button id="a">Update to True</button><button id="location">Update Location</button>
+  <button id="m">Update To False </button></br>
+  <button id="a">Update to True</button></br>
+  <button id="location">Update Location</button></br>
+   <button id="startCall">startCall</button></br>
+    <button id="endCall">endCall</button></br>
+     <button id="getPrice">getPrice</button></br>
+      <button id="merchanRequest">merchanRequest</button></br>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script>
-      var socket; 
-      $("#a").click(function() {
-        // alert( "Handler for .click() called." );
-        socket = io.connect('http://51.254.98.255:9001');
-        // socket = io.connect('http://localhost:9001');
-        socket.emit('updateLeaderStatus', '{"user_id":"12657376","active":true}');
-        socket.on("updateStatusToActive", function(data){
+      var socket;
+       socket = io.connect('http://localhost:9001');
+      $("#startCall").click(function() {
+        socket.emit('callStart', '{"user_id":"12","leader_id": "1", "dialog_id": "1231"}');
+          socket.on("callStartFalse", function(data){
+            console.log(data);
+          });
+          socket.on("callStartSuccess", function(data){
+            console.log(data);
+        }); 
+      }); 
+     $("#getPrice").click(function() {
+        socket.emit('getPrice', '{"role":"leader","id": "1"}');
+        socket.on("getPriceFalse", function(data){
           console.log(data);
         });
-        socket.on("updateStatusFalse", function(data){
+        socket.on("getPriceSuccess", function(data){
+          console.log(data);
+        }); 
+      }); 
+      $("#endCall").click(function() {
+        socket.emit('endCall', '{"id": "2"}');
+        socket.on("endCallSuccess", function(data){
+          console.log(data);
+        });
+        socket.on("endCallFalse", function(data){
           console.log(data);
         })
-        // socket.emit('callStart', '{"user_id":"12","leader_id": "1", "dialog_id": "1231"}');
-        //   socket.on("callStartFalse", function(data){
-        //     console.log(data);
-        //   });
-        //   socket.on("callStartSuccess", function(data){
-        //     console.log(data);
-        // }); 
-        // socket.emit('getPrice', '{"role":"leader","id": "1"}');
-        // socket.on("getPriceFalse", function(data){
+      }); 
+      $("#merchandiseRequest").click(function() {
+        socket.emit('merchandiseRequest', '{"merchandise_fee":"12","shipping_fee":"32", "merchandise_type": "VIP"}');
+        socket.on("merchandiseRequestSuccess", function(data){
+          console.log(data);
+        });
+        socket.on("merchandiseRequestFalse", function(data){
+          console.log(data);
+        }); 
+      }); 
+      $("#a").click(function() {
+        // alert( "Handler for .click() called." );
+        // socket = io.connect('http://51.254.98.255:9001');
+       
+        // socket.emit('updateLeaderStatus', '{"user_id":"12657376","active":true}');
+        // socket.on("updateStatusToActive", function(data){
         //   console.log(data);
         // });
-        // socket.on("getPriceSuccess", function(data){
+        // socket.on("updateStatusFalse", function(data){
         //   console.log(data);
-        // });
-
-
-        // socket.emit('merchandiseRequest', '{"merchandise_fee":"12","shipping_fee":"32", "merchandise_type": "VIP"}');
-        //   socket.on("merchandiseRequestSuccess", function(data){
-        //     console.log(data);
-        //   });
-        //   socket.on("merchandiseRequestFalse", function(data){
-        //     console.log(data);
-        //   }); 
+        // })  
         
         // socket.emit('acceptMerchandiseRequest', '{"merchandise_fee":12,"shipping_fee":32, "id":"2"}');
         //   socket.on("acceptMerchandiseRequestFalse", function(data){

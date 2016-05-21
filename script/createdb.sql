@@ -61,7 +61,7 @@ CREATE TABLE transaction_price(
    dialog_id VARCHAR(100) NOT NULL,
    user_id VARCHAR(100) NOT NULL,
    leader_id VARCHAR(100) NOT NULL,
-   call_start TIMESTAMP default now(),
+   call_start TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
    call_end TIMESTAMP,
    is_payment BOOL default false,
    shipping_fee DOUBLE default 0,

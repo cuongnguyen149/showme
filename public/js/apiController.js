@@ -1,6 +1,28 @@
 angular.module('showme.controllers', []).
 controller('apiController', function($scope) {
 	var responseObject = [
+	{
+			name: 'callEnd',
+			responseExample: {
+				data:{
+					call:{
+						call_end:"2016-05-20T18:50:16.000Z",
+						call_start:"2016-05-20T18:49:16.000Z",
+						create_date:"2016-05-20T18:49:16.000Z",
+						dialog_id:"1231",
+						id:4,
+						is_payment:0,
+						leader_id:"1",
+						merchandise_fee:0,
+						price:0,
+						service_fee:0,
+						shipping_fee:0,
+						update_date:"2016-05-20T18:49:16.000Z",
+						user_id:"12"						
+					}
+				}
+			}
+		},
 		{
 			name: 'callStart',
 			responseExample: {

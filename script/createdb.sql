@@ -63,7 +63,7 @@ CREATE TABLE transaction_price(
    leader_id VARCHAR(100) NOT NULL,
    call_start TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
    call_end TIMESTAMP,
-   is_payment BOOL default false,
+   is_payment BOOL default true,
    shipping_fee DOUBLE default 0,
    merchandise_fee DOUBLE default 0,
    price DOUBLE default 0,

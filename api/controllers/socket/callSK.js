@@ -72,7 +72,7 @@ exports = module.exports = function(io){
 								call_price.total = total_mins*fee_per_min + call_price.merchandise_fee + call_price.shipping_fee;
 							}
 							
-							socket.emit("getPriceSuccess", {returnCode: constants.SUCCESS_CODE, message: "Get call price of " + id + " successfull.", data : {callPrice : call_price}});
+							socket.emit("getPriceSuccess", {returnCode: constants.SUCCESS_CODE, message: "Get call price of " + id + " successfull.", data : {call : call_price}});
 						}else{
 							socket.emit("getPriceFalse", myUtils.createErrorStr("Opps! The leader does not exist! Please check again.", constants.ERROR_CODE));
 						}

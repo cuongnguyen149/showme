@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>TEST</title>
     
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15,20 +15,25 @@
     </style>
   </head>
   <body>
-  <button id="m">Update To False </button></br>
-  <button id="a">Update to True</button></br>
-  <button id="location">Update Location</button></br>
-   <button id="startCall">startCall</button></br>
-    <button id="endCall">endCall</button></br>
-     <button id="getPrice">getPrice</button></br>
-      <button id="merchanRequest">merchanRequest</button></br>
+  <button id="m">Update To False </button></br></br>
+  <button id="a">Update to True</button></br></br>
+  <button id="location">Update Location</button></br></br>
+   <button id="startCall">startCall</button></br></br>
+    <button id="endCall">endCall</button></br></br>
+     <button id="getPrice">getPrice</button></br></br>
+      <button id="merchandiseRequest">merchanRequest</button></br></br>
+      <button id="getcallbyuserID">getcallbyuserID</button></br></br>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script>
       var socket;
+      // socket = io.connect('http://51.254.98.255:9001');
        socket = io.connect('http://localhost:9001');
+       socket.on('merchandiseRequestSuccess', function(data){
+        console.log(data);
+       });
       $("#startCall").click(function() {
-        socket.emit('callStart', '{"user_id":"12","leader_id": "1", "dialog_id": "1231"}');
+        socket.emit('callStart', '{"user_id":"12","leader_id": "1", "dialog_id": "123111"}');
           socket.on("callStartFalse", function(data){
             console.log(data);
           });
@@ -46,34 +51,34 @@
         }); 
       }); 
       $("#endCall").click(function() {
-        socket.emit('endCall', '{"id": "2"}');
-        socket.on("endCallSuccess", function(data){
+        socket.emit('callEnd', '{"id": "24"}');
+        socket.on("callEndFalse", function(data){
           console.log(data);
         });
-        socket.on("endCallFalse", function(data){
+        socket.on("callEndSuccess", function(data){
           console.log(data);
         })
       }); 
       $("#merchandiseRequest").click(function() {
-        socket.emit('merchandiseRequest', '{"merchandise_fee":"12","shipping_fee":"32", "merchandise_type": "VIP"}');
-        socket.on("merchandiseRequestSuccess", function(data){
-          console.log(data);
-        });
+        socket.emit('merchandiseRequest', '{"leader_id": "1", "merchandise_fee":"12","shipping_fee":"32", "merchandise_type": "VIP"}');
+        // socket.on("merchandiseRequestSuccess", function(data){
+        //   console.log(data);
+        // });
         socket.on("merchandiseRequestFalse", function(data){
           console.log(data);
         }); 
       }); 
       $("#a").click(function() {
         // alert( "Handler for .click() called." );
-        // socket = io.connect('http://51.254.98.255:9001');
+        
        
-        // socket.emit('updateLeaderStatus', '{"user_id":"12657376","active":true}');
-        // socket.on("updateStatusToActive", function(data){
-        //   console.log(data);
-        // });
-        // socket.on("updateStatusFalse", function(data){
-        //   console.log(data);
-        // })  
+        socket.emit('updateLeaderStatus', '{"user_id":"1","active":true}');
+        socket.on("updateStatusToActive", function(data){
+          console.log(data);
+        });
+        socket.on("updateStatusFalse", function(data){
+          console.log(data);
+        })  
         
         // socket.emit('acceptMerchandiseRequest', '{"merchandise_fee":12,"shipping_fee":32, "id":"2"}');
         //   socket.on("acceptMerchandiseRequestFalse", function(data){
@@ -95,6 +100,7 @@
           console.log(data);
         })      
       });
+      
       $("#m").click(function() {
         // alert( "Handler for .click() called." );
         socket.emit('updateLeaderStatus', '{"user_id" : "12481167", "active": false}');
@@ -105,6 +111,15 @@
           console.log(data);
         }) 
       });
+      $("#getcallbyuserID").click(function() {
+        socket.emit('getCallByUserId', '{"user_id":"12"}');
+          socket.on("getCallByUserIdFail", function(data){
+            console.log(data);
+          });
+          socket.on("getCallByUserIdSuccess", function(data){
+            console.log(data);
+        }); 
+      }); 
       // io.connect('http://localhost').on("updateStatusSuccess", function(data){
       //   console.log(data);
       // })      

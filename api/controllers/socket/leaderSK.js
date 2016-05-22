@@ -147,11 +147,11 @@ exports = module.exports = function(io){
 						}else if (rowsLeader && rowsLeader.length > 0){
 							var total_mins 	= (now - call_price.call_start.getTime())/60000, // Minutes of call.
 								fee_per_min = rowsLeader[0].fee_per_hour/60;
-							call_price.price = total_mins*fee_per_min;
+							call_price.price = (total_mins*fee_per_min).toFixed(2);
 							if(role && role == 'leader'){
-								call_price.total = total_mins*fee_per_min + call_price.merchandise_fee + call_price.shipping_fee - call_price.service_fee; 
+								call_price.total = (total_mins*fee_per_min + call_price.merchandise_fee + call_price.shipping_fee - call_price.service_fee).toFixed(2); 
 							}else{
-								call_price.total = total_mins*fee_per_min + call_price.merchandise_fee + call_price.shipping_fee;
+								call_price.total = (total_mins*fee_per_min + call_price.merchandise_fee + call_price.shipping_fee).toFixed(2);
 							}
 							
 							socket.emit("getPriceSuccess", {returnCode: constants.SUCCESS_CODE, message: "Get call price of " + id + " successfull.", data : {call : call_price}});
@@ -269,7 +269,7 @@ exports = module.exports = function(io){
 						}else if (rowsLeader && rowsLeader.length > 0){
 							var total_mins 		= (now - call_price.call_start.getTime())/60000, // Minutes of call.
 								fee_per_min 	= rowsLeader[0].fee_per_hour/60;
-							call_price.price 	= total_mins*fee_per_min;
+							call_price.price 	= (total_mins*fee_per_min).toFixed(2);
 							call_price.call_end = new Date();
 							dbConfig.query(update_call, [call_price.price, call_price.call_end, id], function(err, rows){
 								console.log(rows);

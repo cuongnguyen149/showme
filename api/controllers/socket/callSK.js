@@ -36,7 +36,8 @@ exports = module.exports = function(io){
 							dbConfig.query(query_call, [rows.insertId], function(err, rows){
 								if(err){
 									socket.emit("callStartFalse", myUtils.createDatabaseError(err));
-								}else{					
+								}else{
+									rows[0].total = 0;					
 									socket.emit("callStartSuccess", {returnCode: constants.SUCCESS_CODE, message: "Create call with " + dialog_id + " successfully.", data : {call :rows[0]}});
 								}
 							});
@@ -176,6 +177,7 @@ exports = module.exports = function(io){
 			  							if(err){
 			  								socket.emit("callEndFalse", myUtils.createDatabaseError(err));
 			  							}else{
+			  								rows[0].total = 0;
 			  								socket.emit("callEndSuccess", {returnCode: constants.SUCCESS_CODE, message: "End call " + id + " successfull.", data : {call: rows[0]}});
 			  							}
 		  							});

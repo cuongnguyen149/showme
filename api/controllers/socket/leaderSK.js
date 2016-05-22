@@ -118,6 +118,7 @@ exports = module.exports = function(io){
 								if(err){
 									socket.emit("callStartFalse", myUtils.createDatabaseError(err));
 								}else{
+									rows[0].min   = 0;
 									rows[0].total = 0;					
 									socket.emit("callStartSuccess", {returnCode: constants.SUCCESS_CODE, message: "Create call with " + dialog_id + " successfully.", data : {call :rows[0]}});
 
@@ -148,6 +149,7 @@ exports = module.exports = function(io){
 							var total_mins 	= (now - call_price.call_start.getTime())/60000, // Minutes of call.
 								fee_per_min = rowsLeader[0].fee_per_hour/60;
 							call_price.price = (total_mins*fee_per_min).toFixed(2);
+							call_price.min   = parseInt(total_mins.toFixed(0));
 							if(role && role == 'leader'){
 								call_price.total = (total_mins*fee_per_min + call_price.merchandise_fee + call_price.shipping_fee - call_price.service_fee).toFixed(2); 
 							}else{
@@ -280,6 +282,7 @@ exports = module.exports = function(io){
 			  							if(err){
 			  								socket.emit("callEndFalse", myUtils.createDatabaseError(err));
 			  							}else{
+			  								rows[0].min   = parseInt(total_mins.toFixed(0));
 			  								rows[0].total = 0;
 			  								socket.emit("callEndSuccess", {returnCode: constants.SUCCESS_CODE, message: "End call " + id + " successfull.", data : {call: rows[0]}});
 			  							}

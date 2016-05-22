@@ -51,7 +51,7 @@
         }); 
       }); 
       $("#endCall").click(function() {
-        socket.emit('callEnd', '{"id": "24"}');
+        socket.emit('callEnd', '{"id": "3"}');
         socket.on("callEndFalse", function(data){
           console.log(data);
         });

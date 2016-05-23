@@ -259,7 +259,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"          
   /reviews:
-    x-swagger-router-controller: transaction 
+    x-swagger-router-controller: reviews 
     post:
       description: API for update leaders status.
       # used as the method name of the controller

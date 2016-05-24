@@ -1,7 +1,17 @@
 angular.module('showme.controllers', []).
 controller('apiController', function($scope) {
 	var responseObject = [
-	{
+		{
+			name: 'leaderStart',
+			responseExample: {
+				data:{
+					leader:{
+						leader_id:"1"
+					}	
+				}
+			}
+		},
+		{
 			name: 'callEnd',
 			responseExample: {
 				data:{

@@ -15,21 +15,24 @@
     </style>
   </head>
   <body>
-  <button id="m">Update To False </button></br></br>
-  <button id="a">Update to True</button></br></br>
-  <button id="location">Update Location</button></br></br>
-   <button id="startCall">startCall</button></br></br>
+    <button id="m">Update To False </button></br></br>
+    <button id="a">Update to True</button></br></br>
+    <button id="location">Update Location</button></br></br>
+    <button id="startCall">startCall</button></br></br>
     <button id="endCall">endCall</button></br></br>
-     <button id="getPrice">getPrice</button></br></br>
-      <button id="merchandiseRequest">merchanRequest</button></br></br>
-      <button id="getcallbyuserID">getcallbyuserID</button></br></br>
+    <button id="getPrice">getPrice</button></br></br>
+    <button id="merchandiseRequest">merchanRequest</button></br></br>
+    <button id="getcallbyuserID">getcallbyuserID</button></br></br>
+    <button id="startLeader">startLeader</button></br></br>
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script>
       var socket;
       // socket = io.connect('http://51.254.98.255:9001');
        socket = io.connect('http://localhost:9001');
-       socket.on('merchandiseRequestSuccess', function(data){
+       socket.on('merchandiseRequestListener', function(data){
         console.log(data);
        });
       $("#startCall").click(function() {
@@ -60,7 +63,7 @@
         })
       }); 
       $("#merchandiseRequest").click(function() {
-        socket.emit('merchandiseRequest', '{"leader_id": "1", "merchandise_fee":"12","shipping_fee":"32", "merchandise_type": "VIP"}');
+        socket.emit('merchandiseRequest', '{"leader_id": "12", "merchandise_fee":"12","shipping_fee":"32", "merchandise_type": "VIP"}');
         // socket.on("merchandiseRequestSuccess", function(data){
         //   console.log(data);
         // });
@@ -117,6 +120,15 @@
             console.log(data);
           });
           socket.on("getCallByUserIdSuccess", function(data){
+            console.log(data);
+        }); 
+      });
+      $("#startLeader").click(function() {
+        socket.emit('leaderStart', '{"leader_id":"12"}');
+          socket.on("leaderStartSuccess", function(data){
+            console.log(data);
+          });
+          socket.on("leaderStartFail", function(data){
             console.log(data);
         }); 
       }); 

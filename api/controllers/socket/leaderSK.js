@@ -11,8 +11,18 @@ exports = module.exports = function(io){
 	var leader = {},
 		call   = {}; 
   	io.sockets.on('connection', function (socket) {
-  		console.log(socket.id);
   		console.log("user connected");
+  		socket.on('leaderStart', function(leaderObject){
+  			console.log(leaderObj);
+  			var leaderObj = JSON.parse(leaderObject);
+  			if(leaderObj.leader_id){
+  				call[leaderObj.leader_id] = socket.id;
+  				socket.emit("leaderStartSuccess", {returnCode: constants.SUCCESS_CODE, message: "Start leader " + leaderObj.leader_id + " success!.", data: {leader: leaderObj}});	
+  			}else{
+  				socket.emit("leaderStartFail", myUtils.createErrorStr("Bad parameters!!", constants.ERROR_CODE));
+  			}
+  			
+  		});
 	    /*
 	    * update leader location 
 	    * Param: user_id, address.	
@@ -69,7 +79,7 @@ exports = module.exports = function(io){
 					dbConfig.query(query, [leaderObj.user_id], function(err, rows){
 						if(rows && rows.length > 0){
 							if(leaderObj.active){
-								call[leaderObject.user_id] = socket.id;
+								// call[leaderObject.user_id] = socket.id;
 								console.log('update true: ' + call[leaderObject.user_id]);
 								socket.emit("updateStatusToActive", {returnCode: constants.SUCCESS_CODE, message: "Updated status of leader " + leaderObj.user_id + " to " + leaderObj.active +".", data: {user: rows[0]}});	
 								// console.log(io.sockets.connected[socket.id]);
@@ -170,20 +180,20 @@ exports = module.exports = function(io){
   		});
 
   		socket.on('merchandiseRequest', function(merchanObject){
-  			console.log(call[leader_id]);
-  			var x = call[leader_id]; console.log(x);
+  			
   			var merchanParseJson 	= JSON.parse(merchanObject),
   				merchanInfo 		= {};
   			var leader_id 					= merchanParseJson.leader_id;	
   			merchanInfo.merchandise_fee 	= merchanParseJson.merchandise_fee;
   			merchanInfo.shipping_fee		= merchanParseJson.shipping_fee;
   			merchanInfo.merchandise_type	= merchanParseJson.merchandise_type;
+			console.log(call[leader_id]);
+			var x = call[leader_id]; console.log(x);
   			if(merchanInfo.merchandise_fee && merchanInfo.merchandise_type && merchanInfo.shipping_fee){
-  				
-  				io.to(x).emit("merchandiseRequestSuccess", {returnCode: constants.SUCCESS_CODE, message: "You have a merchandise request.", data : {merchanRequest : merchanInfo}});
+  				io.to(x).emit("merchandiseRequestListener", {returnCode: constants.SUCCESS_CODE, message: "You have a merchandise request.", data : {merchanRequest : merchanInfo}});
   				// io.sockets.socket(call[leader_id]).emit("merchandiseRequestSuccess", {returnCode: constants.SUCCESS_CODE, message: "You have a merchandise request.", data : {merchanRequest : merchanInfo}});
   			}else{
-  				socket.emit("merchandiseRequestFalse", myUtils.createErrorStr("Opps! Some information you provide incorrect! Please check again.", constants.ERROR_CODE));
+  				socket.emit("merchandiseRequestFail", myUtils.createErrorStr("Opps! Some information you provide incorrect! Please check again.", constants.ERROR_CODE));
   			}	
   		});
 
@@ -201,22 +211,22 @@ exports = module.exports = function(io){
   			if(merchandise_fee && shipping_fee && id){
   				dbConfig.query(update_call,[merchandise_fee, shipping_fee, id], function(err, rows){
   					if(err){
-  						socket.emit("acceptMerchandiseRequestFalse", myUtils.createDatabaseError(err));
+  						socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));
   					}else{
   						dbConfig.query(query_call, id, function(err, rows){
   							if(err){
-  								socket.emit("acceptMerchandiseRequestFalse", myUtils.createDatabaseError(err));		
+  								socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));		
   							}else if(rows && rows.length > 0){
   								socket.emit("acceptMerchandiseRequestSuccess", {returnCode: constants.SUCCESS_CODE, message: "Updated merchandies request successfull.", data : {call : rows[0]}});
   							}else{
-  								socket.emit("acceptMerchandiseRequestFalse", myUtils.createErrorStr("Opps! Id: " + id+ " you provide incorrect! Please check again.", constants.ERROR_CODE));
+  								socket.emit("acceptMerchandiseRequestFail", myUtils.createErrorStr("Opps! Id: " + id+ " you provide incorrect! Please check again.", constants.ERROR_CODE));
   							}
   						});
   						
   					}
   				});
   			}else{
-  				socket.emit("acceptMerchandiseRequestFalse", myUtils.createErrorStr("Opps! Some information you provide incorrect! Please check again.", constants.ERROR_CODE));
+  				socket.emit("acceptMerchandiseRequestFail", myUtils.createErrorStr("Opps! Some information you provide incorrect! Please check again.", constants.ERROR_CODE));
   			}	
   		});
 

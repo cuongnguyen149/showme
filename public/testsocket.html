@@ -24,6 +24,7 @@
     <button id="merchandiseRequest">merchanRequest</button></br></br>
     <button id="getcallbyuserID">getcallbyuserID</button></br></br>
     <button id="startLeader">startLeader</button></br></br>
+    <button id="acceptMerchandiseRequest">acceptMerchandiseRequest</button></br></br>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -63,7 +64,7 @@
         })
       }); 
       $("#merchandiseRequest").click(function() {
-        socket.emit('merchandiseRequest', '{"leader_id": "12", "merchandise_fee":"12","shipping_fee":"32", "merchandise_type": "VIP"}');
+        socket.emit('merchandiseRequest', '{"leader_id": "12", "merchandise_fee":12, "merchandise_type": 4}');
         // socket.on("merchandiseRequestSuccess", function(data){
         //   console.log(data);
         // });
@@ -76,20 +77,13 @@
         
        
         socket.emit('updateLeaderStatus', '{"user_id":"1","active":true}');
-        socket.on("updateStatusToActive", function(data){
-          console.log(data);
-        });
-        socket.on("updateStatusFalse", function(data){
-          console.log(data);
-        })  
-        
-        // socket.emit('acceptMerchandiseRequest', '{"merchandise_fee":12,"shipping_fee":32, "id":"2"}');
-        //   socket.on("acceptMerchandiseRequestFalse", function(data){
-        //     console.log(data);
-        //   });
-        //   socket.on("acceptMerchandiseRequestSuccess", function(data){
-        //     console.log(data);
-        //   }); 
+          socket.on("updateStatusToActive", function(data){
+            console.log(data);
+          });
+          socket.on("updateStatusFalse", function(data){
+            console.log(data);
+          })  
+         
         });
       $("#location").click(function() {
         // alert( "Handler for .click() called." );
@@ -131,6 +125,15 @@
           socket.on("leaderStartFail", function(data){
             console.log(data);
         }); 
+      }); 
+       $("#acceptMerchandiseRequest").click(function() {
+        socket.emit('acceptMerchandiseRequest', '{"merchandise_fee":12,"shipping_fee":32, "id":"2"}');
+          socket.on("acceptMerchandiseRequestFail", function(data){
+            console.log(data);
+          });
+          socket.on("acceptMerchandiseRequestSuccess", function(data){
+            console.log(data);
+          }); 
       }); 
       // io.connect('http://localhost').on("updateStatusSuccess", function(data){
       //   console.log(data);

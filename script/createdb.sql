@@ -72,3 +72,10 @@ CREATE TABLE transaction_price(
    update_date TIMESTAMP default now() on update now(),
    PRIMARY KEY (id)
 );
+
+CREATE TABLE merchandise_type(
+   id INT NOT NULL AUTO_INCREMENT,
+   shipping_fee INT NOT NULL,
+   type VARCHAR(100) NOT NULL,
+   PRIMARY KEY (id)
+);

@@ -181,16 +181,23 @@ exports = module.exports = function(io){
 
   		socket.on('merchandiseRequest', function(merchanObject){
   			
-  			var merchanParseJson 	= JSON.parse(merchanObject),
-  				merchanInfo 		= {};
-  			var leader_id 					= merchanParseJson.leader_id;	
-  			merchanInfo.merchandise_fee 	= merchanParseJson.merchandise_fee;
-  			merchanInfo.shipping_fee		= merchanParseJson.shipping_fee;
-  			merchanInfo.merchandise_type	= merchanParseJson.merchandise_type;
+  			var merchanParseJson 	= JSON.parse(merchanObject);
+  			var leader_id 			= merchanParseJson.leader_id,	
+	  			merchandise_fee 	= merchanParseJson.merchandise_fee,
+	  			merchandise_type	= merchanParseJson.merchandise_type;
 			console.log(call[leader_id]);
 			var x = call[leader_id]; console.log(x);
-  			if(merchanInfo.merchandise_fee && merchanInfo.merchandise_type && merchanInfo.shipping_fee){
-  				io.to(x).emit("merchandiseRequestListener", {returnCode: constants.SUCCESS_CODE, message: "You have a merchandise request.", data : {merchanRequest : merchanInfo}});
+  			if(merchandise_type){
+  				var query = " SELECT * FROM " + constants.MERCHANDISE_TYPE +
+  							" WHERE " + constants.ID + " = ?";
+				dbConfig.query(query, merchandise_type, function(err, rows){
+					if(err){
+						socket.emit("merchandiseRequestFail", myUtils.createDatabaseError(err));
+					}else{
+						rows[0].merchandise_fee = merchandise_fee;
+  						io.to(x).emit("merchandiseRequestListener", {returnCode: constants.SUCCESS_CODE, message: "You have a merchandise request.", data : {merchanRequest : rows[0]}});
+					}
+				});
   				// io.sockets.socket(call[leader_id]).emit("merchandiseRequestSuccess", {returnCode: constants.SUCCESS_CODE, message: "You have a merchandise request.", data : {merchanRequest : merchanInfo}});
   			}else{
   				socket.emit("merchandiseRequestFail", myUtils.createErrorStr("Opps! Some information you provide incorrect! Please check again.", constants.ERROR_CODE));
@@ -203,18 +210,22 @@ exports = module.exports = function(io){
   			shipping_fee			= merchanParseJson.shipping_fee,
   			id 						= merchanParseJson.id;
   			var update_call 		= "UPDATE " + constants.TRANSACTION_PRICE + 
-  									  " SET " 	+ constants.MERCHANDISE_FEE + " = ?, "
-  									  			+ constants.SHIPPING_FEE + " = ? " +
+  									  " SET " 	+ constants.MERCHANDISE_FEE + " = (" + constants.MERCHANDISE_FEE + " + " + merchandise_fee + "), " 
+  									  			+ constants.SHIPPING_FEE + " = (" + constants.SHIPPING_FEE + " + " + shipping_fee + ")" +
   									  " WHERE "	+ constants.ID	+ " = ? ";
   			var query_call			= "SELECT * FROM " + constants.TRANSACTION_PRICE + 
-							  	  	  " WHERE " + constants.ID + " = ? ";			  			
+							  	  	  " WHERE " + constants.ID + " = ? ";
+							  	  	  console.log(update_call);			  			
   			if(merchandise_fee && shipping_fee && id){
-  				dbConfig.query(update_call,[merchandise_fee, shipping_fee, id], function(err, rows){
+  				dbConfig.query(update_call,[id], function(err, rows){
   					if(err){
+  						console.log(err);
   						socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));
   					}else{
+  						console.log(rows);
   						dbConfig.query(query_call, id, function(err, rows){
   							if(err){
+  								console.log(err);
   								socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));		
   							}else if(rows && rows.length > 0){
   								socket.emit("acceptMerchandiseRequestSuccess", {returnCode: constants.SUCCESS_CODE, message: "Updated merchandies request successfull.", data : {call : rows[0]}});

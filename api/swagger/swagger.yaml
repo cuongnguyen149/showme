@@ -430,7 +430,24 @@ paths:
   #       default:
   #         description: Error
   #         schema:
-  #           $ref: "#/definitions/ErrorResponse"          
+  #           $ref: "#/definitions/ErrorResponse"
+  /merchandise:
+    x-swagger-router-controller: merchandiseType
+    get:
+      description: API for get leaders information by id.
+      # used as the method name of the controller
+      operationId: listMerchangeType
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -646,7 +663,7 @@ definitions:
   #   required:
   #     - user_id
   #     - leader_id
-  #     - dialog_id     
+  #     - dialog_id   
   codeReturn:
     description: leader status info object.
     properties:

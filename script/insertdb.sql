@@ -27,5 +27,16 @@ INSERT INTO client_user ( latitude, longitude, user_id, pwd, email, role, dob, f
 INSERT INTO client_user ( latitude, longitude, user_id, pwd, email, role, dob, firstname, lastname ) 
 	VALUES ( 10.759585, 106.689160, "14", "123", "a14@a.com", "leader", "1999-12-21", "John", "Lock" );
 INSERT INTO client_user ( latitude, longitude, user_id, pwd, email, role, dob, firstname, lastname ) 
-	VALUES ( 10.764797, 106.686237, "15", "123", "a15@a.com", "leader", "1999-12-21", "John", "Lock" );
+	VALUES ( 10.764797, 106.686237, "15", "123", "a15@a.com", "leader", "1999-12-21", "John", "Lock" );	
+INSERT INTO merchandise_type ( shipping_fee, type )
+	VALUES (15, "envoi national, colis < 1kg");
+INSERT INTO merchandise_type ( shipping_fee, type )
+	VALUES (50, "envoi national, 1kg < colis < 5kg");
+INSERT INTO merchandise_type ( shipping_fee, type )
+	VALUES (100, "envoi national, 5kg < colis < 10kg");
+INSERT INTO merchandise_type ( shipping_fee, type )
+	VALUES (150, "envoi national, 10kg < colis < 15kg");
+INSERT INTO merchandise_type ( shipping_fee, type )
+	VALUES (200, "envoi national, 15kg < colis < 20kg");	
+
 

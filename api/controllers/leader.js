@@ -12,7 +12,7 @@ module.exports = {
   updateLocation : updateLocation,
   updateStatus : updateStatus,
   getLeaderInfo : getLeaderInfo,
-  leaderComment: leaderComment,
+  comment: comment,
   leaderStatistical: leaderStatistical
 };
 /**
@@ -185,23 +185,48 @@ function getLeaderInfo(req, res){
 /**
 * Leader get leader comment API.
 */
-function leaderComment(req, res){
+function comment(req, res){
 	var user_id 	= req.query.user_id,
+		role 		= req.query.role,	
 		page_size 	= parseInt(req.query.page_size),
 		page_number = parseInt(req.query.page_number);
-	var skip 		= (page_number-1)*page_size;	
-	var query 		= "SELECT " + constants.USER_COMMENT + " ," 
-								+ constants.CREATE_DATE +
-				  	  " FROM " + constants.USER_TRANSACTION +
-				  	  " WHERE "	+ constants.USER_ID + " = ?" +
-				  	  " ORDER BY " + constants.CREATE_DATE + " DESC " +
-				  	  " LIMIT "	+ skip + ", " + page_size;			  	  					
+	var skip 		= (page_number-1)*page_size;
+	if(role == 'user' ){
+		var query 	= "SELECT " + constants.CLIENT_USER + "." + constants.USER_ID + ", "
+								+ constants.CLIENT_USER + "." + constants.AVATAR + ", "
+								+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
+								+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
+								+ constants.USER_TRANSACTION + "."+ constants.USER_COMMENT + ", "
+								+ constants.USER_TRANSACTION + "."+ constants.CREATE_DATE +  
+			  	  " FROM "		+ constants.CLIENT_USER +
+			  	  " LEFT JOIN " + constants.USER_TRANSACTION +
+			  	  " ON " 		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.USER_TRANSACTION + "." + constants.LEADER_ID +
+			  	  " WHERE " 	+ constants.USER_TRANSACTION	+ "." + constants.USER_ID + " = ?" +
+			  	  " AND " 		+ constants.USER_TRANSACTION + "."+ constants.USER_COMMENT + " <> ''" +
+			  	  " ORDER BY "  + constants.USER_TRANSACTION + "."+ constants.CREATE_DATE  + " DESC " +
+			  	  " LIMIT "		+ skip + ", " + page_size;
+	}else{
+		var query 	= "SELECT " + constants.CLIENT_USER + "." + constants.USER_ID + ", "
+								+ constants.CLIENT_USER + "." + constants.AVATAR + ", "
+								+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
+								+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
+								+ constants.USER_TRANSACTION + "."+ constants.LEADER_COMMENT + ", "
+								+ constants.USER_TRANSACTION + "."+ constants.CREATE_DATE +  
+			  	  " FROM "		+ constants.CLIENT_USER +
+			  	  " LEFT JOIN " + constants.USER_TRANSACTION +
+			  	  " ON " 		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.USER_TRANSACTION + "." + constants.USER_ID +
+			  	  " WHERE " 	+ constants.USER_TRANSACTION	+ "." + constants.LEADER_ID + " = ?" +
+			  	  " AND " 		+ constants.USER_TRANSACTION + "."+ constants.LEADER_COMMENT + " <> ''" +				 
+			  	  " ORDER BY "  + constants.USER_TRANSACTION + "."+ constants.CREATE_DATE  + " DESC " +
+			  	  " LIMIT "		+ skip + ", " + page_size;
+	}	
+				  	  					
 	dbConfig.query(query, [user_id], function(err, rows){
 		if(err){
 			console.log(err);
 			res.json(myUtils.createDatabaseError(err));
 		}else{
-			res.json({returnCode: constants.SUCCESS_CODE, message: "Get comment for leader success.", data: {leader: rows}});
+			res.json({returnCode: constants.SUCCESS_CODE, message: "Get comment success.", data: {comment: rows}});
 		}
 	});				  	  
 }
@@ -214,17 +239,23 @@ function leaderStatistical(req, res){
 		page_number = parseInt(req.query.page_number);
 		var skip 	= (page_number-1)*page_size;
 		var query 	= "SELECT " 	+ constants.CLIENT_USER + "." + constants.USER_ID + ", "
-									+ constants.USER_TRANSACTION + "."+ constants.USER_COMMENT +  
+									+ constants.CLIENT_USER + "." + constants.AVATAR + ", "
+									+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
+									+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
+									+  "(" + constants.TRANSACTION_PRICE + "."+ constants.PRICE + " + " + constants.TRANSACTION_PRICE + "."+ constants.SHIPPING_FEE + " + " + constants.TRANSACTION_PRICE + "."+ constants.MERCHANDISE_FEE + ") AS total_fee, " 
+									+ constants.TRANSACTION_PRICE + "."+ constants.CALL_START +  
 				  	  " FROM "		+ constants.CLIENT_USER +
-				  	  " LEFT JOIN " + constants.USER_TRANSACTION +
-				  	  " ON " 		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.USER_TRANSACTION + "." + constants.USER_ID +
-				  	  " WHERE " 	+ constants.CLIENT_USER	+ "." + constants.USER_ID + " = ?";
-				  	  console.log(query);
+				  	  " LEFT JOIN " + constants.TRANSACTION_PRICE +
+				  	  " ON " 		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.TRANSACTION_PRICE + "." + constants.USER_ID +
+				  	  " WHERE " 	+ constants.TRANSACTION_PRICE	+ "." + constants.LEADER_ID + " = ?" +
+				  	  " ORDER BY "  + constants.TRANSACTION_PRICE + "."+ constants.CALL_START  + " DESC " +
+				  	  " LIMIT "	+ skip + ", " + page_size;
 	dbConfig.query(query, [user_id], function(err, rows){
 		if(err){
 			console.log(err);
+			res.json(myUtils.createDatabaseError(err));
 		}else{
-			console.log(rows);
+			res.json({returnCode: constants.SUCCESS_CODE, message: "Get statistical for leader success.", data: {leader: rows}});
 		}
 	})				  	  
 };

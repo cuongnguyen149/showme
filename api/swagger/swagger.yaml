@@ -224,19 +224,24 @@ paths:
   #         description: Error
   #         schema:
   #           $ref: "#/definitions/ErrorResponse"
-  /leaders/comment:
+  /comment:
     # binds a127 app logic to a route
     x-swagger-router-controller: leader
     get:
-      description: API for get leaders comment.
+      description: API for get comment.
       # used as the method name of the controller
-      operationId: leaderComment
+      operationId: comment
       parameters:
         - name: user_id
           in: query
-          description: user_id of leader.
+          description: user_id of user.
           required: true
           type: string
+        - name: role
+          in: query
+          description: role of userr.
+          required: true
+          type: string  
         - name: page_size
           in: query
           description: record per page.
@@ -655,6 +660,8 @@ definitions:
         type: number
       total_fee:
         type: number
+      leader_comment:
+        type: string
       user_comment:
         type: string
       call_start:
@@ -673,6 +680,7 @@ definitions:
       - rating_recommend
       - total_fee
       - user_comment
+      - leader_comment
       - call_start
       - call_end
   dialogParams:

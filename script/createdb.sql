@@ -44,6 +44,7 @@ CREATE TABLE user_transaction(
    rating_recommend DOUBLE default 0,
    total_fee DOUBLE ,
    user_comment VARCHAR(500),
+   leader_comment VARCHAR(500),
    create_date TIMESTAMP default now(),
    update_date TIMESTAMP default now() on update now(),
    PRIMARY KEY ( transaction_id )

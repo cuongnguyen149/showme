@@ -20,7 +20,6 @@ var constants = {
 	//LEADER
 	LEADER_ID: "leader_id",
 	LEADER_NAME: "leader_name",
-	LEADER_COMMENT: "leader_comment",
 	DESCRIPTION: "description",
 	RATING: "rating",
 	RATING_COUNTER: "rating_counter",
@@ -38,6 +37,7 @@ var constants = {
 	RATING_GUIDE: "rating_guide",
 	RATING_RECOMMEND:"rating_recommend",
 	USER_COMMENT: "user_comment",
+	LEADER_COMMENT: "leader_comment",
 	TOTAL_FEE: "total_fee",
 	IS_PAYMENT: "is_payment",
 	MERCHANDISE_FEE: "merchandise_fee",

@@ -18,19 +18,21 @@ function createReview (req, res){
 		rating_recommend	= reviewObject.rating_recommend,
 		total_fee 			= reviewObject.total_fee,
 		user_comment 		= reviewObject.user_comment,
+		leader_comment      = reviewObject.leader_comment,
 		call_start 			= reviewObject.call_start,
 		call_end 			= reviewObject.call_end;
 		if(new Date(call_start) == 'Invalid Date' || new Date(call_end) == 'Invalid Date'){
 			call_end = call_start = new Date().toISOString().slice(0, 10);
 		}
 	var rating 		= (rating_recommend + rating_guide + rating_connection + rating_visit)/4;	
-	var reviewStr  	= '{"' + constants.USER_ID + '":"' + user_id + '", "'
+	var reviewStr  	= '{"' 		   + constants.USER_ID + '":"' + user_id + '", "'
 								   + constants.LEADER_ID + '":"' + leader_id + '", "'
 			                       + constants.RATING_CONNECTION + '":"' + rating_connection + '", "'
 			                       + constants.RATING_VISIT + '":"' + rating_visit + '", "'
 			                       + constants.RATING_GUIDE + '":"' + rating_guide + '", "' 
 			                       + constants.RATING_RECOMMEND + '":"' + rating_recommend + '", "' 
-			                       + constants.USER_COMMENT + '":"' + user_comment + '", "' 
+			                       + constants.USER_COMMENT + '":"' + user_comment + '", "'
+			                       + constants.LEADER_COMMENT + '":"' + leader_comment + '", "' 
 			                       + constants.TOTAL_FEE + '":"' + total_fee + '", "'
 			                       + constants.CALL_START + '":"' + call_start + '", "'
 			                       + constants.CALL_END + '":"' + call_end + '"}',

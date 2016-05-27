@@ -228,9 +228,43 @@ paths:
     # binds a127 app logic to a route
     x-swagger-router-controller: leader
     get:
-      description: API for get leaders location in range.
+      description: API for get leaders comment.
       # used as the method name of the controller
       operationId: leaderComment
+      parameters:
+        - name: user_id
+          in: query
+          description: user_id of leader.
+          required: true
+          type: string
+        - name: page_size
+          in: query
+          description: record per page.
+          required: true
+          type: number
+        - name: page_number
+          in: query
+          description: page want get record.
+          required: true
+          type: number
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /leaders/statistical:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: leader
+    get:
+      description: API for get leaders statistical in range.
+      # used as the method name of the controller
+      operationId: leaderStatistical
       parameters:
         - name: user_id
           in: query
@@ -263,14 +297,14 @@ paths:
     post:
       description: API for update leaders status.
       # used as the method name of the controller
-      operationId: createTransaction
+      operationId: createReview
       parameters:
-        - name: transaction
+        - name: review
           in: body
-          description: transaction's info.
+          description: review's info.
           required: true
           schema:
-            $ref: "#/definitions/createTransactionParams"   
+            $ref: "#/definitions/createReviewParams"   
       responses:
         "200":
           description: Success
@@ -602,9 +636,11 @@ definitions:
       - email
       - address
       - phone
-  createTransactionParams:
-    description: transaction info.
+  createReviewParams:
+    description: review info.
     properties:
+      role:
+        type: string
       user_id:
         type: string
       leader_id:
@@ -628,6 +664,7 @@ definitions:
         type: string
         # format: date-time
     required:
+      - role
       - user_id
       - leader_id
       - rating_connection

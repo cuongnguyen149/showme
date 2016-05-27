@@ -12,7 +12,8 @@ module.exports = {
   updateLocation : updateLocation,
   updateStatus : updateStatus,
   getLeaderInfo : getLeaderInfo,
-  leaderComment: leaderComment
+  leaderComment: leaderComment,
+  leaderStatistical: leaderStatistical
 };
 /**
 * GET leaders location in cirle API.
@@ -204,3 +205,26 @@ function leaderComment(req, res){
 		}
 	});				  	  
 }
+/**
+* Leader get leader statistical API.
+*/
+function leaderStatistical(req, res){
+	var user_id 	= req.query.user_id,
+		page_size 	= parseInt(req.query.page_size),
+		page_number = parseInt(req.query.page_number);
+		var skip 	= (page_number-1)*page_size;
+		var query 	= "SELECT " 	+ constants.CLIENT_USER + "." + constants.USER_ID + ", "
+									+ constants.USER_TRANSACTION + "."+ constants.USER_COMMENT +  
+				  	  " FROM "		+ constants.CLIENT_USER +
+				  	  " LEFT JOIN " + constants.USER_TRANSACTION +
+				  	  " ON " 		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.USER_TRANSACTION + "." + constants.USER_ID +
+				  	  " WHERE " 	+ constants.CLIENT_USER	+ "." + constants.USER_ID + " = ?";
+				  	  console.log(query);
+	dbConfig.query(query, [user_id], function(err, rows){
+		if(err){
+			console.log(err);
+		}else{
+			console.log(rows);
+		}
+	})				  	  
+};

@@ -38,6 +38,7 @@ CREATE TABLE user_transaction(
 	user_id VARCHAR(100) NOT NULL,
 	call_start TIMESTAMP,
    call_end TIMESTAMP,
+   role VARCHAR(10),
    rating_connection DOUBLE default 0,
    rating_visit DOUBLE default 0,
    rating_guide DOUBLE default 0,

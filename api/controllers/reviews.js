@@ -35,6 +35,7 @@ function createReview (req, res){
 			                       + constants.LEADER_COMMENT + '":"' + leader_comment + '", "' 
 			                       + constants.TOTAL_FEE + '":"' + total_fee + '", "'
 			                       + constants.CALL_START + '":"' + call_start + '", "'
+			                       + constants.ROLE + 	'":"' + role + '", "'
 			                       + constants.CALL_END + '":"' + call_end + '"}',
         reviewObj 		= JSON.parse(reviewStr),
 		insert_transaction  = "INSERT INTO " + constants.USER_TRANSACTION + " SET ?",

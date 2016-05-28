@@ -1,12 +1,13 @@
 'use strict';
 
-var myUtils = require('../../utility/utils');
-var dbConfig = require('../../config/dbConfig');
-var quickbloxConfig = require('../../config/quickbloxConfig');
-var constants = require('../../constants');
-var geocoderProvider = 'google';
-var httpAdapter = 'http';
-var geocoder = require('node-geocoder')(geocoderProvider, httpAdapter);
+var myUtils				= require('../../utility/utils');
+var dbConfig 			= require('../../config/dbConfig');
+var quickbloxConfig 	= require('../../config/quickbloxConfig');
+var constants 			= require('../../constants');
+var geocoderProvider 	= 'google';
+var httpAdapter 		= 'http';
+var _        			= require('underscore');
+var geocoder 			= require('node-geocoder')(geocoderProvider, httpAdapter);
 module.exports = {
   leaderLocation: leaderLocation,
   updateLocation : updateLocation,
@@ -187,46 +188,109 @@ function getLeaderInfo(req, res){
 */
 function comment(req, res){
 	var user_id 	= req.query.user_id,
-		role 		= req.query.role,	
+		role 		= req.query.role,
+		type		= req.query.type,	
 		page_size 	= parseInt(req.query.page_size),
 		page_number = parseInt(req.query.page_number);
 	var skip 		= (page_number-1)*page_size;
-	if(role == 'user' ){
-		var query 	= "SELECT " + constants.CLIENT_USER + "." + constants.USER_ID + ", "
-								+ constants.CLIENT_USER + "." + constants.AVATAR + ", "
-								+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
-								+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
-								+ constants.USER_TRANSACTION + "."+ constants.USER_COMMENT + ", "
-								+ constants.USER_TRANSACTION + "."+ constants.CREATE_DATE +  
-			  	  " FROM "		+ constants.CLIENT_USER +
-			  	  " LEFT JOIN " + constants.USER_TRANSACTION +
-			  	  " ON " 		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.USER_TRANSACTION + "." + constants.LEADER_ID +
-			  	  " WHERE " 	+ constants.USER_TRANSACTION	+ "." + constants.USER_ID + " = ?" +
-			  	  " AND " 		+ constants.USER_TRANSACTION + "."+ constants.USER_COMMENT + " <> ''" +
-			  	  " ORDER BY "  + constants.USER_TRANSACTION + "."+ constants.CREATE_DATE  + " DESC " +
-			  	  " LIMIT "		+ skip + ", " + page_size;
+	if(type == 'one'){
+		if(role == 'user' ){
+			var query 	= "SELECT " + constants.CLIENT_USER + "." + constants.USER_ID + ", "
+									+ constants.CLIENT_USER + "." + constants.AVATAR + ", "
+									+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
+									+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
+									+ constants.USER_TRANSACTION + "." + constants.LEADER_COMMENT + " AS comment, "
+									+ constants.USER_TRANSACTION + "." + constants.ROLE + ", "
+									+ constants.USER_TRANSACTION + "." + constants.CREATE_DATE +  
+				  	  " FROM "		+ constants.CLIENT_USER +
+				  	  " LEFT JOIN " + constants.USER_TRANSACTION +
+				  	  " ON " 		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.USER_TRANSACTION + "." + constants.LEADER_ID +
+				  	  " WHERE " 	+ constants.USER_TRANSACTION	+ "." + constants.USER_ID + " = ?" +
+				  	  " AND " 		+ constants.USER_TRANSACTION + "."+ constants.LEADER_COMMENT + " <> ''" +
+				  	  " ORDER BY "  + constants.USER_TRANSACTION + "."+ constants.CREATE_DATE  + " DESC " +
+				  	  " LIMIT "		+ skip + ", " + page_size;
+		}else{
+			var query 	= "SELECT " + constants.CLIENT_USER + "." + constants.USER_ID + ", "
+									+ constants.CLIENT_USER + "." + constants.AVATAR + ", "
+									+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
+									+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
+									+ constants.USER_TRANSACTION + "." + constants.ROLE + ", "
+									+ constants.USER_TRANSACTION + "."+ constants.USER_COMMENT + " AS comment, " 
+									+ constants.USER_TRANSACTION + "."+ constants.CREATE_DATE +  
+				  	  " FROM "		+ constants.CLIENT_USER +
+				  	  " LEFT JOIN " + constants.USER_TRANSACTION +
+				  	  " ON " 		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.USER_TRANSACTION + "." + constants.USER_ID +
+				  	  " WHERE " 	+ constants.USER_TRANSACTION	+ "." + constants.LEADER_ID + " = ?" +
+				  	  " AND " 		+ constants.USER_TRANSACTION + "."+ constants.USER_COMMENT + " <> ''" +				 
+				  	  " ORDER BY "  + constants.USER_TRANSACTION + "."+ constants.CREATE_DATE  + " DESC " +
+				  	  " LIMIT "		+ skip + ", " + page_size;
+		}
 	}else{
-		var query 	= "SELECT " + constants.CLIENT_USER + "." + constants.USER_ID + ", "
-								+ constants.CLIENT_USER + "." + constants.AVATAR + ", "
-								+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
-								+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
-								+ constants.USER_TRANSACTION + "."+ constants.LEADER_COMMENT + ", "
-								+ constants.USER_TRANSACTION + "."+ constants.CREATE_DATE +  
-			  	  " FROM "		+ constants.CLIENT_USER +
-			  	  " LEFT JOIN " + constants.USER_TRANSACTION +
-			  	  " ON " 		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.USER_TRANSACTION + "." + constants.USER_ID +
-			  	  " WHERE " 	+ constants.USER_TRANSACTION	+ "." + constants.LEADER_ID + " = ?" +
-			  	  " AND " 		+ constants.USER_TRANSACTION + "."+ constants.LEADER_COMMENT + " <> ''" +				 
-			  	  " ORDER BY "  + constants.USER_TRANSACTION + "."+ constants.CREATE_DATE  + " DESC " +
-			  	  " LIMIT "		+ skip + ", " + page_size;
-	}	
-				  	  					
+		if(role == 'user'){
+			var query 	= "SELECT " + constants.CLIENT_USER + "." + constants.USER_ID + ", "
+									+ constants.CLIENT_USER + "." + constants.AVATAR + ", "
+									+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
+									+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
+									+ constants.USER_TRANSACTION + "." + constants.ROLE + ", "
+									+ constants.USER_TRANSACTION + "."+ constants.LEADER_COMMENT + ", "
+									+ constants.USER_TRANSACTION + "."+ constants.LEADER_ID + ", "
+									+ constants.USER_TRANSACTION + "."+ constants.USER_COMMENT + ", "
+									+ constants.USER_TRANSACTION + "."+ constants.CREATE_DATE +  
+				  	  " FROM "		+ constants.CLIENT_USER +
+				  	  " LEFT JOIN " + constants.USER_TRANSACTION +
+				  	  " ON " 		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.USER_TRANSACTION + "." + constants.USER_ID +
+				  	  " OR "		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.USER_TRANSACTION + "." + constants.LEADER_ID +
+				  	  " WHERE " 	+ constants.USER_TRANSACTION	+ "." + constants.USER_ID + " = ?" +				 
+				  	  " ORDER BY "  + constants.USER_TRANSACTION + "."+ constants.CREATE_DATE  + " DESC " +
+				  	  " LIMIT "		+ skip + ", " + page_size;
+		}else{
+			var query 	= "SELECT " + constants.CLIENT_USER + "." + constants.USER_ID + ", "
+									+ constants.CLIENT_USER + "." + constants.AVATAR + ", "
+									+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
+									+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
+									+ constants.USER_TRANSACTION + "." + constants.ROLE + ", "
+									+ constants.USER_TRANSACTION + "."+ constants.LEADER_COMMENT + ", "
+									+ constants.USER_TRANSACTION + "."+ constants.LEADER_ID + ", "
+									+ constants.USER_TRANSACTION + "."+ constants.USER_COMMENT + ", "
+									+ constants.USER_TRANSACTION + "."+ constants.CREATE_DATE +  
+				  	  " FROM "		+ constants.CLIENT_USER +
+				  	  " LEFT JOIN " + constants.USER_TRANSACTION +
+				  	  " ON " 		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.USER_TRANSACTION + "." + constants.USER_ID +
+				  	  " OR "		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.USER_TRANSACTION + "." + constants.LEADER_ID +
+				  	  " WHERE " 	+ constants.USER_TRANSACTION	+ "." + constants.LEADER_ID + " = ?" +				 
+				  	  " ORDER BY "  + constants.USER_TRANSACTION + "."+ constants.CREATE_DATE  + " DESC " +
+				  	  " LIMIT "		+ skip + ", " + page_size;
+		}
+	}		  	  					
 	dbConfig.query(query, [user_id], function(err, rows){
 		if(err){
 			console.log(err);
 			res.json(myUtils.createDatabaseError(err));
 		}else{
-			res.json({returnCode: constants.SUCCESS_CODE, message: "Get comment success.", data: {comment: rows}});
+			if(type == 'all'){
+				var newRows = _.reject(rows, function(value, key, object){
+					return (value.user_id == value.leader_id && value.role == 'user') || (value.user_id != value.leader_id && value.role == 'leader') ;
+				});
+				// var newRows = rows;
+				newRows.forEach(function(data){
+					_.omit(data, function(value, key, object){
+						if(_.isEqual(value, "")){
+							delete data[key];
+						}
+						if (_.isEqual(key, "leader_comment") && !_.isEqual(value, "") ){
+							data.comment = value;
+							delete data[key];
+						}
+						if (_.isEqual(key, "user_comment") && !_.isEqual(value, "") ){
+							data.comment = value;
+							delete data[key];
+						}
+					}); 
+				});
+				res.json({returnCode: constants.SUCCESS_CODE, message: "Get comment success.", data: {comment: newRows}});	
+			}else{
+				res.json({returnCode: constants.SUCCESS_CODE, message: "Get comment success.", data: {comment: rows}});	
+			}
 		}
 	});				  	  
 }

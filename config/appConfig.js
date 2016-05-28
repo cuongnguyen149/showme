@@ -25,7 +25,7 @@ var Configuration = {
 
 
 	/*
-	* For devolop environment.
+	* For develop environment.
 	*/
 
 	mysql : {
@@ -45,7 +45,7 @@ var Configuration = {
 	}
 
 	/*
-	* END for devolop environment.
+	* END for develop environment.
 	*/
 };
 module.exports = Configuration;

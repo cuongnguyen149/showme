@@ -38,5 +38,3 @@ INSERT INTO merchandise_type ( shipping_fee, merchandise_type )
 	VALUES (150, "envoi national, 10kg < colis < 15kg");
 INSERT INTO merchandise_type ( shipping_fee, merchandise_type )
 	VALUES (200, "envoi national, 15kg < colis < 20kg");	
-
-

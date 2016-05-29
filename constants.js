@@ -39,6 +39,7 @@ var constants = {
 	USER_COMMENT: "user_comment",
 	LEADER_COMMENT: "leader_comment",
 	TOTAL_FEE: "total_fee",
+	TOTAL: "total",
 	IS_PAYMENT: "is_payment",
 	MERCHANDISE_FEE: "merchandise_fee",
 	SHIPPING_FEE:"shipping_fee",

@@ -72,6 +72,7 @@ CREATE TABLE transaction_price(
    is_payment BOOL default true,
    shipping_fee DOUBLE default 0,
    merchandise_fee DOUBLE default 0,
+   total DOUBLE default 0,
    price DOUBLE default 0,
    service_fee DOUBLE default 0,
    create_date TIMESTAMP default now(),

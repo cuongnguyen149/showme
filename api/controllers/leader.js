@@ -306,7 +306,7 @@ function leaderStatistical(req, res){
 									+ constants.CLIENT_USER + "." + constants.AVATAR + ", "
 									+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
 									+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
-									+  "(" + constants.TRANSACTION_PRICE + "."+ constants.PRICE + " + " + constants.TRANSACTION_PRICE + "."+ constants.SHIPPING_FEE + " + " + constants.TRANSACTION_PRICE + "."+ constants.MERCHANDISE_FEE + ") AS total_fee, " 
+									+ constants.TRANSACTION_PRICE + "."+ constants.TOTAL + ", "
 									+ constants.TRANSACTION_PRICE + "."+ constants.CALL_START +  
 				  	  " FROM "		+ constants.CLIENT_USER +
 				  	  " LEFT JOIN " + constants.TRANSACTION_PRICE +
@@ -314,12 +314,18 @@ function leaderStatistical(req, res){
 				  	  " WHERE " 	+ constants.TRANSACTION_PRICE	+ "." + constants.LEADER_ID + " = ?" +
 				  	  " ORDER BY "  + constants.TRANSACTION_PRICE + "."+ constants.CALL_START  + " DESC " +
 				  	  " LIMIT "	+ skip + ", " + page_size;
-	dbConfig.query(query, [user_id], function(err, rows){
-		if(err){
-			console.log(err);
-			res.json(myUtils.createDatabaseError(err));
-		}else{
-			res.json({returnCode: constants.SUCCESS_CODE, message: "Get statistical for leader success.", data: {leader: rows}});
-		}
-	})				  	  
+		var get_SUM_total = "SELECT SUM ("+ constants.TRANSACTION_PRICE + "."+ constants.TOTAL + ") AS total_header " +
+							"FROM "	 + constants.TRANSACTION_PRICE;
+	dbConfig.query(get_SUM_total, function(err, sumToltal){
+		console.log(sumToltal);
+		dbConfig.query(query, [user_id], function(err, rows){
+			if(err){
+				console.log(err);
+				res.json(myUtils.createDatabaseError(err));
+			}else{
+
+				res.json({returnCode: constants.SUCCESS_CODE, message: "Get statistical for leader success.", data: {total_header: sumToltal[0].total_header, leader: rows}});
+			}
+		})
+	});								  	  				  	  
 };

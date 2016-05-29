@@ -241,7 +241,12 @@ paths:
           in: query
           description: role of userr.
           required: true
-          type: string  
+          type: string
+        - name: type
+          in: query
+          description: type of query. 'all' for user profile/'one' for individual user.
+          required: true
+          type: string 
         - name: page_size
           in: query
           description: record per page.

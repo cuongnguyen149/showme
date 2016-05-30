@@ -316,14 +316,14 @@ function leaderStatistical(req, res){
 				  	  " LIMIT "	+ skip + ", " + page_size;
 		var get_SUM_total = "SELECT SUM ("+ constants.TRANSACTION_PRICE + "."+ constants.TOTAL + ") AS total_header " +	
 							"FROM "	 + constants.TRANSACTION_PRICE;
-		var get_count	  =	"SELECT COUNT(DISTINCT "+ constants.USER_ID+") AS total_visitor FROM " + constants.TRANSACTION_PRICE;
+		var get_count	  =	"SELECT COUNT(*) AS total_visit FROM " + constants.TRANSACTION_PRICE;
 			
 	dbConfig.query(get_SUM_total, function(err, sumToltal){
 		if(err){
 			console.log(err);
 			res.json(myUtils.createDatabaseError(err));
 		}else{
-			dbConfig.query(get_count, function(err, visitorCount){
+			dbConfig.query(get_count, function(err, visitCount){
 				if(err){
 					console.log(err);
 					res.json(myUtils.createDatabaseError(err));
@@ -333,9 +333,8 @@ function leaderStatistical(req, res){
 							console.log(err);
 							res.json(myUtils.createDatabaseError(err));
 						}else{
-				console.log(visitorCount);	
 
-							res.json({returnCode: constants.SUCCESS_CODE, message: "Get statistical for leader success.", data: {total_visitor: visitorCount[0].total_visitor, total_header: sumToltal[0].total_header, leader: rows}});
+							res.json({returnCode: constants.SUCCESS_CODE, message: "Get statistical for leader success.", data: {total_visit: visitCount[0].total_visit, total_header: sumToltal[0].total_header, leader: rows}});
 						}
 					});	
 				}

@@ -314,18 +314,32 @@ function leaderStatistical(req, res){
 				  	  " WHERE " 	+ constants.TRANSACTION_PRICE	+ "." + constants.LEADER_ID + " = ?" +
 				  	  " ORDER BY "  + constants.TRANSACTION_PRICE + "."+ constants.CALL_START  + " DESC " +
 				  	  " LIMIT "	+ skip + ", " + page_size;
-		var get_SUM_total = "SELECT SUM ("+ constants.TRANSACTION_PRICE + "."+ constants.TOTAL + ") AS total_header " +
+		var get_SUM_total = "SELECT SUM ("+ constants.TRANSACTION_PRICE + "."+ constants.TOTAL + ") AS total_header " +	
 							"FROM "	 + constants.TRANSACTION_PRICE;
+		var get_count	  =	"SELECT COUNT(DISTINCT "+ constants.USER_ID+") AS total_visitor FROM " + constants.TRANSACTION_PRICE;
+			
 	dbConfig.query(get_SUM_total, function(err, sumToltal){
-		console.log(sumToltal);
-		dbConfig.query(query, [user_id], function(err, rows){
-			if(err){
-				console.log(err);
-				res.json(myUtils.createDatabaseError(err));
-			}else{
+		if(err){
+			console.log(err);
+			res.json(myUtils.createDatabaseError(err));
+		}else{
+			dbConfig.query(get_count, function(err, visitorCount){
+				if(err){
+					console.log(err);
+					res.json(myUtils.createDatabaseError(err));
+				}else{
+					dbConfig.query(query, [user_id], function(err, rows){
+						if(err){
+							console.log(err);
+							res.json(myUtils.createDatabaseError(err));
+						}else{
+				console.log(visitorCount);	
 
-				res.json({returnCode: constants.SUCCESS_CODE, message: "Get statistical for leader success.", data: {total_header: sumToltal[0].total_header, leader: rows}});
-			}
-		})
+							res.json({returnCode: constants.SUCCESS_CODE, message: "Get statistical for leader success.", data: {total_visitor: visitorCount[0].total_visitor, total_header: sumToltal[0].total_header, leader: rows}});
+						}
+					});	
+				}
+			});
+		}
 	});								  	  				  	  
 };

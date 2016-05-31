@@ -6,12 +6,15 @@ var app            = express();
 var constants      = require('./constants');
 var appConfig      = require('./config/appConfig');
 var myUtils        = require('./utility/utils');
+var bodyParser     = require('body-parser');
 module.exports     = app; // for testing
 
 var config = {
   appRoot: __dirname // required config
 };
 app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json({limit: '10mb'}));
+app.use(bodyParser.urlencoded({limit: '10mb'}));
 app.all('*', function(req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');

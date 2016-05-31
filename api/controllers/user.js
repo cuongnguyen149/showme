@@ -154,14 +154,16 @@ function updateRole (req, res){
 */
 function updateUserProfiles(req, res){
   var userObject = req.swagger.params.user.value;
-
-  var query_email = "SELECT " + constants.EMAIL + ", " + constants.PWD +
-                  " FROM " + constants.CLIENT_USER +
-                  " WHERE "  + constants.USER_ID + " = ?";
-
-  var query_user = "SELECT * " +
-                  " FROM " + constants.CLIENT_USER +
-                  " WHERE "  + constants.USER_ID + " = ?";
+  var avatarUrl = req.protocol + '://' + req.get('host') + "/showme/v1/image/user/avatar/avatar_" + userObject.user_id +".jpg";
+  var query_email       = "SELECT " + constants.EMAIL + ", " + constants.PWD +
+                          " FROM " + constants.CLIENT_USER +
+                          " WHERE "  + constants.USER_ID + " = ?";
+  var query_existEmail  = "SELECT " + constants.EMAIL + ", " + constants.PWD +
+                          " FROM " + constants.CLIENT_USER +
+                          " WHERE "  + constants.USER_ID + " != ?";                
+  var query_user        = "SELECT * " +
+                          " FROM " + constants.CLIENT_USER +
+                          " WHERE "  + constants.USER_ID + " = ?";
 
   var update_user = "UPDATE " + constants.CLIENT_USER +
                     " SET " + constants.AVATAR + " = ?, " +
@@ -176,48 +178,61 @@ function updateUserProfiles(req, res){
                               constants.EMAIL + " = ?, " + 
                               constants.ADDRESS + " = ?, " + 
                               constants.PHONE + " = ? " + 
-                    " WHERE " + constants.USER_ID + " = ? ";                                  
-  dbConfig.query(query_email, [userObject.user_id], function(err, rows){
+                    " WHERE " + constants.USER_ID + " = ? ";
+  dbConfig.query(query_existEmail, [userObject.user_id], function(err, rows){
     if(rows && rows.length > 0 && rows[0].email == userObject.email){
       res.json(myUtils.createErrorStr('Email already exist.', constants.ERROR_CODE));
     }else if(err){
       res.json(myUtils.createDatabaseError(err));
     }else{
-      console.log(rows[0]);
-      var params = {email: rows[0].email, password : rows[0].pwd};
-      quickbloxConfig.createSession(params, function(err, result) {
-        if(result){
-          quickbloxConfig.users.update(userObject.user_id, {email : userObject.email}, function(err, result){
+      dbConfig.query(query_email, [userObject.user_id], function(err, rows){
+        if(rows && rows.length > 0){
+          var params = {email: rows[0].email, password : rows[0].pwd};
+          quickbloxConfig.createSession(params, function(err, result) {
             if(result){
-              dbConfig.query(update_user,[userObject.avatar, userObject.firstname, userObject.lastname, 
-                                          userObject.language, userObject.description, userObject.fee_per_hour,
-                                          userObject.possible_purchase, userObject.sex, userObject.dob, 
-                                          userObject.email, userObject.address, userObject.phone, userObject.user_id] ,function(err, rows){
-                 if(rows){
-                    dbConfig.query(query_user, [userObject.user_id], function(err, rows){
-                      if(rows && rows.length > 0){
-                        res.json({returnCode: constants.SUCCESS_CODE, message: "Updated user " + userObject.user_id + " successfully.", data : {user :rows[0]}});
-                      }else if(err){
-                        console.log(err);
-                        res.json(myUtils.createDatabaseError(err));
-                      }else{
-                        res.json(myUtils.createErrorStr('user_id incorrect! Please check again.', constants.ERROR_CODE));
-                      }
-                    });
-                 }else{
-                  console.log(err);
-                  res.json(myUtils.createDatabaseError(err));
-                 } 
-              });
+              quickbloxConfig.users.update(userObject.user_id, {email : userObject.email}, function(err, result){
+                if(result){
+                  var base64Data = userObject.avatar.replace(/^data:image\/png;base64,/, "").replace(/^data:image\/jpeg;base64,/, "");
+                  require("fs").writeFile("./public/showme/v1/image/user/avatar/avatar_" + userObject.user_id +".jpg", base64Data, 'base64', function(err) {
+                    if(err){
+                      res.json(myUtils.createDatabaseError(err));
+                    }else{
+                      dbConfig.query(update_user,[avatarUrl, userObject.firstname, userObject.lastname, 
+                                                  userObject.language, userObject.description, userObject.fee_per_hour,
+                                                  userObject.possible_purchase, userObject.sex, userObject.dob, 
+                                                  userObject.email, userObject.address, userObject.phone, userObject.user_id] ,function(err, rows){
+                         if(rows){
+                            dbConfig.query(query_user, [userObject.user_id], function(err, rows){
+                              if(rows && rows.length > 0){
+                                res.json({returnCode: constants.SUCCESS_CODE, message: "Updated user " + userObject.user_id + " successfully.", data : {user :rows[0]}});
+                              }else if(err){
+                                console.log(err);
+                                res.json(myUtils.createDatabaseError(err));
+                              }else{
+                                res.json(myUtils.createErrorStr('user_id incorrect! Please check again.', constants.ERROR_CODE));
+                              }
+                            });
+                         }else{
+                          console.log(err);
+                          res.json(myUtils.createDatabaseError(err));
+                         } 
+                      });
+                    }
+                  });
+                }else{
+                  res.json(myUtils.createQuickBloxError(err));
+                }
+              }); 
             }else{
+              console.log(err);
               res.json(myUtils.createQuickBloxError(err));
             }
-          }); 
+          });      
+        }else if(err){
+          res.json(myUtils.createDatabaseError(err));
         }else{
-          console.log(err);
-          res.json(myUtils.createQuickBloxError(err));
         }
-      });      
+      });                        
     }
-  });                  
+  });                                                    
 };

@@ -5,12 +5,13 @@ var myUtils = require('../../utility/utils');
 var dbConfig = require('../../config/dbConfig');
 var quickbloxConfig = require('../../config/quickbloxConfig');
 var constants = require('../../constants');
+var nodemailer = require('nodemailer');
 module.exports = {
   registerUser: registerUser,
   login : login,
   updateRole: updateRole,
   updateUserProfiles : updateUserProfiles,
-  forgetPassword: forgetPassword
+  forgotPassword: forgotPassword
 };
 /**
 * Register API (Integrate with QuickBlox)
@@ -266,6 +267,61 @@ function updateUserProfiles(req, res){
 /**
 * User forger password API.
 */
-function forgetPassword(req, res){
-
+function forgotPassword(req, res){
+  var userObject  = req.swagger.params.user.value;
+  var query_user  = "SELECT " + constants.EMAIL + ", " + constants.PWD + ", " + constants.USER_ID +
+                      " FROM " + constants.CLIENT_USER +
+                      " WHERE "  + constants.EMAIL + " = ?";
+  var update_pwd  = "UPDATE " + constants.CLIENT_USER + 
+                    " SET " + constants.PWD + " = ?" +
+                    " WHERE " + constants.EMAIL + " = ? ";                
+  dbConfig.query(query_user, [userObject.email], function(err, rows){
+    if(err){
+       res.json(myUtils.createDatabaseError(err));
+    }else if(rows && rows.length > 0){
+      var newPwd = myUtils.ramdomString(10);
+      console.log(newPwd);
+      var params = {email: rows[0].email, password : rows[0].pwd};
+          quickbloxConfig.createSession(params, function(err, result) {
+            if(err){
+               res.json(myUtils.createQuickBloxError(err));
+            }else{
+              quickbloxConfig.users.update(rows[0].user_id, {old_password: rows[0].pwd, password: newPwd}, function(err, result){
+                if(err){
+                   res.json(myUtils.createQuickBloxError(err));
+                }else{
+                  dbConfig.query(update_pwd, [newPwd, userObject.email], function(err, rows){
+                    if(err){
+                      res.json(myUtils.createDatabaseError(err));
+                    }else{
+                      var smtpTransport = nodemailer.createTransport('SMTP', {
+                        service: 'Gmail',
+                        auth: {
+                          user: 'perboy9x@gmail.com',
+                          pass: '119213411762'
+                        }
+                      });
+                      var mailOptions = {
+                        to: userObject.email,
+                        from: 'passwordreset@gmail.com',
+                        subject: '[Show me] Password Reset',
+                        text: 'You are receiving this because you (or someone else) have reseted the password for your account.\n\n' +
+                          'Please use the new password below for login to Show Me application:\n\n' +
+                          'Password: ' + newPwd, 
+                      };
+                      smtpTransport.sendMail(mailOptions, function(err) {
+                        if(!err){
+                          res.json({returnCode: constants.SUCCESS_CODE, message: "New password would be sent to " + userObject.email + ". Please check your inbox!", data : {pwd: newPwd}});
+                        }
+                      }); 
+                    }
+                  });
+                }  
+              });
+            }
+          });
+    }else{
+      res.json(myUtils.createErrorStr('Email does not exist! Please check again.', constants.ERROR_CODE));
+    }
+  });                     
 };  

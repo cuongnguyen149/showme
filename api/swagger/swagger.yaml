@@ -508,6 +508,31 @@ paths:
         default:
           description: Error
           schema:
+            $ref: "#/definitions/ErrorResponse"
+  /forgotpassword:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: user
+    post:
+      description: API for get back password.
+      # used as the method name of the controller
+      operationId: forgotPassword
+      parameters:
+        - name: user
+          in: body
+          description: The user's info.
+          required: true
+          schema:
+            $ref: "#/definitions/forgetPasswordParams" 
+      responses:
+        "201":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
             $ref: "#/definitions/ErrorResponse"          
   /swagger:
     x-swagger-pipe: swagger_raw
@@ -717,6 +742,13 @@ definitions:
       - user_id
       - leader_id
       - dialog_id
+  forgetPasswordParams:
+    description: dialog details object.
+    properties:
+      email:
+        type: string
+    required:
+      - email
   # callParams:
   #   description: call object.
   #   properties:

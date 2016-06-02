@@ -104,4 +104,15 @@ module.exports.mergeByProperty = function(arr1, arr2, prop1, prop2) {
       delete arr1obj.pwd;
     } 
   });
-};  
+}; 
+/**
+ * Random string.
+ */
+
+module.exports.ramdomString = function (length){
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for( var i=0; i < length; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
+}; 

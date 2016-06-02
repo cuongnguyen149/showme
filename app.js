@@ -27,14 +27,14 @@ app.all('*', function(req, res, next) {
   	return;
   }    
   //console.log(req.originalUrl + "  " + req.headers.token);
-  if (req.originalUrl.indexOf("/login") >= 0 || req.originalUrl.indexOf("/user") >= 0 || req.originalUrl.indexOf("/doc/api") >= 0) {
+  if (req.originalUrl.indexOf("/forgotpassword") >= 0 || req.originalUrl.indexOf("/login") >= 0 || req.originalUrl.indexOf("/user") >= 0 || req.originalUrl.indexOf("/doc/api") >= 0) {
 	 next();
 	} else if (req.headers.token) {
 		myUtils.validateToken(req, res, next);
 	} else {
 	// ignore
-	  // res.json(myUtils.createErrorStr('No token found', constants.NO_TOKEN_CODE));
-	 next();
+	  res.json(myUtils.createErrorStr('No token found', constants.NO_TOKEN_CODE));
+	 // next();
  }
 });
 app.get('/doc/api', function(req, res){

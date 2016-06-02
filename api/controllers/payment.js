@@ -8,5 +8,11 @@ module.exports ={
 	getToken: getToken
 }
 function getToken(req, res) {
-	
+	braintreeConfig.clientToken.generate({}, function (err, response) {
+  		if(err){
+  			res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later.", constants.ERROR_CODE));
+  		}else{
+  			res.json({returnCode: constants.SUCCESS_CODE, message : "Get toke success.", data: {token_payment: response.clientToken}});
+  		}
+  	});
 }

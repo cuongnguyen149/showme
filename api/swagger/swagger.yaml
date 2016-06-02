@@ -478,7 +478,7 @@ paths:
   /merchandise:
     x-swagger-router-controller: merchandiseType
     get:
-      description: API for get leaders information by id.
+      description: API for get merchandise type information for shipping.
       # used as the method name of the controller
       operationId: listMerchangeType
       responses:
@@ -492,6 +492,23 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /payment/token:
+    x-swagger-router-controller: payment
+    get:
+      description: API for get token for payment.
+      # used as the method name of the controller
+      operationId: getToken
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"          
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -634,7 +651,6 @@ definitions:
         type: string
     required:
       - user_id
-      - avatar
       - firstname
       - lastname
       - language

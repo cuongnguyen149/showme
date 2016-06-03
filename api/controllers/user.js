@@ -11,7 +11,8 @@ module.exports = {
   login : login,
   updateRole: updateRole,
   updateUserProfiles : updateUserProfiles,
-  forgotPassword: forgotPassword
+  forgotPassword: forgotPassword,
+  createCardInfo : createCardInfo 
 };
 /**
 * Register API (Integrate with QuickBlox)
@@ -312,6 +313,8 @@ function forgotPassword(req, res){
                       smtpTransport.sendMail(mailOptions, function(err) {
                         if(!err){
                           res.json({returnCode: constants.SUCCESS_CODE, message: "New password would be sent to " + userObject.email + ". Please check your inbox!", data : {pwd: newPwd}});
+                        }else{
+                           res.json(myUtils.createErrorStr('Erorr with mail server. ' + err, constants.ERROR_CODE));
                         }
                       }); 
                     }
@@ -324,4 +327,25 @@ function forgotPassword(req, res){
       res.json(myUtils.createErrorStr('Email does not exist! Please check again.', constants.ERROR_CODE));
     }
   });                     
-};  
+};
+/**
+* User create card info API.
+*/ 
+function createCardInfo (req, res){
+  var cardObject  = req.swagger.params.card.value;
+  var insert_card = "INSERT INTO " + constants.USER_CARD_INFORMATION + "SET = ?";
+  var cardStr = '{"' + constants.USER_ID + '":"' + cardObject.user_id + '", "'
+                     + constants.CARD_NUMBER + '":"' + cardObject.card_number + '", "'
+                     + constants.EXPIRATION_DATE + '":"' + cardObject.expiration_date + '", "'
+                     + constants.EXPIRATION_MONTH + '":"' + cardObject.expiration_month + '", "' 
+                     + constants.EXPIRATION_YEAR + '":"' + cardObject.expiration_year + '", "' 
+                     + constants.CVV + '":"' + cardObject.cvv + '"}';
+  var cardObj =  JSON.parse(cardStr);
+  dbConfig.query(insert_card, cardObject, function(err, rows){
+    if(err){
+
+    }else{
+
+    }
+  });                    
+};

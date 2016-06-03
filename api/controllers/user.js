@@ -298,8 +298,13 @@ function forgotPassword(req, res){
                       var smtpTransport = nodemailer.createTransport('SMTP', {
                         service: 'Gmail',
                         auth: {
-                          user: 'perboy9x@gmail.com',
-                          pass: '119213411762'
+                           XOAuth2: {
+                            user: "perboy9x@gmail.com", // Your gmail address.
+                                                                  // Not @developer.gserviceaccount.com
+                            clientId: "740381407173-hjmgu9jjlk8pb3fn2rvhufugu5noomdk.apps.googleusercontent.com",
+                            clientSecret: "ldt_vqu09jz6nP1jvNSUnbbJ",
+                            refreshToken: "1/L0_pEp_bVZOjuSO1g0PErP8DRjXZoouqR5O-SKHSRp0"
+                          }
                         }
                       });
                       var mailOptions = {

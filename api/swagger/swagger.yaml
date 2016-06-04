@@ -90,6 +90,55 @@ paths:
         default:
           description: Error
           schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/cardinfo:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: user
+    post:
+      description: API for create card info.
+      # used as the method name of the controller
+      operationId: createCardInfo
+      parameters:
+        - name: card
+          in: body
+          description: The card's info.
+          required: true
+          schema:
+            $ref: "#/definitions/cardInfoParams" 
+      responses:
+        "201":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/cardinfo/{user_id}:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: user
+    get:
+      description: API for create card info.
+      # used as the method name of the controller
+      operationId: getUserPaymentInfo
+      parameters:
+        - name: user_id
+          in: path
+          description: The card's info.
+          required: true
+          type: string
+      responses:
+        "201":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
             $ref: "#/definitions/ErrorResponse"          
   /login:
     # binds a127 app logic to a route
@@ -509,6 +558,30 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /payment/transaction:
+    x-swagger-router-controller: payment
+    post:
+      description: API for .
+      # used as the method name of the controller
+      operationId: createTransaction
+      parameters:
+        - name: transaction
+          in: body
+          description: The transaction's info.
+          required: true
+          schema:
+            $ref: "#/definitions/transactionParams"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"          
   /forgotpassword:
     # binds a127 app logic to a route
     x-swagger-router-controller: user
@@ -749,6 +822,35 @@ definitions:
         type: string
     required:
       - email
+  cardInfoParams:
+    description: card information.
+    properties:
+      user_id:
+        type: string
+      card_number:
+        type: string
+      expiration_date:
+        description: MM/YY
+        type: string
+      cvv:
+       description: only accept 3 digits.  
+       type: string
+    required:
+      - user_id
+      - card_number
+      - expiration_date
+  transactionParams:
+    description: card information.
+    properties:
+      user_id:
+        type: string
+      amount:
+        type: string  
+    required:
+      - user_id
+      - amount    
+      
+        
   # callParams:
   #   description: call object.
   #   properties:

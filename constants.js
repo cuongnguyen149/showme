@@ -46,6 +46,13 @@ var constants = {
 	SERVICE_FEE: "SERVICE_FEE",
 	PRICE: "price",
 	TYPE: "type",
+	//USER CARD INFORMATION
+	USER_CARD_INFORMATION: "user_card_information",
+	CARD_NUMBER : "card_number",
+	EXPIRATION_DATE: "expiration_date",
+	EXPIRATION_MONTH: "expiration_month",
+	EXPIRATION_YEAR: "expiration_year",
+	CVV: "cvv",
 
 	//DIALOG
 	DIALOG: "dialog",

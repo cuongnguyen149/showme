@@ -86,3 +86,11 @@ CREATE TABLE merchandise_type(
    merchandise_type VARCHAR(100) NOT NULL,
    PRIMARY KEY (id)
 );
+
+CREATE TABLE user_card_information(
+   user_id VARCHAR(100) NOT NULL,
+   card_number VARCHAR(50) NOT NULL,
+   expiration_date VARCHAR(10) NOT NULL,
+   cvv VARCHAR(10),
+   PRIMARY KEY (user_id)
+);

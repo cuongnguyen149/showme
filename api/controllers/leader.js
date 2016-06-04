@@ -69,7 +69,8 @@ function leaderLocation(req, res){
 	    });	
 	}else if(lat && lng && lat != 0.0 && lng != 0.0){
 		var addressObject = {latitude: lat, longitude: lng, addressFull: ""};
-		var query = "SELECT " + constants.USER_ID + ", " 
+		var query = "SELECT " + constants.USER_ID + ", "
+							  +	constants.AVATAR + ", " 
 							  + constants.LATITUDE + ", " 
 							  + constants.LONGITUDE + ", " 
 							  + constants.FIRSTNAME + ", " 

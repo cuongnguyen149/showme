@@ -6,13 +6,15 @@ var dbConfig = require('../../config/dbConfig');
 var quickbloxConfig = require('../../config/quickbloxConfig');
 var constants = require('../../constants');
 var nodemailer = require('nodemailer');
+var braintreeConfig = require('../../config/braintreeConfig');
 module.exports = {
   registerUser: registerUser,
   login : login,
   updateRole: updateRole,
   updateUserProfiles : updateUserProfiles,
   forgotPassword: forgotPassword,
-  createCardInfo : createCardInfo 
+  createCardInfo : createCardInfo,
+  getUserPaymentInfo: getUserPaymentInfo 
 };
 /**
 * Register API (Integrate with QuickBlox)
@@ -299,8 +301,7 @@ function forgotPassword(req, res){
                         service: 'Gmail',
                         auth: {
                            XOAuth2: {
-                            user: "perboy9x@gmail.com", // Your gmail address.
-                                                                  // Not @developer.gserviceaccount.com
+                            user: "perboy9x@gmail.com",
                             clientId: "740381407173-hjmgu9jjlk8pb3fn2rvhufugu5noomdk.apps.googleusercontent.com",
                             clientSecret: "ldt_vqu09jz6nP1jvNSUnbbJ",
                             refreshToken: "1/L0_pEp_bVZOjuSO1g0PErP8DRjXZoouqR5O-SKHSRp0"
@@ -338,7 +339,7 @@ function forgotPassword(req, res){
 */ 
 function createCardInfo (req, res){
   var cardObject  = req.swagger.params.card.value;
-  var insert_card = "INSERT INTO " + constants.USER_CARD_INFORMATION + "SET = ?";
+  var insert_card = "INSERT INTO " + constants.USER_CARD_INFORMATION + " SET ? ";
   var cardStr = '{"' + constants.USER_ID + '":"' + cardObject.user_id + '", "'
                      + constants.CARD_NUMBER + '":"' + cardObject.card_number + '", "'
                      + constants.EXPIRATION_DATE + '":"' + cardObject.expiration_date + '", "'
@@ -346,11 +347,42 @@ function createCardInfo (req, res){
                      + constants.EXPIRATION_YEAR + '":"' + cardObject.expiration_year + '", "' 
                      + constants.CVV + '":"' + cardObject.cvv + '"}';
   var cardObj =  JSON.parse(cardStr);
-  dbConfig.query(insert_card, cardObject, function(err, rows){
-    if(err){
+  braintreeConfig.customer.create({
+      id: cardObject.user_id,  
+      creditCard : {
+        number : cardObject.card_number,
+        cvv : cardObject.cvv,
+        expirationDate : cardObject.expiration_date
+      }
+      }, function (err, result) {
+          if(err){
+             res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + err, constants.ERROR_CODE));
+          }else if(result.success){
 
-    }else{
-
-    }
-  });                    
+            dbConfig.query(insert_card, cardObj, function(err, rows){
+              if(err){
+                res.json(myUtils.createDatabaseError(err));
+              }else{
+                res.json({returnCode: constants.SUCCESS_CODE, message: "Create card information success.", data : {card: cardObject}});
+              }
+            });  
+          }else{
+            res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + result.message, constants.ERROR_CODE));
+          }
+        });
 };
+
+function getUserPaymentInfo (req, res){
+  var user_id = req.swagger.params.user_id.value;
+  var query   = "SELECT * FROM " + constants.USER_CARD_INFORMATION +
+          " WHERE " + constants.USER_ID + " = ?";
+  dbConfig.query(query, [user_id], function(err, rows){
+    if(err){
+      res.json(myUtils.createDatabaseError(err));
+    }else if(rows && rows.length > 0){
+      res.json({returnCode: constants.SUCCESS_CODE, message : "Get payment info success.", data:{ card : rows[0]}});
+    }else{
+      res.json(myUtils.createErrorStr("Payment info of user " + user_id + " does not exist.", constants.ERROR_CODE));
+    }
+  })          
+}

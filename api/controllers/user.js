@@ -343,8 +343,6 @@ function createCardInfo (req, res){
   var cardStr = '{"' + constants.USER_ID + '":"' + cardObject.user_id + '", "'
                      + constants.CARD_NUMBER + '":"' + cardObject.card_number + '", "'
                      + constants.EXPIRATION_DATE + '":"' + cardObject.expiration_date + '", "'
-                     + constants.EXPIRATION_MONTH + '":"' + cardObject.expiration_month + '", "' 
-                     + constants.EXPIRATION_YEAR + '":"' + cardObject.expiration_year + '", "' 
                      + constants.CVV + '":"' + cardObject.cvv + '"}';
   var cardObj =  JSON.parse(cardStr);
   braintreeConfig.customer.create({

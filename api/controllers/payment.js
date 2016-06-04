@@ -27,9 +27,10 @@ function createTransaction (req, res){
 		if(err){
 			res.json(myUtils.createDatabaseError(err));
 		}else if(rows && rows.length > 0){
+			var amount = rows[0].total + parseInt(transactionObject.tip);
 			braintreeConfig.transaction.sale({
 			  customerId: rows[0].user_id,
-			  amount: rows[0].total
+			  amount: amount
 			}, function (err, result) {
 				if(err){
 					res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + err, constants.ERROR_CODE));

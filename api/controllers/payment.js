@@ -21,17 +21,30 @@ function getToken(req, res) {
 
 function createTransaction (req, res){
 	var transactionObject =  req.swagger.params.transaction.value;
-	braintreeConfig.transaction.sale({
-	  customerId: transactionObject.user_id,
-	  amount: transactionObject.amount
-	}, function (err, result) {
+	var query_call		= "SELECT * FROM " + constants.TRANSACTION_PRICE + 
+					  	" WHERE " + constants.ID + " = ? ";
+	dbConfig.query(query_call, [transactionObject.id], function(err, rows){
 		if(err){
-			res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + err, constants.ERROR_CODE));
-		}else if(result.success){
-			transactionObject.currency = result.transaction.currencyIsoCode;
-			res.json({returnCode: constants.SUCCESS_CODE, message : "Checkout success!.", data: {transaction: transactionObject}});
+			res.json(myUtils.createDatabaseError(err));
+		}else if(rows && rows.length > 0){
+			braintreeConfig.transaction.sale({
+			  customerId: rows[0].user_id,
+			  amount: rows[0].total
+			}, function (err, result) {
+				if(err){
+					res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + err, constants.ERROR_CODE));
+				}else if(result.success){
+					transactionObject.currency = result.transaction.currencyIsoCode;
+					transactionObject.amount   = result.transaction.amount;
+					transactionObject.user 	   = rows[0].user_id;
+					res.json({returnCode: constants.SUCCESS_CODE, message : "Checkout success!.", data: {transaction: transactionObject}});
+				}else{
+					res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + result.message, constants.ERROR_CODE));
+				}
+			});
+			
 		}else{
-			res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + result.message, constants.ERROR_CODE));
+			res.json(myUtils.createErrorStr("Id does not exist. Please check again.", constants.ERROR_CODE));
 		}
-	});
+	});				  
 };

@@ -840,15 +840,12 @@ definitions:
       - card_number
       - expiration_date
   transactionParams:
-    description: card information.
+    description: call id.
     properties:
-      user_id:
-        type: string
-      amount:
-        type: string  
+      id:
+        type: string 
     required:
-      - user_id
-      - amount    
+      - id    
       
         
   # callParams:

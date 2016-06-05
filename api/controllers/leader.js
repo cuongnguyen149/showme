@@ -316,15 +316,17 @@ function leaderStatistical(req, res){
 				  	  " ORDER BY "  + constants.TRANSACTION_PRICE + "."+ constants.CALL_START  + " DESC " +
 				  	  " LIMIT "	+ skip + ", " + page_size;
 		var get_SUM_total = "SELECT SUM ("+ constants.TRANSACTION_PRICE + "."+ constants.TOTAL + ") AS total_header " +	
-							"FROM "	 + constants.TRANSACTION_PRICE;
-		var get_count	  =	"SELECT COUNT(*) AS total_visit FROM " + constants.TRANSACTION_PRICE;
+							"FROM "	 + constants.TRANSACTION_PRICE +
+							" WHERE "  + constants.LEADER_ID + " = ?";
+		var get_count	  =	"SELECT COUNT(*) AS total_visit FROM " + constants.TRANSACTION_PRICE + 
+							" WHERE "  + constants.LEADER_ID + " = ?";
 			
-	dbConfig.query(get_SUM_total, function(err, sumToltal){
+	dbConfig.query(get_SUM_total, [user_id], function(err, sumToltal){
 		if(err){
 			console.log(err);
 			res.json(myUtils.createDatabaseError(err));
 		}else{
-			dbConfig.query(get_count, function(err, visitCount){
+			dbConfig.query(get_count, [user_id], function(err, visitCount){
 				if(err){
 					console.log(err);
 					res.json(myUtils.createDatabaseError(err));

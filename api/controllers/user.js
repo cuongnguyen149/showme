@@ -167,7 +167,7 @@ function updateUserProfiles(req, res){
   var query_existEmail  = "SELECT " + constants.EMAIL + ", " + constants.PWD +
                           " FROM " + constants.CLIENT_USER +
                           " WHERE "  + constants.USER_ID + " != ?";                
-  var query_user        = "SELECT * " +
+  var query_user        = "SELECT *, DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
                           " FROM " + constants.CLIENT_USER +
                           " WHERE "  + constants.USER_ID + " = ?";
 

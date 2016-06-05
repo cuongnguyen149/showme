@@ -336,7 +336,9 @@ function leaderStatistical(req, res){
 							console.log(err);
 							res.json(myUtils.createDatabaseError(err));
 						}else{
-
+							if(!sumToltal[0].total_header){
+								sumToltal[0].total_header = 0;
+							}
 							res.json({returnCode: constants.SUCCESS_CODE, message: "Get statistical for leader success.", data: {total_visit: visitCount[0].total_visit, total_header: sumToltal[0].total_header, leader: rows}});
 						}
 					});	

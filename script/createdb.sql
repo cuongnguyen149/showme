@@ -76,7 +76,7 @@ CREATE TABLE transaction_price(
    total DOUBLE default 0,
    price DOUBLE default 0,
    service_fee DOUBLE default 0,
-   list_number_merchandise VARCHAR(200) "",
+   list_number_merchandise VARCHAR(200) default '',
    create_date TIMESTAMP default now(),
    update_date TIMESTAMP default now() on update now(),
    PRIMARY KEY (id)

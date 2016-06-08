@@ -308,6 +308,7 @@ function leaderStatistical(req, res){
 									+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
 									+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
 									+ constants.TRANSACTION_PRICE + "."+ constants.TOTAL + ", "
+									+ constants.TRANSACTION_PRICE + "."+ constants.LIST_NUMBER_MERCHANDISE + ", "
 									+ constants.TRANSACTION_PRICE + "."+ constants.CALL_START +  
 				  	  " FROM "		+ constants.CLIENT_USER +
 				  	  " LEFT JOIN " + constants.TRANSACTION_PRICE +

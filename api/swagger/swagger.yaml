@@ -843,7 +843,9 @@ definitions:
     description: call id.
     properties:
       id:
-        type: string 
+        type: string
+      tip:
+        type: number
     required:
       - id    
       

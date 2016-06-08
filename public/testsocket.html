@@ -127,7 +127,7 @@
         }); 
       }); 
        $("#acceptMerchandiseRequest").click(function() {
-        socket.emit('acceptMerchandiseRequest', '{"merchandise_fee":12,"shipping_fee":32, "id":"2"}');
+        socket.emit('acceptMerchandiseRequest', '{"merchandise_fee":12,"shipping_fee":32, "id":"2", "id_merchandise_type": "5"}');
           socket.on("acceptMerchandiseRequestFail", function(data){
             console.log(data);
           });

@@ -39,6 +39,7 @@ var constants = {
 	USER_COMMENT: "user_comment",
 	LEADER_COMMENT: "leader_comment",
 	TOTAL_FEE: "total_fee",
+	TIP : "tip",
 	TOTAL: "total",
 	IS_PAYMENT: "is_payment",
 	MERCHANDISE_FEE: "merchandise_fee",
@@ -46,6 +47,7 @@ var constants = {
 	SERVICE_FEE: "SERVICE_FEE",
 	PRICE: "price",
 	TYPE: "type",
+	LIST_NUMBER_MERCHANDISE: "list_number_merchandise",
 	//USER CARD INFORMATION
 	USER_CARD_INFORMATION: "user_card_information",
 	CARD_NUMBER : "card_number",

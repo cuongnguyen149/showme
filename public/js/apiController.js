@@ -131,6 +131,7 @@ controller('apiController', function($scope) {
 					price:0,
 					service_fee:0,
 					shipping_fee:0,
+					list_number_merchandise: "1, 2, 3,",
 					update_date:"2016-05-20T18:49:16.000Z",
 					user_id:"12"	
 					}

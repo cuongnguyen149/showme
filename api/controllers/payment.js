@@ -20,14 +20,20 @@ function getToken(req, res) {
 };
 
 function createTransaction (req, res){
-	var transactionObject =  req.swagger.params.transaction.value;
-	var query_call		= "SELECT * FROM " + constants.TRANSACTION_PRICE + 
-					  	" WHERE " + constants.ID + " = ? ";
+	var transactionObject 	=  req.swagger.params.transaction.value;
+	console.log(transactionObject);
+	var tip  				= parseFloat(transactionObject.tip)	
+	var query_call			= "SELECT * FROM " + constants.TRANSACTION_PRICE + 
+					  		  " WHERE " + constants.ID + " = ? ";
+	var update_transaction = "UPDATE " + constants.TRANSACTION_PRICE +
+							 " SET "	+ constants.TIP + " = ? , " 
+							 			+ constants.TOTAL + " = ? "	+
+							 " WHERE " 	+ constants.ID +  " = ?";			  	
 	dbConfig.query(query_call, [transactionObject.id], function(err, rows){
 		if(err){
 			res.json(myUtils.createDatabaseError(err));
 		}else if(rows && rows.length > 0){
-			var amount = rows[0].total + parseInt(transactionObject.tip);
+			var amount = rows[0].total + tip;
 			braintreeConfig.transaction.sale({
 			  customerId: rows[0].user_id,
 			  amount: amount
@@ -35,10 +41,22 @@ function createTransaction (req, res){
 				if(err){
 					res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + err, constants.ERROR_CODE));
 				}else if(result.success){
+					console.log(result);
 					transactionObject.currency = result.transaction.currencyIsoCode;
 					transactionObject.amount   = result.transaction.amount;
 					transactionObject.user 	   = rows[0].user_id;
-					res.json({returnCode: constants.SUCCESS_CODE, message : "Checkout success!.", data: {transaction: transactionObject}});
+					if(tip > 0){
+						console.log(update_transaction);
+						dbConfig.query(update_transaction, [tip, amount, transactionObject.id], function (err, rows) {
+							if(err){
+								res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + err, constants.ERROR_CODE));
+							}else{
+								res.json({returnCode: constants.SUCCESS_CODE, message : "Checkout success!.", data: {transaction: transactionObject}});
+							}
+						})
+					}else{
+						res.json({returnCode: constants.SUCCESS_CODE, message : "Checkout success!.", data: {transaction: transactionObject}});
+					}
 				}else{
 					res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + result.message, constants.ERROR_CODE));
 				}
@@ -49,3 +67,4 @@ function createTransaction (req, res){
 		}
 	});				  
 };
+	

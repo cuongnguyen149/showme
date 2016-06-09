@@ -130,7 +130,7 @@ function updateRole (req, res){
               " WHERE "  + constants.USER_ID + " = ?";             
   if(userObject.role && userObject.role == "user"){
     role = "leader";
-    query = "SELECT *, NULL AS " + constants.PWD + 
+    query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
               " FROM " + constants.CLIENT_USER +
               " WHERE "  + constants.USER_ID + " = ?";
   }

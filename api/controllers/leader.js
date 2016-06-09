@@ -21,7 +21,8 @@ module.exports = {
 * GET All leaders location API.
 */
 function getAllLeaderActive(req, res){
-	var query = "SELECT * FROM " + constants.CLIENT_USER + 
+	var query = "SELECT * , DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
+				" FROM " + constants.CLIENT_USER + 
 				" WHERE " + constants.ROLE + " = ? " + 
 				" AND "   + constants.IS_ACTIVE + " = ? ";
 	dbConfig.query(query, ['leader', true], function(err, rows){

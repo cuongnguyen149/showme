@@ -14,8 +14,25 @@ module.exports = {
   updateStatus : updateStatus,
   getLeaderInfo : getLeaderInfo,
   comment: comment,
-  leaderStatistical: leaderStatistical
+  leaderStatistical: leaderStatistical,
+  getAllLeaderActive: getAllLeaderActive
 };
+/**
+* GET All leaders location API.
+*/
+function getAllLeaderActive(req, res){
+	var query = "SELECT * FROM " + constants.CLIENT_USER + 
+				" WHERE " + constants.ROLE + " = ? " + 
+				" AND "   + constants.IS_ACTIVE + " = ? ";
+	dbConfig.query(query, ['leader', true], function(err, rows){
+		if(err){
+			console.log(err);
+			res.json(myUtils.createDatabaseError(err)); 
+		}else{
+			res.json({returnCode: constants.SUCCESS_CODE, message : "Get all leader location success", data: {leaders : rows}});
+		}
+	});			
+}
 /**
 * GET leaders location in cirle API.
 */

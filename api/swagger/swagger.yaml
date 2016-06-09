@@ -165,6 +165,23 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /leaders:
+    x-swagger-router-controller: leader
+    get:
+      description: API for get all leaders's info who is adtived.
+      # used as the method name of the controller
+      operationId: getAllLeaderActive
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"          
   /leaders/{user_id}:
     x-swagger-router-controller: leader
     get:

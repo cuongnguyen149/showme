@@ -108,6 +108,7 @@ controller('apiController', function($scope) {
 			responseExample: {
 				data:{
 					merchanRequest:{
+						id: 1
 						merchandise_fee:"12",
 						merchandise_type:"VIP",
 						shipping_fee:"32"	

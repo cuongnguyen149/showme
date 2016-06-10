@@ -21,8 +21,7 @@ function getToken(req, res) {
 
 function createTransaction (req, res){
 	var transactionObject 	=  req.swagger.params.transaction.value;
-	console.log(transactionObject);
-	var tip  				= parseFloat(transactionObject.tip)	
+	var tip  				= parseFloat(transactionObject.tip)
 	var query_call			= "SELECT * FROM " + constants.TRANSACTION_PRICE + 
 					  		  " WHERE " + constants.ID + " = ? ";
 	var update_transaction = "UPDATE " + constants.TRANSACTION_PRICE +
@@ -33,7 +32,7 @@ function createTransaction (req, res){
 		if(err){
 			res.json(myUtils.createDatabaseError(err));
 		}else if(rows && rows.length > 0){
-			var amount = rows[0].total + tip;
+			var amount = rows[0].total + tip;;	
 			if(amount != 0){
 				braintreeConfig.transaction.sale({
 				  customerId: rows[0].user_id,

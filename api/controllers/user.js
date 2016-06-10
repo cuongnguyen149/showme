@@ -28,7 +28,7 @@ function registerUser(req, res) {
       dob         = userObject.dob,
       device_uiid = userObject.device_uiid; 
   pwd = pwd + constants.PWD_ADD;
-  var params = {email : email, password: pwd};
+  var params = {email : email, password: pwd, full_name: lastname + ' ' + firstname};
   var query_email = "SELECT " + constants.EMAIL + 
                     " FROM " + constants.CLIENT_USER +
                     " WHERE "  + constants.EMAIL + " = ?"; 

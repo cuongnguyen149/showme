@@ -30,12 +30,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script>
-      var socket;
-      // socket = io.connect('http://51.254.98.255:9001');
-       socket = io.connect('http://localhost:9001');
-       socket.on('merchandiseRequestListener', function(data){
-        console.log(data);
-       });
+       // socket.on('merchandiseRequestListener', function(data){
+       //  console.log(data);
+       // });
       $("#startCall").click(function() {
         socket.emit('callStart', '{"user_id":"12","leader_id": "1", "dialog_id": "123111"}');
           socket.on("callStartFalse", function(data){
@@ -127,7 +124,10 @@
         }); 
       }); 
        $("#acceptMerchandiseRequest").click(function() {
-        socket.emit('acceptMerchandiseRequest', '{"merchandise_fee":12,"shipping_fee":32, "id":"2", "id_merchandise_type": "5"}');
+        var socket;
+        // socket = io.connect('http://51.254.98.255:9001');
+         socket = io.connect('http://localhost:9001');
+        socket.emit('acceptMerchandiseRequest', '{"merchandise_fee":111,"shipping_fee":32, "id":"1", "id_merchandise_type": "4"}');
           socket.on("acceptMerchandiseRequestFail", function(data){
             console.log(data);
           });

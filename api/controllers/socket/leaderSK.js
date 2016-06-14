@@ -218,49 +218,50 @@ exports = module.exports = function(io){
 						                     		+ constants.TRANSACTION_PRICE_ID + '":"' + id + '", "' 
 						                     		+ constants.MERCHANDISE_FEE + '":"' + merchandise_fee + '"}';
 			var boughtMerObj				= 	 JSON.parse(boughtMerStr);			                     		
-			dbConfig.query(query_merchandise_type, [id_merchandise_type], function(err, rows){
-				if(err){	
+			dbConfig.query(insert_bought_merchandise, boughtMerObj, function(err, insertRows){
+				if(err){
+					console.log(err);
 					socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));
-				}else if(rows && rows.length > 0){
-		  			var update_call = "UPDATE " + constants.TRANSACTION_PRICE + 
-		  							  " SET " 	+ constants.MERCHANDISE_FEE + " = (" + constants.MERCHANDISE_FEE + " + " + merchandise_fee + "), "
-		  									    + constants.LIST_NUMBER_MERCHANDISE + " = concat( " + constants.LIST_NUMBER_MERCHANDISE + ", '" + id_merchandise_type + ", '), "   
-		  									  	+ constants.SHIPPING_FEE + " = (" + constants.SHIPPING_FEE + " + " + rows[0].shipping_fee + ")" +
-		  							  " WHERE "	+ constants.ID	+ " = ? ";
-		  			if(merchandise_fee && id){
-		  				dbConfig.query(update_call,[id], function(err, rows){
-		  					if(err){
-		  						console.log(err);
-		  						socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));
-		  					}else{
-								dbConfig.query(insert_bought_merchandise, boughtMerObj, function(err, rows){
-									if(err){
-										console.log(err);
-									}else{	
-										console.log(rows);
-									}
-								});			                     		 					  	  	  		  
-		  						dbConfig.query(query_call, id, function(err, rows){
-		  							if(err){
-		  								console.log(err);
-		  								socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));		
-		  							}else if(rows && rows.length > 0){
-		  								socket.emit("acceptMerchandiseRequestSuccess", {returnCode: constants.SUCCESS_CODE, message: "Updated merchandies request successfull.", data : {call : rows[0]}});
-		  							}else{
-		  								socket.emit("acceptMerchandiseRequestFail", myUtils.createErrorStr("Opps! Id: " + id+ " you provide incorrect! Please check again.", constants.ERROR_CODE));
-		  							}
-		  						});
-		  						
-		  					}
-		  				});
-		  			}else{
-		  				socket.emit("acceptMerchandiseRequestFail", myUtils.createErrorStr("Opps! Some information you provide incorrect! Please check again.", constants.ERROR_CODE));
-		  			}	
+				}else{	
+					console.log(insertRows);
+					dbConfig.query(query_merchandise_type, [id_merchandise_type], function(err, rows){
+						if(err){	
+							socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));
+						}else if(rows && rows.length > 0){
+				  			var update_call = "UPDATE " + constants.TRANSACTION_PRICE + 
+				  							  " SET " 	+ constants.MERCHANDISE_FEE + " = (" + constants.MERCHANDISE_FEE + " + " + merchandise_fee + "), "
+				  									    + constants.LIST_NUMBER_MERCHANDISE + " = concat( " + constants.LIST_NUMBER_MERCHANDISE + ", '" + insertRows.insertId + ", '), "   
+				  									  	+ constants.SHIPPING_FEE + " = (" + constants.SHIPPING_FEE + " + " + rows[0].shipping_fee + ")" +
+				  							  " WHERE "	+ constants.ID	+ " = ? ";
+				  			if(merchandise_fee && id){
+				  				dbConfig.query(update_call,[id], function(err, rows){
+				  					if(err){
+				  						console.log(err);
+				  						socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));
+				  					}else{
+				  						dbConfig.query(query_call, id, function(err, rows){
+				  							if(err){
+				  								console.log(err);
+				  								socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));		
+				  							}else if(rows && rows.length > 0){
+				  								socket.emit("acceptMerchandiseRequestSuccess", {returnCode: constants.SUCCESS_CODE, message: "Updated merchandies request successfull.", data : {call : rows[0]}});
+				  							}else{
+				  								socket.emit("acceptMerchandiseRequestFail", myUtils.createErrorStr("Opps! Id: " + id+ " you provide incorrect! Please check again.", constants.ERROR_CODE));
+				  							}
+				  						});
+				  						
+				  					}
+				  				});
+				  			}else{
+				  				socket.emit("acceptMerchandiseRequestFail", myUtils.createErrorStr("Opps! Some information you provide incorrect! Please check again.", constants.ERROR_CODE));
+				  			}	
 
-				}else{
+						}else{
 
+						}
+					});				  	  	  	  				  	  	  	  			
 				}
-			});				  	  	  	  				  	  	  	  			
+			});			                     		 					  	  	  		  
   		});
 
   		socket.on('refuseMerchandiseRequest', function(merchanObject){

@@ -283,17 +283,18 @@ function forgotPassword(req, res){
        res.json(myUtils.createDatabaseError(err));
     }else if(rows && rows.length > 0){
       var newPwd = myUtils.ramdomString(10);
+      var newPwdWithAdd = newPwd + constants.PWD_ADD;
       console.log(newPwd);
       var params = {email: rows[0].email, password : rows[0].pwd};
           quickbloxConfig.createSession(params, function(err, result) {
             if(err){
                res.json(myUtils.createQuickBloxError(err));
             }else{
-              quickbloxConfig.users.update(rows[0].user_id, {old_password: rows[0].pwd, password: newPwd}, function(err, result){
+              quickbloxConfig.users.update(rows[0].user_id, {old_password: rows[0].pwd, password: newPwdWithAdd}, function(err, result){
                 if(err){
                    res.json(myUtils.createQuickBloxError(err));
                 }else{
-                  dbConfig.query(update_pwd, [newPwd, userObject.email], function(err, rows){
+                  dbConfig.query(update_pwd, [newPwdWithAdd, userObject.email], function(err, rows){
                     if(err){
                       res.json(myUtils.createDatabaseError(err));
                     }else{
@@ -304,7 +305,7 @@ function forgotPassword(req, res){
                             user: "perboy9x@gmail.com",
                             clientId: "740381407173-hjmgu9jjlk8pb3fn2rvhufugu5noomdk.apps.googleusercontent.com",
                             clientSecret: "ldt_vqu09jz6nP1jvNSUnbbJ",
-                            refreshToken: "1/L0_pEp_bVZOjuSO1g0PErP8DRjXZoouqR5O-SKHSRp0"
+                            refreshToken: "1/86k_jcq984BrSsC-l1C88pbpklDg3IcNxXlcWlpF6kw"
                           }
                         }
                       });

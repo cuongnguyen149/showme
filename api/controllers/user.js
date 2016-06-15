@@ -56,7 +56,9 @@ function registerUser(req, res) {
                     // console.log(err);
                     res.json(myUtils.createDatabaseError(err)); 
                    }else{
-                    var query_user = "SELECT * , DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB + 
+                    var query_user = "SELECT * , DATE_FORMAT( " + constants.DOB + ", '%d/%m/%Y') AS "+  constants.DOB
+                                                + ", DATE_FORMAT( " + constants.CREATE_DATE + ", '%d/%m/%Y') AS "+  constants.CREATE_DATE               
+                                                + ", DATE_FORMAT( " + constants.UPDATE_DATE + ", '%d/%m/%Y') AS "+  constants.UPDATE_DATE + 
                                      " FROM " + constants.CLIENT_USER +
                                      " WHERE "  + constants.USER_ID + " = ?";
                     dbConfig.query(query_user, [result.id], function(err, rows){
@@ -92,7 +94,9 @@ function registerUser(req, res) {
 function login(req, res){
   var userObject = req.swagger.params.login.value;
       userObject.pwd = userObject.pwd + constants.PWD_ADD;
-  var query = "SELECT *, DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
+  var query = "SELECT *, DATE_FORMAT( " + constants.DOB + ", '%d/%m/%Y') AS "+  constants.DOB
+                        + ", DATE_FORMAT( " + constants.CREATE_DATE + ", '%d/%m/%Y') AS "+  constants.CREATE_DATE               
+                        + ", DATE_FORMAT( " + constants.UPDATE_DATE + ", '%d/%m/%Y') AS "+  constants.UPDATE_DATE +
               " FROM " + constants.CLIENT_USER +
               " WHERE "  + constants.EMAIL + " = ?" +
               " AND " + constants.PWD + " = ?";
@@ -125,12 +129,16 @@ function updateRole (req, res){
   var userObject = req.swagger.params.user.value;
   var role = "user";
   var user_id = userObject.user_id;
-  var query = "SELECT *, NULL AS " + constants.PWD + ", NULL AS " + constants.FEE_PER_HOUR + ", NULL AS " + constants.MONTH_INCOME + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
+  var query = "SELECT *, NULL AS " + constants.PWD + ", NULL AS " + constants.FEE_PER_HOUR + ", NULL AS " + constants.MONTH_INCOME + ", DATE_FORMAT( " + constants.DOB + ", '%d/%m/%Y') AS "+  constants.DOB
+                  + ", DATE_FORMAT( " + constants.CREATE_DATE + ", '%d/%m/%Y') AS "+  constants.CREATE_DATE               
+                  + ", DATE_FORMAT( " + constants.UPDATE_DATE + ", '%d/%m/%Y') AS "+  constants.UPDATE_DATE +
               " FROM " + constants.CLIENT_USER +
               " WHERE "  + constants.USER_ID + " = ?";             
   if(userObject.role && userObject.role == "user"){
     role = "leader";
-    query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
+    query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%d/%m/%Y') AS "+  constants.DOB
+                                                 + ", DATE_FORMAT( " + constants.CREATE_DATE + ", '%d/%m/%Y') AS "+  constants.CREATE_DATE              
+                                                 + ", DATE_FORMAT( " + constants.UPDATE_DATE + ", '%d/%m/%Y') AS "+  constants.UPDATE_DATE + 
               " FROM " + constants.CLIENT_USER +
               " WHERE "  + constants.USER_ID + " = ?";
   }
@@ -167,7 +175,9 @@ function updateUserProfiles(req, res){
   var query_existEmail  = "SELECT " + constants.EMAIL + ", " + constants.PWD +
                           " FROM " + constants.CLIENT_USER +
                           " WHERE "  + constants.USER_ID + " != ?";                
-  var query_user        = "SELECT *, DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
+  var query_user        = "SELECT *, DATE_FORMAT( " + constants.DOB + ", '%d/%m/%Y') AS "+  constants.DOB
+                                    + ", DATE_FORMAT( " + constants.CREATE_DATE + ", '%d/%m/%Y') AS "+  constants.CREATE_DATE              
+                                    + ", DATE_FORMAT( " + constants.UPDATE_DATE + ", '%d/%m/%Y') AS "+  constants.UPDATE_DATE + 
                           " FROM " + constants.CLIENT_USER +
                           " WHERE "  + constants.USER_ID + " = ?";
 

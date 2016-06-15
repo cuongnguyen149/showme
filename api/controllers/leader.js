@@ -21,7 +21,9 @@ module.exports = {
 * GET All leaders location API.
 */
 function getAllLeaderActive(req, res){
-	var query = "SELECT * , DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
+	var query = "SELECT * , DATE_FORMAT( " + constants.DOB + ", '%d/%m/%Y') AS "+  constants.DOB
+						   + ", DATE_FORMAT( " + constants.CREATE_DATE + ", '%d/%m/%Y') AS "+  constants.CREATE_DATE 							
+						   + ", DATE_FORMAT( " + constants.UPDATE_DATE + ", '%d/%m/%Y') AS "+  constants.UPDATE_DATE +		
 				" FROM " + constants.CLIENT_USER + 
 				" WHERE " + constants.ROLE + " = ? " + 
 				" AND "   + constants.IS_ACTIVE + " = ? ";
@@ -130,7 +132,9 @@ function updateLocation(req, res){
 				          	 		 + constants.LONGITUDE + " = ?, " 
 				          	 		 + constants.ADDRESS + " = ? " +
 				          	 " WHERE " + constants.USER_ID + " = ? ";
-				var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
+				var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%d/%m/%Y') AS "+  constants.DOB
+																 + ", DATE_FORMAT( " + constants.CREATE_DATE + ", '%d/%m/%Y') AS "+  constants.CREATE_DATE 							
+													  			 + ", DATE_FORMAT( " + constants.UPDATE_DATE + ", '%d/%m/%Y') AS "+  constants.UPDATE_DATE +	
 			                          " FROM " + constants.CLIENT_USER +
 			                          " WHERE "  + constants.USER_ID + " = ?";          	 
 				dbConfig.query(update, [resuls[0].latitude, resuls[0].longitude, leaderObject.address, user_id], function(err, rows){
@@ -165,7 +169,9 @@ function updateStatus(req, res){
 	var update = "UPDATE " + constants.CLIENT_USER +
 	          	 " SET " + constants.IS_ACTIVE + " = " + !leaderObject.active +
 	          	 " WHERE " + constants.USER_ID + " = ?";
-	var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
+	var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%d/%m/%Y') AS "+  constants.DOB 
+													 + ", DATE_FORMAT( " + constants.CREATE_DATE + ", '%d/%m/%Y') AS "+  constants.CREATE_DATE 							
+													 + ", DATE_FORMAT( " + constants.UPDATE_DATE + ", '%d/%m/%Y') AS "+  constants.UPDATE_DATE +	
                           " FROM " + constants.CLIENT_USER +
                           " WHERE "  + constants.USER_ID + " = ?";          	 
 	dbConfig.query(update, [leaderObject.user_id], function(err, rows){
@@ -189,13 +195,16 @@ function updateStatus(req, res){
 */
 function getLeaderInfo(req, res){
 	var user_id = req.swagger.params.user_id.value;
-	var query   = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
+	var query   = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%d/%m/%Y') AS "+  constants.DOB 
+													   + ", DATE_FORMAT( " + constants.CREATE_DATE + ", '%d/%m/%Y') AS "+  constants.CREATE_DATE 							
+													   + ", DATE_FORMAT( " + constants.UPDATE_DATE + ", '%d/%m/%Y') AS "+  constants.UPDATE_DATE +	
 	              " FROM " + constants.CLIENT_USER +
 	              " WHERE "  + constants.USER_ID + " = ?";
 	dbConfig.query(query, [user_id], function(err, rows){
 		if(rows && rows.length > 0){
 			res.json({returnCode: constants.SUCCESS_CODE, message: "Get information of leader success.", data: {user: rows[0]}});
 		}else if(err){
+			console.log(err);
 			res.json(myUtils.createDatabaseError(err));
 		}else{
 			res.json(myUtils.createErrorStr("user_id: " +  user_id + " does not exist!", constants.ERROR_CODE));

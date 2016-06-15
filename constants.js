@@ -48,6 +48,10 @@ var constants = {
 	PRICE: "price",
 	TYPE: "type",
 	LIST_NUMBER_MERCHANDISE: "list_number_merchandise",
+	//LIST_BOUGHT_MERCHANDISE
+	LIST_BOUGHT_MERCHANDISE: "list_bought_merchandise",
+	MERCHANDISE_TYPE_ID: "merchandise_type_id",
+	TRANSACTION_PRICE_ID: "transaction_price_id",
 	//USER CARD INFORMATION
 	USER_CARD_INFORMATION: "user_card_information",
 	CARD_NUMBER : "card_number",

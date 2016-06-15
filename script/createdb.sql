@@ -89,6 +89,14 @@ CREATE TABLE merchandise_type(
    PRIMARY KEY (id)
 );
 
+CREATE TABLE list_bought_merchandise(
+   id INT NOT NULL AUTO_INCREMENT,
+   transaction_price_id INT NOT NULL,
+   merchandise_type_id INT NOT NULL,
+   merchandise_fee DOUBLE default 0,
+   PRIMARY KEY (id)
+);
+
 CREATE TABLE user_card_information(
    user_id VARCHAR(100) NOT NULL,
    card_number VARCHAR(50) NOT NULL,

@@ -205,51 +205,63 @@ exports = module.exports = function(io){
   		});
 
   		socket.on('acceptMerchandiseRequest', function(merchanObject){
-  			var merchanParseJson 		= JSON.parse(merchanObject);
-  			var merchandise_fee 		= merchanParseJson.merchandise_fee,
-  			id 							= merchanParseJson.id,
-  			id_merchandise_type 		= merchanParseJson.id_merchandise_type;
-  			var query_call				= "SELECT * FROM " + constants.TRANSACTION_PRICE + 
-							  	  	  	  " WHERE " + constants.ID + " = ? ";
-			var query_merchandise_type  = "SELECT * FROM " + constants.MERCHANDISE_TYPE + 
-							  	  	  	  " WHERE " + constants.ID + " = ? ";
-			dbConfig.query(query_merchandise_type, [id_merchandise_type], function(err, rows){
+  			var merchanParseJson 			= JSON.parse(merchanObject);
+  			var merchandise_fee 			= merchanParseJson.merchandise_fee,
+  				id 							= merchanParseJson.id,
+  				id_merchandise_type 		= merchanParseJson.id_merchandise_type;
+  			var query_call					= "SELECT * FROM " + constants.TRANSACTION_PRICE + 
+							  	  		  	  " WHERE " + constants.ID + " = ? ";
+			var query_merchandise_type	  	= "SELECT * FROM " + constants.MERCHANDISE_TYPE + 
+							  	  	  		  " WHERE " + constants.ID + " = ? ";
+			var insert_bought_merchandise 	= "INSERT INTO " + constants.LIST_BOUGHT_MERCHANDISE + " SET ?";
+			var boughtMerStr				=  '{"' + constants.MERCHANDISE_TYPE_ID + '":"' + id_merchandise_type + '", "'
+						                     		+ constants.TRANSACTION_PRICE_ID + '":"' + id + '", "' 
+						                     		+ constants.MERCHANDISE_FEE + '":"' + merchandise_fee + '"}';
+			var boughtMerObj				= 	 JSON.parse(boughtMerStr);			                     		
+			dbConfig.query(insert_bought_merchandise, boughtMerObj, function(err, insertRows){
 				if(err){
+					console.log(err);
+					socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));
+				}else{	
+					console.log(insertRows);
+					dbConfig.query(query_merchandise_type, [id_merchandise_type], function(err, rows){
+						if(err){	
+							socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));
+						}else if(rows && rows.length > 0){
+				  			var update_call = "UPDATE " + constants.TRANSACTION_PRICE + 
+				  							  " SET " 	+ constants.MERCHANDISE_FEE + " = (" + constants.MERCHANDISE_FEE + " + " + merchandise_fee + "), "
+				  									    + constants.LIST_NUMBER_MERCHANDISE + " = concat( " + constants.LIST_NUMBER_MERCHANDISE + ", '" + insertRows.insertId + ", '), "   
+				  									  	+ constants.SHIPPING_FEE + " = (" + constants.SHIPPING_FEE + " + " + rows[0].shipping_fee + ")" +
+				  							  " WHERE "	+ constants.ID	+ " = ? ";
+				  			if(merchandise_fee && id){
+				  				dbConfig.query(update_call,[id], function(err, rows){
+				  					if(err){
+				  						console.log(err);
+				  						socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));
+				  					}else{
+				  						dbConfig.query(query_call, id, function(err, rows){
+				  							if(err){
+				  								console.log(err);
+				  								socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));		
+				  							}else if(rows && rows.length > 0){
+				  								socket.emit("acceptMerchandiseRequestSuccess", {returnCode: constants.SUCCESS_CODE, message: "Updated merchandies request successfull.", data : {call : rows[0]}});
+				  							}else{
+				  								socket.emit("acceptMerchandiseRequestFail", myUtils.createErrorStr("Opps! Id: " + id+ " you provide incorrect! Please check again.", constants.ERROR_CODE));
+				  							}
+				  						});
+				  						
+				  					}
+				  				});
+				  			}else{
+				  				socket.emit("acceptMerchandiseRequestFail", myUtils.createErrorStr("Opps! Some information you provide incorrect! Please check again.", constants.ERROR_CODE));
+				  			}	
 
-				}else if(rows && rows.length > 0){
-		  			var update_call = "UPDATE " + constants.TRANSACTION_PRICE + 
-		  							  " SET " 	+ constants.MERCHANDISE_FEE + " = (" + constants.MERCHANDISE_FEE + " + " + merchandise_fee + "), "
-		  									    + constants.LIST_NUMBER_MERCHANDISE + " = concat( " + constants.LIST_NUMBER_MERCHANDISE + ", '" + id_merchandise_type + ", '), "   
-		  									  	+ constants.SHIPPING_FEE + " = (" + constants.SHIPPING_FEE + " + " + rows[0].shipping_fee + ")" +
-		  							  " WHERE "	+ constants.ID	+ " = ? ";
-		  			if(merchandise_fee && id){
-		  				dbConfig.query(update_call,[id], function(err, rows){
-		  					if(err){
-		  						console.log(err);
-		  						socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));
-		  					}else{
-		  						console.log(rows);
-		  						dbConfig.query(query_call, id, function(err, rows){
-		  							if(err){
-		  								console.log(err);
-		  								socket.emit("acceptMerchandiseRequestFail", myUtils.createDatabaseError(err));		
-		  							}else if(rows && rows.length > 0){
-		  								socket.emit("acceptMerchandiseRequestSuccess", {returnCode: constants.SUCCESS_CODE, message: "Updated merchandies request successfull.", data : {call : rows[0]}});
-		  							}else{
-		  								socket.emit("acceptMerchandiseRequestFail", myUtils.createErrorStr("Opps! Id: " + id+ " you provide incorrect! Please check again.", constants.ERROR_CODE));
-		  							}
-		  						});
-		  						
-		  					}
-		  				});
-		  			}else{
-		  				socket.emit("acceptMerchandiseRequestFail", myUtils.createErrorStr("Opps! Some information you provide incorrect! Please check again.", constants.ERROR_CODE));
-		  			}	
+						}else{
 
-				}else{
-
+						}
+					});				  	  	  	  				  	  	  	  			
 				}
-			});				  	  	  	  				  	  	  	  			
+			});			                     		 					  	  	  		  
   		});
 
   		socket.on('refuseMerchandiseRequest', function(merchanObject){

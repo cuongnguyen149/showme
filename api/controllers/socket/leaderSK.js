@@ -35,7 +35,9 @@ exports = module.exports = function(io){
 				          	 " SET " + constants.LATITUDE + " = ?, " 
 				          	 		 + constants.LONGITUDE + " = ? " + 
 				          	 " WHERE " + constants.USER_ID + " = ? ";
-				var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
+				var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%d/%m/%Y') AS "+  constants.DOB
+																 + ", DATE_FORMAT( " + constants.CREATE_DATE + ", '%d/%m/%Y') AS "+  constants.CREATE_DATE 							
+													   			 + ", DATE_FORMAT( " + constants.UPDATE_DATE + ", '%d/%m/%Y') AS "+  constants.UPDATE_DATE +
 			                          " FROM " + constants.CLIENT_USER +
 			                          " WHERE "  + constants.USER_ID + " = ?";
 				dbConfig.query(update, [leaderObj.lat, leaderObj.lng, leaderObj.user_id], function(err, rows){
@@ -69,7 +71,9 @@ exports = module.exports = function(io){
 	    	var update = "UPDATE " + constants.CLIENT_USER +
 	          	 " SET " + constants.IS_ACTIVE + " = " + leaderObj.active +
 	          	 " WHERE " + constants.USER_ID + " = ?";
-			var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%Y-%m-%d') AS "+  constants.DOB +
+			var query = "SELECT *, NULL AS " + constants.PWD + ", DATE_FORMAT( " + constants.DOB + ", '%d/%m/%Y') AS "+  constants.DOB
+															 + ", DATE_FORMAT( " + constants.CREATE_DATE + ", '%d/%m/%Y') AS "+  constants.CREATE_DATE 							
+													         + ", DATE_FORMAT( " + constants.UPDATE_DATE + ", '%d/%m/%Y') AS "+  constants.UPDATE_DATE +
 		                          " FROM " + constants.CLIENT_USER +
 		                          " WHERE "  + constants.USER_ID + " = ?";          	 
 			dbConfig.query(update, [leaderObj.user_id], function(err, rows){

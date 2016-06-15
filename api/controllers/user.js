@@ -321,7 +321,7 @@ function forgotPassword(req, res){
                         if(!err){
                           res.json({returnCode: constants.SUCCESS_CODE, message: "New password would be sent to " + userObject.email + ". Please check your inbox!", data : {pwd: newPwd}});
                         }else{
-                           res.json(myUtils.createErrorStr('Erorr with mail server. ' + err, constants.ERROR_CODE));
+                           res.json(myUtils.createErrorStr('Erorr with mail serve. ' + err, constants.ERROR_CODE));
                         }
                       }); 
                     }

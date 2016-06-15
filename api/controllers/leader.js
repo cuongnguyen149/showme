@@ -326,7 +326,7 @@ function leaderStatistical(req, res){
 									+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
 									+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
 									+ constants.TRANSACTION_PRICE + "."+ constants.TOTAL + ", "
-									+ constants.TRANSACTION_PRICE + "."+ constants.LIST_NUMBER_MERCHANDISE + ", "
+									+ " SUBSTRING (" + constants.TRANSACTION_PRICE + "."+ constants.LIST_NUMBER_MERCHANDISE + ", 1, CHAR_LENGTH( " + constants.TRANSACTION_PRICE + "."+ constants.LIST_NUMBER_MERCHANDISE + ") - 2) AS " + constants.LIST_NUMBER_MERCHANDISE + ", "
 									+ constants.TRANSACTION_PRICE + "."+ constants.CALL_START +  
 				  	  " FROM "		+ constants.CLIENT_USER +
 				  	  " LEFT JOIN " + constants.TRANSACTION_PRICE +
@@ -358,6 +358,8 @@ function leaderStatistical(req, res){
 							if(!sumToltal[0].total_header){
 								sumToltal[0].total_header = 0;
 							}
+							// rows[constants.LIST_NUMBER_MERCHANDISE] = rows[0][constants.LIST_NUMBER_MERCHANDISE].slice(0,-2);
+							// console.log(rows[constants.LIST_NUMBER_MERCHANDISE]);
 							res.json({returnCode: constants.SUCCESS_CODE, message: "Get statistical for leader success.", data: {total_visit: visitCount[0].total_visit, total_header: sumToltal[0].total_header, leader: rows}});
 						}
 					});	

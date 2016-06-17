@@ -81,7 +81,7 @@ function leaderLocation(req, res){
 					}	
 				});
 	    	}else{
-	    		res.json(myUtils.createErrorStr("Your input address does not exist! Please try again.", constants.ERROR_CODE));
+	    		res.json(myUtils.createErrorStr("Votre adresse d'entrée n'existe pas! Veuillez réessayer.", constants.ERROR_CODE));
 	    	}
 	    })
 	    .catch(function(err) {
@@ -114,7 +114,7 @@ function leaderLocation(req, res){
 			}	
 		});
 	}else{
-		res.json(myUtils.createErrorStr("Your params incorrect! Please check again.", constants.ERROR_CODE));
+		res.json(myUtils.createErrorStr("Votre params incorrecte! S'il vous plaît le vérifier.", constants.ERROR_CODE));
 	}	
 	 			
 };
@@ -154,7 +154,7 @@ function updateLocation(req, res){
 					}	
 				});
 	        }else{
-				res.json(myUtils.createErrorStr("Your input address does not exist! Please try again.", constants.ERROR_CODE));
+				res.json(myUtils.createErrorStr("Votre adresse d'entrée n'existe pas! Veuillez réessayer.", constants.ERROR_CODE));
 	        }
 	    })
 	    .catch(function(err) {

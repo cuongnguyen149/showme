@@ -35,7 +35,7 @@ function registerUser(req, res) {
   dbConfig.query(query_email, [userObject.email], function(err, rows){
     if(rows){
       if(rows.length > 0){
-        res.json(myUtils.createErrorStr('Email already exist.', constants.ERROR_CODE));
+        res.json(myUtils.createErrorStr("L'email existe déjà.", constants.ERROR_CODE));
       }else{
         quickbloxConfig.createSession(function(err, result) {
           if(result){
@@ -111,9 +111,9 @@ function login(req, res){
         console.log(err);
         res.json(myUtils.createDatabaseError(err)); 
        }else if(rows && rows.length > 0){
-        res.json({returnCode : constants.SUCCESS_CODE, message: "Login successfully", data: myUtils.generateToken(rows[0])});  
+        res.json({returnCode : constants.SUCCESS_CODE, message: "Connectez-vous avec succès", data: myUtils.generateToken(rows[0])});  
        }else{
-        res.json(myUtils.createErrorStr('Your email or password incorrect! Please check again!', constants.ERROR_CODE));
+        res.json(myUtils.createErrorStr("Votre e-mail ou mot de passe incorrect! S'il vous plaît le vérifier!", constants.ERROR_CODE));
        } 
       });
     }else{
@@ -158,7 +158,7 @@ function updateRole (req, res){
     }else if(err){
       res.json(myUtils.createDatabaseError(err));
     }else{
-      res.json(myUtils.createErrorStr('Your params incorrect! Please check again!', constants.ERROR_CODE));
+      res.json(myUtils.createErrorStr("Votre params incorrecte! S'il vous plaît le vérifier.!", constants.ERROR_CODE));
     }
   });             
 };
@@ -197,7 +197,7 @@ function updateUserProfiles(req, res){
                     " WHERE " + constants.USER_ID + " = ? ";
   dbConfig.query(query_existEmail, [userObject.user_id], function(err, rows){
     if(rows && rows.length > 0 && rows[0].email == userObject.email){
-      res.json(myUtils.createErrorStr('Email already exist.', constants.ERROR_CODE));
+      res.json(myUtils.createErrorStr("L'email existe déjà.", constants.ERROR_CODE));
     }else if(err){
       res.json(myUtils.createDatabaseError(err));
     }else{
@@ -323,13 +323,13 @@ function forgotPassword(req, res){
                         to: userObject.email,
                         from: 'passwordreset@gmail.com',
                         subject: '[Show me] Password Reset',
-                        text: 'You are receiving this because you (or someone else) have reseted the password for your account.\n\n' +
+                        text: 'You are receiving this because you (or someone else) have reset the password for your account.\n\n' +
                           'Please use the new password below for login to Show Me application:\n\n' +
                           'Password: ' + newPwd, 
                       };
                       smtpTransport.sendMail(mailOptions, function(err) {
                         if(!err){
-                          res.json({returnCode: constants.SUCCESS_CODE, message: "New password would be sent to " + userObject.email + ". Please check your inbox!", data : {pwd: newPwd}});
+                          res.json({returnCode: constants.SUCCESS_CODE, message: "Nouveau mot de passe sera envoyé à " + userObject.email + ". S'il vous plaît vérifier votre boîte de réception!", data : {pwd: newPwd}});
                         }else{
                            res.json(myUtils.createErrorStr('Erorr with mail serve. ' + err, constants.ERROR_CODE));
                         }
@@ -341,7 +341,7 @@ function forgotPassword(req, res){
             }
           });
     }else{
-      res.json(myUtils.createErrorStr('Email does not exist! Please check again.', constants.ERROR_CODE));
+      res.json(myUtils.createErrorStr("Email n'existe pas! S'il vous plaît le vérifier.", constants.ERROR_CODE));
     }
   });                     
 };
@@ -365,18 +365,18 @@ function createCardInfo (req, res){
       }
       }, function (err, result) {
           if(err){
-             res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + err, constants.ERROR_CODE));
+             res.json(myUtils.createErrorStr("Avoir problème avec le système de paiement! S'il vous plaît essayer plus tard. " + err, constants.ERROR_CODE));
           }else if(result.success){
 
             dbConfig.query(insert_card, cardObj, function(err, rows){
               if(err){
                 res.json(myUtils.createDatabaseError(err));
               }else{
-                res.json({returnCode: constants.SUCCESS_CODE, message: "Create card information success.", data : {card: cardObject}});
+                res.json({returnCode: constants.SUCCESS_CODE, message: "Créer carte avec succès.", data : {card: cardObject}});
               }
             });  
           }else{
-            res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + result.message, constants.ERROR_CODE));
+            res.json(myUtils.createErrorStr("Avoir problème avec le système de paiement! S'il vous plaît essayer plus tard. " + result.message, constants.ERROR_CODE));
           }
         });
 };
@@ -391,7 +391,7 @@ function getUserPaymentInfo (req, res){
     }else if(rows && rows.length > 0){
       res.json({returnCode: constants.SUCCESS_CODE, message : "Get payment info success.", data:{ card : rows[0]}});
     }else{
-      res.json(myUtils.createErrorStr("Payment info of user " + user_id + " does not exist.", constants.ERROR_CODE));
+      res.json(myUtils.createErrorStr("N'existe pas d'info de paiement de l'utilisateur" + user_id + ".", constants.ERROR_CODE));
     }
   })          
 }

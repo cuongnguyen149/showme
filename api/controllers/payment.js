@@ -11,7 +11,7 @@ module.exports ={
 function getToken(req, res) {
 	braintreeConfig.clientToken.generate({}, function (err, response) {
   		if(err){
-  			res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + err, constants.ERROR_CODE));
+  			res.json(myUtils.createErrorStr("Avoir problème avec le système de paiement! S'il vous plaît essayer plus tard. " + err, constants.ERROR_CODE));
   		}else{
 
   			res.json({returnCode: constants.SUCCESS_CODE, message : "Get toke success.", data: {token_payment: response.clientToken}});
@@ -39,7 +39,7 @@ function createTransaction (req, res){
 				  amount: amount
 				}, function (err, result) {
 					if(err){
-						res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + err, constants.ERROR_CODE));
+						res.json(myUtils.createErrorStr("Avoir problème avec le système de paiement! S'il vous plaît essayer plus tard. " + err, constants.ERROR_CODE));
 					}else if(result.success){
 						console.log(result);
 						transactionObject.currency = result.transaction.currencyIsoCode;
@@ -49,7 +49,7 @@ function createTransaction (req, res){
 							console.log(update_transaction);
 							dbConfig.query(update_transaction, [tip, amount, transactionObject.id], function (err, rows) {
 								if(err){
-									res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + err, constants.ERROR_CODE));
+									res.json(myUtils.createErrorStr("Avoir problème avec le système de paiement! S'il vous plaît essayer plus tard. " + err, constants.ERROR_CODE));
 								}else{
 									res.json({returnCode: constants.SUCCESS_CODE, message : "Checkout success!.", data: {transaction: transactionObject}});
 								}
@@ -58,11 +58,11 @@ function createTransaction (req, res){
 							res.json({returnCode: constants.SUCCESS_CODE, message : "Checkout success!.", data: {transaction: transactionObject}});
 						}
 					}else{
-						res.json(myUtils.createErrorStr("Have problem with payment system! Please try it later. " + result.message, constants.ERROR_CODE));
+						res.json(myUtils.createErrorStr("Avoir problème avec le système de paiement! S'il vous plaît essayer plus tard. " + result.message, constants.ERROR_CODE));
 					}
 				});	
 			}else{
-				res.json(myUtils.createErrorStr("Cannot checkout when amount = 0", constants.ERROR_CODE));
+				res.json(myUtils.createErrorStr("Vous ne pouvez pas la caisse lorsque montant = 0", constants.ERROR_CODE));
 			}
 		}else{
 			res.json(myUtils.createErrorStr("Id does not exist. Please check again.", constants.ERROR_CODE));

@@ -199,7 +199,7 @@ exports = module.exports = function(io){
 						socket.emit("merchandiseRequestFail", myUtils.createDatabaseError(err));
 					}else{
 						rows[0].merchandise_fee = merchandise_fee;
-  						io.to(x).emit("merchandiseRequestListener", {returnCode: constants.SUCCESS_CODE, message: "You have a merchandise request.", data : {merchanRequest : rows[0]}});
+  						io.to(x).emit("merchandiseRequestListener", {returnCode: constants.SUCCESS_CODE, message: "Vous avez une demande d'achat de marchandises.", data : {merchanRequest : rows[0]}});
 					}
 				});
   				// io.sockets.socket(call[leader_id]).emit("merchandiseRequestSuccess", {returnCode: constants.SUCCESS_CODE, message: "You have a merchandise request.", data : {merchanRequest : merchanInfo}});

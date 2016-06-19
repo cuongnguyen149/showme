@@ -70,7 +70,7 @@ function registerUser(req, res) {
                       res.json(myUtils.createDatabaseError(err)); 
                      }else{
                       // console.log(rows[0]);
-                      res.status(201).json({returnCode : constants.SUCCESS_CODE, message: "Sign up successfully", data: rows[0]});  
+                      res.status(201).json({returnCode : constants.SUCCESS_CODE, message: "Sign up successfully", data: {user: rows[0]}});  
                      } 
                     });
                    } 
@@ -115,7 +115,7 @@ function login(req, res){
         console.log(err);
         res.json(myUtils.createDatabaseError(err)); 
        }else if(rows && rows.length > 0){
-        res.json({returnCode : constants.SUCCESS_CODE, message: "Connectez-vous avec succès", data: rows[0]});  
+        res.json({returnCode : constants.SUCCESS_CODE, message: "Connectez-vous avec succès", data: {user: rows[0]}});  
        }else{
         res.json(myUtils.createErrorStr("Votre e-mail ou mot de passe incorrect! S'il vous plaît le vérifier!", constants.ERROR_CODE));
        } 
@@ -141,7 +141,7 @@ function getUserInfoByToken (req, res){
     console.log(err);
     res.json(myUtils.createDatabaseError(err)); 
    }else if(rows && rows.length > 0){
-    res.json({returnCode : constants.SUCCESS_CODE, message: "Get user info by token success", data: rows[0]});  
+    res.json({returnCode : constants.SUCCESS_CODE, message: "Get user info by token success", data: {user: rows[0]}});  
    }else{
     res.json(myUtils.createErrorStr("Cannot find user info with token: " + token , constants.ERROR_CODE));
    } 

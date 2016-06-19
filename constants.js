@@ -83,6 +83,7 @@ var constants = {
 	DEVICE_UIID: "device_uiid",
 	LEADER: "leader",
 	USER: "user",
+	TOKEN: "token",
 	PWD_ADD: "SM",
 	//RETURN CODE
 	ERROR_CODE : 1000,

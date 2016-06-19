@@ -37,15 +37,12 @@ module.exports.createErrorStr = function(message, returnCode) {
 /**
  * Generate token for user.
  */
-module.exports.generateToken = function(user) {
+module.exports.generateToken = function() {
   var expires = expiresIn(2);
   var token = jwt.encode({
     exp: expires
   }, 'showme-serect-string');
-  user.token = token;
-  return {   
-    user: user
-  };
+  return token;
 };
 
 /**

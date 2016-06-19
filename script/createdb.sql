@@ -28,7 +28,8 @@ CREATE TABLE client_user(
    latitude DOUBLE,
    create_date TIMESTAMP default now(),
    update_date TIMESTAMP default now() on update now(),
-   device_uiid VARCHAR(500), 
+   device_uiid VARCHAR(500),
+   token VARCHAR(500), 
    PRIMARY KEY ( user_id )
 );
 

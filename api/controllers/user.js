@@ -14,7 +14,8 @@ module.exports = {
   updateUserProfiles : updateUserProfiles,
   forgotPassword: forgotPassword,
   createCardInfo : createCardInfo,
-  getUserPaymentInfo: getUserPaymentInfo 
+  getUserPaymentInfo: getUserPaymentInfo,
+  getUserInfoByToken: getUserInfoByToken 
 };
 /**
 * Register API (Integrate with QuickBlox)
@@ -26,7 +27,8 @@ function registerUser(req, res) {
       firstname   = userObject.firstname,
       lastname    = userObject.lastname,
       dob         = userObject.dob,
-      device_uiid = userObject.device_uiid; 
+      device_uiid = userObject.device_uiid,
+      token       = myUtils.generateToken(); 
   pwd = pwd + constants.PWD_ADD;
   var params = {email : email, password: pwd, full_name: lastname + ' ' + firstname};
   var query_email = "SELECT " + constants.EMAIL + 
@@ -48,6 +50,7 @@ function registerUser(req, res) {
                                    + constants.FIRSTNAME + '":"' + firstname + '", "' 
                                    + constants.LASTNAME + '":"' + lastname + '", "' 
                                    + constants.DOB + '":"' + dob + '", "' 
+                                   + constants.TOKEN + '":"' + token + '", "' 
                                    + constants.DEVICE_UIID + '":"' + device_uiid + '"}'; 
                 var userObj =  JSON.parse(userStr);
                 var insert = "INSERT INTO " + constants.CLIENT_USER + " SET ?"; 
@@ -67,7 +70,7 @@ function registerUser(req, res) {
                       res.json(myUtils.createDatabaseError(err)); 
                      }else{
                       // console.log(rows[0]);
-                      res.status(201).json({returnCode : constants.SUCCESS_CODE, message: "Sign up successfully", data: myUtils.generateToken(rows[0])});  
+                      res.status(201).json({returnCode : constants.SUCCESS_CODE, message: "Sign up successfully", data: rows[0]});  
                      } 
                     });
                    } 
@@ -92,7 +95,8 @@ function registerUser(req, res) {
 * User login API (Integrate with QuickBlox)
 */
 function login(req, res){
-  var userObject = req.swagger.params.login.value;
+  var userObject = req.swagger.params.login.value,
+      token      = myUtils.generateToken(); 
       userObject.pwd = userObject.pwd + constants.PWD_ADD;
   var query = "SELECT *, DATE_FORMAT( " + constants.DOB + ", '%d/%m/%Y') AS "+  constants.DOB
                         + ", DATE_FORMAT( " + constants.CREATE_DATE + ", '%d/%m/%Y') AS "+  constants.CREATE_DATE               
@@ -100,18 +104,18 @@ function login(req, res){
               " FROM " + constants.CLIENT_USER +
               " WHERE "  + constants.EMAIL + " = ?" +
               " AND " + constants.PWD + " = ?";
-  var update = "UPDATE " + constants.CLIENT_USER +
-               " SET " + constants.DEVICE_UIID + " = '" + userObject.device_uiid + "'" +
-               " WHERE " + constants.EMAIL + " = ?";
-               console.log(query);
-  dbConfig.query(update, [userObject.email], function(err, rows){
+  var update = "UPDATE "  + constants.CLIENT_USER +
+               " SET "    + constants.DEVICE_UIID + " = ?, "
+                          + constants.TOKEN + " = ? " + 
+               " WHERE "  + constants.EMAIL + " = ?";
+  dbConfig.query(update, [userObject.device_uiid, token, userObject.email], function(err, rows){
     if(rows){
       dbConfig.query(query, [userObject.email, userObject.pwd], function(err, rows){
        if(err){
         console.log(err);
         res.json(myUtils.createDatabaseError(err)); 
        }else if(rows && rows.length > 0){
-        res.json({returnCode : constants.SUCCESS_CODE, message: "Connectez-vous avec succès", data: myUtils.generateToken(rows[0])});  
+        res.json({returnCode : constants.SUCCESS_CODE, message: "Connectez-vous avec succès", data: rows[0]});  
        }else{
         res.json(myUtils.createErrorStr("Votre e-mail ou mot de passe incorrect! S'il vous plaît le vérifier!", constants.ERROR_CODE));
        } 
@@ -122,6 +126,27 @@ function login(req, res){
     }
   });              
 };
+/**
+* get user info by token API.
+*/
+function getUserInfoByToken (req, res){
+  var token = req.swagger.params.token.value;
+  var query = "SELECT *, DATE_FORMAT( " + constants.DOB + ", '%d/%m/%Y') AS "+  constants.DOB
+                        + ", DATE_FORMAT( " + constants.CREATE_DATE + ", '%d/%m/%Y') AS "+  constants.CREATE_DATE               
+                        + ", DATE_FORMAT( " + constants.UPDATE_DATE + ", '%d/%m/%Y') AS "+  constants.UPDATE_DATE +
+              " FROM " + constants.CLIENT_USER +
+              " WHERE "  + constants.TOKEN + " = ?"
+  dbConfig.query(query, [token], function(err, rows){
+   if(err){
+    console.log(err);
+    res.json(myUtils.createDatabaseError(err)); 
+   }else if(rows && rows.length > 0){
+    res.json({returnCode : constants.SUCCESS_CODE, message: "Get user info by token success", data: rows[0]});  
+   }else{
+    res.json(myUtils.createErrorStr("Cannot find user info with token: " + token , constants.ERROR_CODE));
+   } 
+  });            
+}
 /**
 * User update user's role API.
 */
@@ -331,7 +356,7 @@ function forgotPassword(req, res){
                         if(!err){
                           res.json({returnCode: constants.SUCCESS_CODE, message: "Nouveau mot de passe sera envoyé à " + userObject.email + ". S'il vous plaît vérifier votre boîte de réception!", data : {pwd: newPwd}});
                         }else{
-                           res.json(myUtils.createErrorStr('Erorr with mail serve. ' + err, constants.ERROR_CODE));
+                           res.json(myUtils.createErrorStr('Error with mail server. ' + err, constants.ERROR_CODE));
                         }
                       }); 
                     }

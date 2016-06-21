@@ -336,7 +336,11 @@ function leaderStatistical(req, res){
 									+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
 									+ constants.TRANSACTION_PRICE + "."+ constants.TOTAL + ", "
 									+ " SUBSTRING (" + constants.TRANSACTION_PRICE + "."+ constants.LIST_NUMBER_MERCHANDISE + ", 1, CHAR_LENGTH( " + constants.TRANSACTION_PRICE + "."+ constants.LIST_NUMBER_MERCHANDISE + ") - 2) AS " + constants.LIST_NUMBER_MERCHANDISE + ", "
-									+ constants.TRANSACTION_PRICE + "."+ constants.CALL_START +  
+									+ constants.TRANSACTION_PRICE + "."+ constants.CALL_START + ", "
+									+ constants.TRANSACTION_PRICE + "."+ constants.CALL_END + ", "
+									+ constants.TRANSACTION_PRICE + "."+ constants.SHIPPING_FEE + ", "
+									+ constants.TRANSACTION_PRICE + "."+ constants.MERCHANDISE_FEE + ", " 
+									+ constants.TRANSACTION_PRICE + "."+ constants.PRICE +
 				  	  " FROM "		+ constants.CLIENT_USER +
 				  	  " LEFT JOIN " + constants.TRANSACTION_PRICE +
 				  	  " ON " 		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.TRANSACTION_PRICE + "." + constants.USER_ID +

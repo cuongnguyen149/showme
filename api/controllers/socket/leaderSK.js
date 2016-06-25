@@ -303,6 +303,7 @@ exports = module.exports = function(io){
   			var id 				= callParseJson.id;
   			var update_call 	= "UPDATE " + constants.TRANSACTION_PRICE + 
   								  " SET " 	+ constants.PRICE + " = ?, " 
+  								  			+ constants.SERVICE_FEE + " = ?, " 
   								  			+ constants.TOTAL + " = ?, " 
   									  		+ constants.CALL_END + " = ? " +
   								  " WHERE "	+ constants.ID	+ " = ? ",
@@ -321,12 +322,13 @@ exports = module.exports = function(io){
 							var total_mins 		= (now - call_price.call_start.getTime())/60000, // Minutes of call.
 								fee_per_min 	= rowsLeader[0].fee_per_hour/60;
 							call_price.price 	= (total_mins*fee_per_min);
+							call_price.service_fee	= call_price.price*0.25;
 							call_price.total    = call_price.shipping_fee + call_price.merchandise_fee + call_price.price;
-							call_price.price = call_price.price.toFixed(2);
+							call_price.price 	= call_price.price.toFixed(2);
+							call_price.service_fee = call_price.service_fee.toFixed(2);
 							call_price.total =	call_price.total.toFixed(2);
 							call_price.call_end = new Date();
-							dbConfig.query(update_call, [call_price.price, call_price.total ,call_price.call_end, id], function(err, rows){
-								console.log(rows);
+							dbConfig.query(update_call, [call_price.price, call_price.service_fee, call_price.total ,call_price.call_end, id], function(err, rows){
 								if(err){
 									socket.emit("callEndFalse", myUtils.createDatabaseError(err));
 								}else{

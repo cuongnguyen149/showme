@@ -334,11 +334,12 @@ function leaderStatistical(req, res){
 									+ constants.CLIENT_USER + "." + constants.AVATAR + ", "
 									+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
 									+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
-									+ constants.TRANSACTION_PRICE + "."+ constants.TOTAL + ", "
+									+ "(" + constants.TRANSACTION_PRICE + "."+ constants.TOTAL + " - " + constants.TRANSACTION_PRICE + "."+ constants.SERVICE_FEE + ") AS total , "
 									+ " SUBSTRING (" + constants.TRANSACTION_PRICE + "."+ constants.LIST_NUMBER_MERCHANDISE + ", 1, CHAR_LENGTH( " + constants.TRANSACTION_PRICE + "."+ constants.LIST_NUMBER_MERCHANDISE + ") - 2) AS " + constants.LIST_NUMBER_MERCHANDISE + ", "
 									+ constants.TRANSACTION_PRICE + "."+ constants.CALL_START + ", "
 									+ constants.TRANSACTION_PRICE + "."+ constants.CALL_END + ", "
 									+ constants.TRANSACTION_PRICE + "."+ constants.SHIPPING_FEE + ", "
+									+ constants.TRANSACTION_PRICE + "."+ constants.SERVICE_FEE + ", "
 									+ constants.TRANSACTION_PRICE + "."+ constants.MERCHANDISE_FEE + ", " 
 									+ constants.TRANSACTION_PRICE + "."+ constants.TIP + ", "
 									+ constants.TRANSACTION_PRICE + "."+ constants.PRICE +

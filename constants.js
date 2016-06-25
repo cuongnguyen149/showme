@@ -44,7 +44,7 @@ var constants = {
 	IS_PAYMENT: "is_payment",
 	MERCHANDISE_FEE: "merchandise_fee",
 	SHIPPING_FEE:"shipping_fee",
-	SERVICE_FEE: "SERVICE_FEE",
+	SERVICE_FEE: "service_fee",
 	PRICE: "price",
 	TYPE: "type",
 	LIST_NUMBER_MERCHANDISE: "list_number_merchandise",

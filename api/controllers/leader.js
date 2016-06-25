@@ -340,6 +340,7 @@ function leaderStatistical(req, res){
 									+ constants.TRANSACTION_PRICE + "."+ constants.CALL_END + ", "
 									+ constants.TRANSACTION_PRICE + "."+ constants.SHIPPING_FEE + ", "
 									+ constants.TRANSACTION_PRICE + "."+ constants.MERCHANDISE_FEE + ", " 
+									+ constants.TRANSACTION_PRICE + "."+ constants.TIP + ", "
 									+ constants.TRANSACTION_PRICE + "."+ constants.PRICE +
 				  	  " FROM "		+ constants.CLIENT_USER +
 				  	  " LEFT JOIN " + constants.TRANSACTION_PRICE +

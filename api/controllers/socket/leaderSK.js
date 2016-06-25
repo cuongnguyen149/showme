@@ -164,6 +164,8 @@ exports = module.exports = function(io){
 								fee_per_min = rowsLeader[0].fee_per_hour/60;
 							call_price.price = (total_mins*fee_per_min).toFixed(2);
 							call_price.min   = parseInt(total_mins.toFixed(0));
+							call_price.service_fee = call_price.price*0.25;
+							call_price.service_fee = call_price.service_fee.toFixed(2);
 							if(role && role == 'leader'){
 								call_price.total = (total_mins*fee_per_min + call_price.merchandise_fee + call_price.shipping_fee - call_price.service_fee).toFixed(2); 
 							}else{

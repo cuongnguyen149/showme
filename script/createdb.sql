@@ -24,6 +24,7 @@ CREATE TABLE client_user(
    possible_purchase DOUBLE default 0,
    month_income DOUBLE,
    is_active BOOL DEFAULT false,
+   is_certificate BOOL DEFAULT false,
    longitude DOUBLE,
    latitude DOUBLE,
    create_date TIMESTAMP default now(),

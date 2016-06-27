@@ -37,10 +37,14 @@ function createReview (req, res){
 			                       + constants.CALL_START + '":"' + call_start + '", "'
 			                       + constants.ROLE + 	'":"' + role + '", "'
 			                       + constants.CALL_END + '":"' + call_end + '"}',
+
         reviewObj 		= JSON.parse(reviewStr),
+
 		insert_transaction  = "INSERT INTO " + constants.USER_TRANSACTION + " SET ?",
+
 		query				= "SELECT * FROM " + constants.USER_TRANSACTION + 
 							  " WHERE " + constants.TRANSACTION_ID + " = ?",
+
 		update_rating		= "UPDATE " + constants.CLIENT_USER +
 							  " SET "	+ constants.RATING + " = ((" + constants.RATING + "*" + constants.RATING_COUNTER + " + " + rating 								 + ")/(" + constants.RATING_COUNTER + " + 1)), "
 							  			+ constants.RATING_CONNECTION + " = ((" + constants.RATING_CONNECTION + "*" + constants.RATING_COUNTER + " + " + rating_connection + ")/(" + constants.RATING_COUNTER + " + 1)), "
@@ -48,8 +52,20 @@ function createReview (req, res){
 							  			+ constants.RATING_VISIT + " = ((" + constants.RATING_VISIT + "*" + constants.RATING_COUNTER+ " + " + rating_visit 				 + ")/(" + constants.RATING_COUNTER + " + 1)), "
 							  			+ constants.RATING_GUIDE + " = ((" + constants.RATING_GUIDE + "*" + constants.RATING_COUNTER+ " + " + rating_guide 				 + ")/(" + constants.RATING_COUNTER + " + 1)), "
 							  			+ constants.RATING_COUNTER + " = (" + constants.RATING_COUNTER + "+ 1)" +
-							  " WHERE " + constants.USER_ID + " = ?";
-							  // console.log(update_rating);
+							  " WHERE " + constants.USER_ID + " = ?",
+
+		count_user_reviewed_and_rating	= "SELECT COUNT (DISTINCT "	+ constants.USER_TRANSACTION + "." + constants.USER_ID + ") AS review_counter, "
+																	+ constants.CLIENT_USER + "." + constants.RATING + ", " 
+																	+ constants.CLIENT_USER + "." + constants.IS_CERTIFICATE +		 
+										  " FROM " 	+ constants.USER_TRANSACTION + 
+										  " LEFT JOIN " + constants.CLIENT_USER + 
+										  " ON " + constants.USER_TRANSACTION + "." + constants.LEADER_ID + " = " + constants.CLIENT_USER + "." + constants.USER_ID +  
+										  " WHERE "	+ constants.USER_TRANSACTION + "." + constants.LEADER_ID + " = '" + leader_id + "'" + 
+										  " AND " + constants.USER_TRANSACTION + "." + constants.ROLE + " = 'user' ",
+		update_leader_certificate 	= "UPDATE " + constants.CLIENT_USER + 
+									  " SET " + constants.IS_CERTIFICATE + " = true " +
+									  " WHERE " + constants.USER_ID + " = '" + leader_id + "'";		  
+
 	var update_id = leader_id;						  
 		if(role == 'user'){
 			update_id = user_id;
@@ -64,14 +80,28 @@ function createReview (req, res){
 					console.log(err);
 					res.json(myUtils.createDatabaseError(err));
 				}else{
-					dbConfig.query(query, [rows.insertId], function(err, rows){
-						if(err){
-							console.log(err);
-							res.json(myUtils.createDatabaseError(err));
-						}else{
-							res.json({returnCode: constants.SUCCESS_CODE, message : "Create review success.", data: {review: rows[0]}});
-						}
-					});	
+					if(role == 'leader') {
+						dbConfig.query(count_user_reviewed_and_rating, function(err, countReturn){
+							if(err){
+								res.json(myUtils.createDatabaseError(err));
+							}else{
+								console.log(countReturn);
+								if(!countReturn.is_certificate && countReturn.review_counter >= 5 && countReturn.rating >= 3 ){
+
+								}
+								dbConfig.query(query, [rows.insertId], function(err, rows){
+									if(err){
+										console.log(err);
+										res.json(myUtils.createDatabaseError(err));
+									}else{
+										res.json({returnCode: constants.SUCCESS_CODE, message : "Create review success.", data: {review: rows[0]}});
+									}
+								});	
+							}
+						});	
+					}else{
+
+					}
 				}
 			}); 	
 		}

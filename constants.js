@@ -27,6 +27,7 @@ var constants = {
 	POSSIBLE_PURCHASE: "possible_purchase",
 	MONTH_INCOME: "month_income",
 	IS_ACTIVE: "is_active",
+	IS_CERTIFICATE : "is_certificate",				
 	LONGITUDE: "longitude",
 	LATITUDE: "latitude",
 

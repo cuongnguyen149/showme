@@ -56,6 +56,7 @@ function createReview (req, res){
 
 		count_user_reviewed_and_rating	= "SELECT COUNT (DISTINCT "	+ constants.USER_TRANSACTION + "." + constants.USER_ID + ") AS review_counter, "
 																	+ constants.CLIENT_USER + "." + constants.RATING + ", " 
+																	+ constants.CLIENT_USER + "." + constants.DEVICE_UIID + ", " 
 																	+ constants.CLIENT_USER + "." + constants.IS_CERTIFICATE +		 
 										  " FROM " 	+ constants.USER_TRANSACTION + 
 										  " LEFT JOIN " + constants.CLIENT_USER + 
@@ -67,7 +68,7 @@ function createReview (req, res){
 									  " WHERE " + constants.USER_ID + " = '" + leader_id + "'";		  
 
 	var update_id = leader_id;						  
-		if(role == 'user'){
+		if(role == 'leader'){
 			update_id = user_id;
 		}						  
 	dbConfig.query(update_rating, [update_id], function(err, rows){
@@ -80,14 +81,20 @@ function createReview (req, res){
 					console.log(err);
 					res.json(myUtils.createDatabaseError(err));
 				}else{
-					if(role == 'leader') {
+					if(role == 'user') {
 						dbConfig.query(count_user_reviewed_and_rating, function(err, countReturn){
 							if(err){
 								res.json(myUtils.createDatabaseError(err));
 							}else{
 								console.log(countReturn);
-								if(!countReturn.is_certificate && countReturn.review_counter >= 5 && countReturn.rating >= 3 ){
-
+								if(!countReturn.is_certificate && countReturn.review_counter >= 2 && countReturn.rating >= 3 ){
+									if(myUtils.sendPushNotificationAndroid(constants.MESSAGE_CERTIFICATION, countReturn.device_uiid, leader_id)){
+										dbConfig.query(update_leader_certificate, function(err, rows){
+											if(err){
+												console.log(err);
+											}
+										});
+									}
 								}
 								dbConfig.query(query, [rows.insertId], function(err, rows){
 									if(err){

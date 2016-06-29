@@ -1,7 +1,10 @@
 var constants = require('../constants');
 var jwt       = require('jwt-simple');
 var _         = require('underscore');
-
+var config    = require('./appConfig');
+var gcm       = require('node-gcm');
+var sender    = new gcm.Sender(config.googleCloudMessage.api_key);
+var pushNotificationMessage   = new gcm.Message();
 /**
  * Create Quickblox error object.
  */
@@ -112,4 +115,26 @@ module.exports.ramdomString = function (length){
     for( var i=0; i < length; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     return text;
+}; 
+
+/**
+ * Send push notification for android with message and title
+ */
+
+module.exports.sendPushNotificationAndroid = function (message, deviceId, user_id){
+  var registrationIds = [];
+  registrationIds.push(deviceId);
+  pushNotificationMessage.addData('message', message);
+  pushNotificationMessage.addData('user_id', user_id);
+  pushNotificationMessage.delayWhileIdle = true;
+  pushNotificationMessage.addNotification('title', 'certification');
+  sender.send(pushNotificationMessage, registrationIds, 5, function(err, result) {
+    if(err){
+      console.error(err);
+      return false;
+    }else{
+      console.log(result); 
+      return true;
+    }
+  });    
 }; 

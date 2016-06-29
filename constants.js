@@ -1,6 +1,7 @@
 var constants = {
 	ERROR : "error",
 	MESSAGE: "message",
+	MESSAGE_CERTIFICATION: "Bravo, vous être maintenant un guide certifié",
 	MESSAGE_QUICKBLOX_ERR: "Opp! something went wrong with Quickblox!",
 	MESSAGE_DATABASE_ERR: "Opp! something went wrong with Database!",
 	BAD_PARAMETERS: "Bad parameters.",

@@ -65,6 +65,7 @@ function leaderLocation(req, res){
 	    							  + constants.RATING + ", " 
 	    							  + constants.LANGUAGE + ", "
 	    							  + constants.FEE_PER_HOUR + ", "
+	    							  + constants.IS_CERTIFICATE + ", "
 	    							  + constants.POSSIBLE_PURCHASE +
 							", ( 6371 * acos( cos( radians(" + lat + ") ) * cos( radians( "+  constants.LATITUDE + " ) ) * cos( radians( " + constants.LONGITUDE + " ) - radians( " + lng + " ) ) + sin( radians( " + lat + " ) ) * sin(radians( "+ constants.LATITUDE + " )) ) ) AS distance " +
 							" FROM " + constants.CLIENT_USER +
@@ -98,6 +99,7 @@ function leaderLocation(req, res){
 							  + constants.RATING + ", " 
 							  + constants.LANGUAGE + ", "
 							  + constants.FEE_PER_HOUR + ", "
+							  + constants.IS_CERTIFICATE + ", "
 							  + constants.POSSIBLE_PURCHASE +
 					", ( 6371 * acos( cos( radians(" + lat + ") ) * cos( radians( "+  constants.LATITUDE + " ) ) * cos( radians( " + constants.LONGITUDE + " ) - radians( " + lng + " ) ) + sin( radians( " + lat + " ) ) * sin(radians( "+ constants.LATITUDE + " )) ) ) AS distance " +
 					" FROM " + constants.CLIENT_USER +

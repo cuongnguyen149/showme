@@ -126,8 +126,9 @@ module.exports.sendPushNotificationAndroid = function (message, deviceId, user_i
   registrationIds.push(deviceId);
   pushNotificationMessage.addData('message', message);
   pushNotificationMessage.addData('user_id', user_id);
+  pushNotificationMessage.addData('type', 'certification');
   pushNotificationMessage.delayWhileIdle = true;
-  pushNotificationMessage.addNotification('title', 'certification');
+  // pushNotificationMessage.addNotification('title', 'certification');
   sender.send(pushNotificationMessage, registrationIds, 5, function(err, result) {
     if(err){
       console.error(err);

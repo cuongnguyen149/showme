@@ -647,7 +647,32 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"          
+            $ref: "#/definitions/ErrorResponse"
+  /testpush:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: reviews
+    post:
+      description: API for get back password.
+      # used as the method name of the controller
+      operationId: testPushNotificationReview
+      parameters:
+        - name: info
+          in: body
+          description: The user's info.
+          required: false
+          schema:
+            $ref: "#/definitions/testpush" 
+      responses:
+        "201":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BaseSuccessRespone"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"           
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -863,6 +888,11 @@ definitions:
         type: string
     required:
       - email
+  testpush:
+    description: dialog details object.
+    properties:
+      device_uiid:
+        type: string    
   cardInfoParams:
     description: card information.
     properties:

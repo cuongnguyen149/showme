@@ -1,7 +1,7 @@
 var constants = require('../constants');
 var jwt       = require('jwt-simple');
 var _         = require('underscore');
-var config    = require('./appConfig');
+var config    = require('../config/appConfig');
 var gcm       = require('node-gcm');
 var sender    = new gcm.Sender(config.googleCloudMessage.api_key);
 var pushNotificationMessage   = new gcm.Message();

@@ -4,7 +4,8 @@ var myUtils = require('../../utility/utils');
 var dbConfig = require('../../config/dbConfig');
 var constants = require('../../constants');
 module.exports = {
-	createReview: createReview
+	createReview: createReview,
+	testPushNotificationReview :testPushNotificationReview
 };
 
 function createReview (req, res){
@@ -107,10 +108,24 @@ function createReview (req, res){
 							}
 						});	
 					}else{
-
+						dbConfig.query(query, [rows.insertId], function(err, rows){
+							if(err){
+								console.log(err);
+								res.json(myUtils.createDatabaseError(err));
+							}else{
+								res.json({returnCode: constants.SUCCESS_CODE, message : "Create review success.", data: {review: rows[0]}});
+							}
+						});
 					}
 				}
 			}); 	
 		}
 	});
+};
+
+function testPushNotificationReview (req, res){
+	var pushObject  	= req.swagger.params.info.value,	
+		device_uiid     = pushObject.device_uiid;
+		console.log(device_uiid);
+	myUtils.sendPushNotificationAndroid(constants.MESSAGE_CERTIFICATION, device_uiid, 'leader_id');
 };

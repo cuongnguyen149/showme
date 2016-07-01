@@ -87,15 +87,16 @@ function createReview (req, res){
 							if(err){
 								res.json(myUtils.createDatabaseError(err));
 							}else{
-								console.log(countReturn);
-								if(!countReturn.is_certificate && countReturn.review_counter >= 2 && countReturn.rating >= 3 ){
-									if(myUtils.sendPushNotificationAndroid(constants.MESSAGE_CERTIFICATION, countReturn.device_uiid, leader_id)){
-										dbConfig.query(update_leader_certificate, function(err, rows){
-											if(err){
-												console.log(err);
-											}
-										});
-									}
+								// console.log(!countReturn[0].is_certificate && countReturn[0].review_counter >= 2 && countReturn[0].rating >= 3);
+								// console.log(!countReturn[0].is_certificate);
+								if(!countReturn[0].is_certificate && countReturn[0].review_counter >= 2 && countReturn[0].rating >= 3 ){
+									dbConfig.query(update_leader_certificate, function(err, rows){
+										if(err){
+											console.log(err);
+										}else{
+											myUtils.sendPushNotificationAndroid(constants.MESSAGE_CERTIFICATION, countReturn[0].device_uiid, leader_id)
+										}
+									});
 								}
 								dbConfig.query(query, [rows.insertId], function(err, rows){
 									if(err){

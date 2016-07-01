@@ -132,10 +132,8 @@ module.exports.sendPushNotificationAndroid = function (message, deviceId, user_i
   sender.send(pushNotificationMessage, registrationIds, 5, function(err, result) {
     if(err){
       console.error(err);
-      return false;
     }else{
       console.log(result); 
-      return true;
     }
   });    
 }; 

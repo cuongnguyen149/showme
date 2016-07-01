@@ -89,7 +89,7 @@ function createReview (req, res){
 							}else{
 								// console.log(!countReturn[0].is_certificate && countReturn[0].review_counter >= 2 && countReturn[0].rating >= 3);
 								// console.log(!countReturn[0].is_certificate);
-								if(!countReturn[0].is_certificate && countReturn[0].review_counter >= 2 && countReturn[0].rating >= 3 ){
+								if(!countReturn[0].is_certificate && countReturn[0].review_counter >= 5 && countReturn[0].rating >= 3 ){
 									dbConfig.query(update_leader_certificate, function(err, rows){
 										if(err){
 											console.log(err);

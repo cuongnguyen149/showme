@@ -33,8 +33,11 @@
        // socket.on('merchandiseRequestListener', function(data){
        //  console.log(data);
        // });
+       var socket;
+        // socket = io.connect('http://51.254.98.255:9001');
+         socket = io.connect('http://localhost:9001');
       $("#startCall").click(function() {
-        socket.emit('callStart', '{"user_id":"12","leader_id": "1", "dialog_id": "123111"}');
+        socket.emit('callStart', '{"user_id":"7","leader_id": "1", "dialog_id": "123111"}');
           socket.on("callStartFalse", function(data){
             console.log(data);
           });
@@ -124,9 +127,9 @@
         }); 
       }); 
        $("#acceptMerchandiseRequest").click(function() {
-        var socket;
-        // socket = io.connect('http://51.254.98.255:9001');
-         socket = io.connect('http://localhost:9001');
+        // var socket;
+        // // socket = io.connect('http://51.254.98.255:9001');
+        //  socket = io.connect('http://localhost:9001');
         socket.emit('acceptMerchandiseRequest', '{"merchandise_fee":111,"shipping_fee":32, "id":"1", "id_merchandise_type": "4"}');
           socket.on("acceptMerchandiseRequestFail", function(data){
             console.log(data);

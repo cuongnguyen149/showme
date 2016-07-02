@@ -329,33 +329,61 @@ function comment(req, res){
 */
 function leaderStatistical(req, res){
 	var user_id 	= req.query.user_id,
+		role 		= req.query.role,
 		page_size 	= parseInt(req.query.page_size),
 		page_number = parseInt(req.query.page_number);
 		var skip 	= (page_number-1)*page_size;
-		var query 	= "SELECT " 	+ constants.CLIENT_USER + "." + constants.USER_ID + ", "
-									+ constants.CLIENT_USER + "." + constants.AVATAR + ", "
-									+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
-									+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
-									+ "(" + constants.TRANSACTION_PRICE + "."+ constants.TOTAL + " - " + constants.TRANSACTION_PRICE + "."+ constants.SERVICE_FEE + ") AS total , "
-									+ " SUBSTRING (" + constants.TRANSACTION_PRICE + "."+ constants.LIST_NUMBER_MERCHANDISE + ", 1, CHAR_LENGTH( " + constants.TRANSACTION_PRICE + "."+ constants.LIST_NUMBER_MERCHANDISE + ") - 2) AS " + constants.LIST_NUMBER_MERCHANDISE + ", "
-									+ constants.TRANSACTION_PRICE + "."+ constants.CALL_START + ", "
-									+ constants.TRANSACTION_PRICE + "."+ constants.CALL_END + ", "
-									+ constants.TRANSACTION_PRICE + "."+ constants.SHIPPING_FEE + ", "
-									+ constants.TRANSACTION_PRICE + "."+ constants.SERVICE_FEE + ", "
-									+ constants.TRANSACTION_PRICE + "."+ constants.MERCHANDISE_FEE + ", " 
-									+ constants.TRANSACTION_PRICE + "."+ constants.TIP + ", "
-									+ constants.TRANSACTION_PRICE + "."+ constants.PRICE +
-				  	  " FROM "		+ constants.CLIENT_USER +
-				  	  " LEFT JOIN " + constants.TRANSACTION_PRICE +
-				  	  " ON " 		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.TRANSACTION_PRICE + "." + constants.USER_ID +
-				  	  " WHERE " 	+ constants.TRANSACTION_PRICE	+ "." + constants.LEADER_ID + " = ?" +
-				  	  " ORDER BY "  + constants.TRANSACTION_PRICE + "."+ constants.CALL_START  + " DESC " +
-				  	  " LIMIT "	+ skip + ", " + page_size;
-		var get_SUM_total = "SELECT SUM ("+ constants.TRANSACTION_PRICE + "."+ constants.TOTAL + ") AS total_header " +	
-							"FROM "	 + constants.TRANSACTION_PRICE +
-							" WHERE "  + constants.LEADER_ID + " = ?";
-		var get_count	  =	"SELECT COUNT(*) AS total_visit FROM " + constants.TRANSACTION_PRICE + 
-							" WHERE "  + constants.LEADER_ID + " = ?";
+		if(role == 'leader'){
+			var query 	= "SELECT " 	+ constants.CLIENT_USER + "." + constants.USER_ID + ", "
+										+ constants.CLIENT_USER + "." + constants.AVATAR + ", "
+										+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
+										+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
+										+ "(" + constants.TRANSACTION_PRICE + "."+ constants.TOTAL + " - " + constants.TRANSACTION_PRICE + "."+ constants.SERVICE_FEE + ") AS total , "
+										+ " SUBSTRING (" + constants.TRANSACTION_PRICE + "."+ constants.LIST_NUMBER_MERCHANDISE + ", 1, CHAR_LENGTH( " + constants.TRANSACTION_PRICE + "."+ constants.LIST_NUMBER_MERCHANDISE + ") - 2) AS " + constants.LIST_NUMBER_MERCHANDISE + ", "
+										+ constants.TRANSACTION_PRICE + "."+ constants.CALL_START + ", "
+										+ constants.TRANSACTION_PRICE + "."+ constants.CALL_END + ", "
+										+ constants.TRANSACTION_PRICE + "."+ constants.SHIPPING_FEE + ", "
+										+ constants.TRANSACTION_PRICE + "."+ constants.SERVICE_FEE + ", "
+										+ constants.TRANSACTION_PRICE + "."+ constants.MERCHANDISE_FEE + ", " 
+										+ constants.TRANSACTION_PRICE + "."+ constants.TIP + ", "
+										+ constants.TRANSACTION_PRICE + "."+ constants.PRICE +
+					  	  " FROM "		+ constants.CLIENT_USER +
+					  	  " LEFT JOIN " + constants.TRANSACTION_PRICE +
+					  	  " ON " 		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.TRANSACTION_PRICE + "." + constants.USER_ID +
+					  	  " WHERE " 	+ constants.TRANSACTION_PRICE	+ "." + constants.LEADER_ID + " = ?" +
+					  	  " ORDER BY "  + constants.TRANSACTION_PRICE + "."+ constants.CALL_START  + " DESC " +
+					  	  " LIMIT "	+ skip + ", " + page_size;
+			var get_SUM_total = "SELECT SUM ("+ constants.TRANSACTION_PRICE + "."+ constants.TOTAL + ") AS total_header " +	
+								"FROM "	 + constants.TRANSACTION_PRICE +
+								" WHERE "  + constants.LEADER_ID + " = ?";
+			var get_count	  =	"SELECT COUNT(*) AS total_visit FROM " + constants.TRANSACTION_PRICE + 
+								" WHERE "  + constants.LEADER_ID + " = ?";
+		}else{
+			var query 	= "SELECT " 	+ constants.CLIENT_USER + "." + constants.USER_ID + ", "
+										+ constants.CLIENT_USER + "." + constants.AVATAR + ", "
+										+ constants.CLIENT_USER + "." + constants.FIRSTNAME + ", "
+										+ constants.CLIENT_USER + "." + constants.LASTNAME + ", "
+										+ "(" + constants.TRANSACTION_PRICE + "."+ constants.TOTAL + " - " + constants.TRANSACTION_PRICE + "."+ constants.SERVICE_FEE + ") AS total , "
+										+ " SUBSTRING (" + constants.TRANSACTION_PRICE + "."+ constants.LIST_NUMBER_MERCHANDISE + ", 1, CHAR_LENGTH( " + constants.TRANSACTION_PRICE + "."+ constants.LIST_NUMBER_MERCHANDISE + ") - 2) AS " + constants.LIST_NUMBER_MERCHANDISE + ", "
+										+ constants.TRANSACTION_PRICE + "."+ constants.CALL_START + ", "
+										+ constants.TRANSACTION_PRICE + "."+ constants.CALL_END + ", "
+										+ constants.TRANSACTION_PRICE + "."+ constants.SHIPPING_FEE + ", "
+										+ constants.TRANSACTION_PRICE + "."+ constants.SERVICE_FEE + ", "
+										+ constants.TRANSACTION_PRICE + "."+ constants.MERCHANDISE_FEE + ", " 
+										+ constants.TRANSACTION_PRICE + "."+ constants.TIP + ", "
+										+ constants.TRANSACTION_PRICE + "."+ constants.PRICE +
+					  	  " FROM "		+ constants.CLIENT_USER +
+					  	  " LEFT JOIN " + constants.TRANSACTION_PRICE +
+					  	  " ON " 		+ constants.CLIENT_USER + "." + constants.USER_ID  + " = " + constants.TRANSACTION_PRICE + "." + constants.LEADER_ID +
+					  	  " WHERE " 	+ constants.TRANSACTION_PRICE	+ "." + constants.USER_ID + " = ?" +
+					  	  " ORDER BY "  + constants.TRANSACTION_PRICE + "."+ constants.CALL_START  + " DESC " +
+					  	  " LIMIT "	+ skip + ", " + page_size;
+			var get_SUM_total = "SELECT SUM ("+ constants.TRANSACTION_PRICE + "."+ constants.TOTAL + ") AS total_header " +	
+								"FROM "	 + constants.TRANSACTION_PRICE +
+								" WHERE "  + constants.USER_ID + " = ?";
+			var get_count	  =	"SELECT COUNT(*) AS total_visit FROM " + constants.TRANSACTION_PRICE + 
+								" WHERE "  + constants.USER_ID + " = ?";
+		}		  	  
 			
 	dbConfig.query(get_SUM_total, [user_id], function(err, sumToltal){
 		if(err){
@@ -377,7 +405,11 @@ function leaderStatistical(req, res){
 							}
 							// rows[constants.LIST_NUMBER_MERCHANDISE] = rows[0][constants.LIST_NUMBER_MERCHANDISE].slice(0,-2);
 							// console.log(rows[constants.LIST_NUMBER_MERCHANDISE]);
-							res.json({returnCode: constants.SUCCESS_CODE, message: "Get statistical for leader success.", data: {total_visit: visitCount[0].total_visit, total_header: sumToltal[0].total_header, leader: rows}});
+							if(role == 'leader'){
+								res.json({returnCode: constants.SUCCESS_CODE, message: "Get statistical for leader/user success.", data: {total_visit: visitCount[0].total_visit, total_header: sumToltal[0].total_header, leader: rows}});
+							}else{
+								res.json({returnCode: constants.SUCCESS_CODE, message: "Get statistical for leader/user success.", data: {total_visit: visitCount[0].total_visit, total_header: sumToltal[0].total_header, user: rows}});
+							}
 						}
 					});	
 				}

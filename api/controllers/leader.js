@@ -405,11 +405,7 @@ function leaderStatistical(req, res){
 							}
 							// rows[constants.LIST_NUMBER_MERCHANDISE] = rows[0][constants.LIST_NUMBER_MERCHANDISE].slice(0,-2);
 							// console.log(rows[constants.LIST_NUMBER_MERCHANDISE]);
-							if(role == 'leader'){
-								res.json({returnCode: constants.SUCCESS_CODE, message: "Get statistical for leader/user success.", data: {total_visit: visitCount[0].total_visit, total_header: sumToltal[0].total_header, leader: rows}});
-							}else{
-								res.json({returnCode: constants.SUCCESS_CODE, message: "Get statistical for leader/user success.", data: {total_visit: visitCount[0].total_visit, total_header: sumToltal[0].total_header, user: rows}});
-							}
+							res.json({returnCode: constants.SUCCESS_CODE, message: "Get statistical for leader/user success.", data: {total_visit: visitCount[0].total_visit, total_header: sumToltal[0].total_header, leader: rows}});
 						}
 					});	
 				}

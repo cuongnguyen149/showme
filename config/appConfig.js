@@ -17,9 +17,9 @@ var Configuration = {
 		athuSecret: 'fVMmMrwjMeUAFUX'
 	},
 	braintree: {
-		merchantId: "bsk2xwy7bnbk8qbc",
-		publicKey: "ndjx6nmm5x4yz2nm",
-		privateKey: "a288d14b567f8bb2e79b5418eadb98de"
+		merchantId: "f9zznktwgj2mnr3x",
+		publicKey: "vcz4249w3nmtybbb",
+		privateKey: "production_jy25mbqk_f9zznktwgj2mnr3x"
 	},
 	googleCloudMessage : {
 		api_key: "AIzaSyBuICziu7cttbRYS9z_MmFXU5plz9hjk0g"
